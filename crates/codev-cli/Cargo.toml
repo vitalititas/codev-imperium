@@ -1,5 +1,5 @@
 [package]
-name = "goose-cli"
+name = "codev-cli"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,7 +12,7 @@ description.workspace = true
 workspace = true
 
 [[bin]]
-name = "goose"
+name = "codev"
 path = "src/main.rs"
 
 [[bin]]
@@ -21,9 +21,9 @@ path = "src/bin/generate_manpages.rs"
 
 [dependencies]
 clap_mangen = { version = "0.3", default-features = false }
-goose = { path = "../goose", default-features = false }
-goose-mcp = { path = "../goose-mcp", default-features = false }
-goose-providers = { path = "../goose-providers", default-features = false }
+codev = { path = "../codev", default-features = false }
+codev-mcp = { path = "../codev-mcp", default-features = false }
+codev-providers = { path = "../codev-providers", default-features = false }
 rmcp = { workspace = true }
 clap = { workspace = true }
 cliclack = { version = "0.5", default-features = false }
@@ -83,15 +83,15 @@ default = [
     "system-keyring",
     "update",
 ]
-code-mode = ["goose/code-mode"]
-local-inference = ["goose/local-inference"]
-aws-providers = ["goose/aws-providers"]
-cuda = ["goose/cuda", "local-inference"]
-vulkan = ["goose/vulkan", "local-inference"]
-telemetry = ["goose/telemetry"]
-nostr = ["goose/nostr"]
-otel = ["goose/otel"]
-system-keyring = ["goose/system-keyring"]
+code-mode = ["codev/code-mode"]
+local-inference = ["codev/local-inference"]
+aws-providers = ["codev/aws-providers"]
+cuda = ["codev/cuda", "local-inference"]
+vulkan = ["codev/vulkan", "local-inference"]
+telemetry = ["codev/telemetry"]
+nostr = ["codev/nostr"]
+otel = ["codev/otel"]
+system-keyring = ["codev/system-keyring"]
 tui = []
 update = ["dep:sigstore-verify"]
 portable-default = ["rustls-tls", "aws-providers", "telemetry", "otel", "tui"]
@@ -100,14 +100,14 @@ disable-update = []
 rustls-tls = [
     "reqwest/rustls",
     "sigstore-verify?/rustls",
-    "goose/rustls-tls",
-    "goose-mcp/rustls-tls",
+    "codev/rustls-tls",
+    "codev-mcp/rustls-tls",
 ]
 native-tls = [
     "reqwest/native-tls",
     "sigstore-verify?/native-tls",
-    "goose/native-tls",
-    "goose-mcp/native-tls",
+    "codev/native-tls",
+    "codev-mcp/native-tls",
 ]
 
 [dev-dependencies]

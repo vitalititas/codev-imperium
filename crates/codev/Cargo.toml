@@ -1,5 +1,5 @@
 [package]
-name = "goose"
+name = "codev"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -122,8 +122,8 @@ strum = { workspace = true }
 once_cell = { workspace = true }
 etcetera = { workspace = true }
 fs-err = { version = "3.1", default-features = false }
-goose-providers = { path = "../goose-providers", default-features = false }
-goose-sdk-types = { path = "../goose-sdk-types" }
+codev-providers = { path = "../codev-providers", default-features = false }
+codev-sdk-types = { path = "../codev-sdk-types" }
 rand = { workspace = true }
 utoipa = { workspace = true, features = ["chrono"] }
 tokio-cron-scheduler = { version = "0.15", default-features = false }
@@ -197,7 +197,7 @@ pem = { version = "3.0.2", default-features = false, features = ["std"], optiona
 pkcs1 = { version = "0.7.5", default-features = false, features = ["pkcs8", "std"], optional = true }
 pkcs8 = { version = "0.11.0", default-features = false, features = ["alloc", "std"], optional = true }
 sec1 = { version = "0.7", default-features = false, features = ["der", "pkcs8", "std"], optional = true }
-goose-acp-macros = { path = "../goose-acp-macros", default-features = false }
+codev-acp-macros = { path = "../codev-acp-macros", default-features = false }
 tower-http = { workspace = true, features = ["cors"] }
 http-body-util = { version = "0.1.2", default-features = false }
 tracing-appender = { workspace = true }
@@ -245,10 +245,10 @@ test-case = { workspace = true }
 env-lock = { workspace = true }
 rmcp = { workspace = true, features = ["transport-streamable-http-server"] }
 opentelemetry_sdk = { workspace = true, features = ["testing"] }
-goose-test-support = { path = "../goose-test-support", default-features = false }
+codev-test-support = { path = "../codev-test-support", default-features = false }
 bytes = { workspace = true }
 http = { workspace = true }
-goose-mcp = { path = "../goose-mcp", default-features = false }
+codev-mcp = { path = "../codev-mcp", default-features = false }
 insta = { version = "1", default-features = false }
 dtor = { version = "1.0.5", default-features = false, features = ["proc_macro"] }
 tower = { version = "0.5.2", default-features = false, features = ["util"] }

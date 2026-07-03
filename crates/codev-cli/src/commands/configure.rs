@@ -1,31 +1,31 @@
 use crate::recipes::github_recipe::GOOSE_RECIPE_GITHUB_REPO_CONFIG_KEY;
 use cliclack::spinner;
 use console::style;
-use goose::agents::extension::{ToolInfo, PLATFORM_EXTENSIONS};
-use goose::agents::extension_manager::get_parameter_names;
-use goose::agents::Agent;
-use goose::agents::{extension::Envs, ExtensionConfig};
-use goose::config::declarative_providers::{
+use codev::agents::extension::{ToolInfo, PLATFORM_EXTENSIONS};
+use codev::agents::extension_manager::get_parameter_names;
+use codev::agents::Agent;
+use codev::agents::{extension::Envs, ExtensionConfig};
+use codev::config::declarative_providers::{
     create_custom_provider, remove_custom_provider, CreateCustomProviderParams,
 };
-use goose::config::extensions::{
+use codev::config::extensions::{
     get_all_extension_names, get_all_extensions, get_enabled_extensions, get_extension_by_name,
     name_to_key, remove_extension, set_extension, set_extension_enabled,
 };
-use goose::config::paths::Paths;
-use goose::config::permission::PermissionLevel;
-use goose::config::signup_tetrate::TetrateAuth;
-use goose::config::{
+use codev::config::paths::Paths;
+use codev::config::permission::PermissionLevel;
+use codev::config::signup_tetrate::TetrateAuth;
+use codev::config::{
     configure_tetrate, Config, ConfigError, ExperimentManager, ExtensionEntry, GooseMode,
     PermissionManager,
 };
-use goose::model::ModelConfig;
+use codev::model::ModelConfig;
 #[cfg(feature = "telemetry")]
-use goose::posthog::{get_telemetry_choice, TELEMETRY_ENABLED_KEY};
-use goose::providers::base::ConfigKey;
-use goose::providers::provider_test::test_provider_configuration;
-use goose::providers::{create, providers, retry_operation, RetryConfig};
-use goose::session::SessionType;
+use codev::posthog::{get_telemetry_choice, TELEMETRY_ENABLED_KEY};
+use codev::providers::base::ConfigKey;
+use codev::providers::provider_test::test_provider_configuration;
+use codev::providers::{create, providers, retry_operation, RetryConfig};
+use codev::session::SessionType;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::io::IsTerminal;
@@ -179,7 +179,7 @@ async fn handle_manual_provider_setup(config: &Config) {
             println!(
                 "\n  {}: Run '{}' again to adjust your config or add extensions",
                 style("Tip").green().italic(),
-                style("goose configure").cyan()
+                style("codev configure").cyan()
             );
             set_extension(ExtensionEntry {
                 enabled: true,
@@ -191,7 +191,7 @@ async fn handle_manual_provider_setup(config: &Config) {
             println!(
                 "\n  {}: We did not save your config, inspect your credentials\n   and run '{}' again to ensure goose can connect",
                 style("Warning").yellow().italic(),
-                style("goose configure").cyan()
+                style("codev configure").cyan()
             );
         }
         Err(e) => {
@@ -208,7 +208,7 @@ fn print_manual_config_error(e: &anyhow::Error) {
                 "\n  {} Required configuration key '{}' not found \n  Please provide this value and run '{}' again",
                 style("Error").red().italic(),
                 key,
-                style("goose configure").cyan()
+                style("codev configure").cyan()
             );
         }
         Some(ConfigError::KeyringError(msg)) => {
@@ -219,7 +219,7 @@ fn print_manual_config_error(e: &anyhow::Error) {
                 "\n  {} Invalid configuration value: {} \n  Please check your input and run '{}' again",
                 style("Error").red().italic(),
                 msg,
-                style("goose configure").cyan()
+                style("codev configure").cyan()
             );
         }
         Some(ConfigError::FileError(err)) => {
@@ -227,7 +227,7 @@ fn print_manual_config_error(e: &anyhow::Error) {
                 "\n  {} Failed to access config file: {} \n  Please check file permissions and run '{}' again",
                 style("Error").red().italic(),
                 err,
-                style("goose configure").cyan()
+                style("codev configure").cyan()
             );
         }
         Some(ConfigError::DirectoryError(msg)) => {
@@ -235,7 +235,7 @@ fn print_manual_config_error(e: &anyhow::Error) {
                 "\n  {} Failed to access config directory: {} \n  Please check directory permissions and run '{}' again",
                 style("Error").red().italic(),
                 msg,
-                style("goose configure").cyan()
+                style("codev configure").cyan()
             );
         }
         _ => {
@@ -243,7 +243,7 @@ fn print_manual_config_error(e: &anyhow::Error) {
                 "\n  {} {} \n  We did not save your config, inspect your credentials\n   and run '{}' again to ensure goose can connect",
                 style("Error").red().italic(),
                 e,
-                style("goose configure").cyan()
+                style("codev configure").cyan()
             );
         }
     }
@@ -255,7 +255,7 @@ fn print_keyring_error(msg: &str) {
         "\n  {} Failed to access secure storage (keyring): {} \n  Please check your system keychain and run '{}' again. \n  If your system is unable to use the keyring, please try setting secret key(s) via environment variables.",
         style("Error").red().italic(),
         msg,
-        style("goose configure").cyan()
+        style("codev configure").cyan()
     );
 }
 
@@ -265,7 +265,7 @@ fn print_keyring_error(msg: &str) {
         "\n  {} Failed to access Windows Credential Manager: {} \n  Please check Windows Credential Manager and run '{}' again. \n  If your system is unable to use the Credential Manager, please try setting secret key(s) via environment variables.",
         style("Error").red().italic(),
         msg,
-        style("goose configure").cyan()
+        style("codev configure").cyan()
     );
 }
 
@@ -275,7 +275,7 @@ fn print_keyring_error(msg: &str) {
         "\n  {} Failed to access secure storage: {} \n  Please check your system's secure storage and run '{}' again. \n  If your system is unable to use secure storage, please try setting secret key(s) via environment variables.",
         style("Error").red().italic(),
         msg,
-        style("goose configure").cyan()
+        style("codev configure").cyan()
     );
 }
 
@@ -1359,9 +1359,9 @@ pub fn configure_goose_mode_dialog() -> anyhow::Result<()> {
 pub fn configure_telemetry_dialog() -> anyhow::Result<()> {
     let config = Config::global();
 
-    if std::env::var("GOOSE_TELEMETRY_OFF").is_ok() {
+    if std::env::var("CODEV_TELEMETRY_OFF").is_ok() {
         let _ = cliclack::log::info(
-            "Notice: GOOSE_TELEMETRY_OFF environment variable is set and will override the configuration here.",
+            "Notice: CODEV_TELEMETRY_OFF environment variable is set and will override the configuration here.",
         );
     }
 
@@ -1749,9 +1749,9 @@ pub fn configure_max_turns_dialog() -> anyhow::Result<()> {
 
 /// Handle OpenRouter authentication
 pub async fn handle_openrouter_auth() -> anyhow::Result<()> {
-    use goose::config::{configure_openrouter, signup_openrouter::OpenRouterAuth};
-    use goose::conversation::message::Message;
-    use goose::providers::create;
+    use codev::config::{configure_openrouter, signup_openrouter::OpenRouterAuth};
+    use codev::conversation::message::Message;
+    use codev::providers::create;
 
     // Use the OpenRouter authentication flow
     let mut auth_flow = OpenRouterAuth::new()?;

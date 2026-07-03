@@ -1,5 +1,5 @@
 [package]
-name = "goose-sdk"
+name = "codev-sdk"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -9,11 +9,11 @@ repository.workspace = true
 description = "Rust SDK for Goose with optional uniffi bindings for Python/Kotlin"
 
 [lib]
-name = "goose_sdk"
+name = "codev_sdk"
 crate-type = ["cdylib", "staticlib", "rlib"]
 
 [[bin]]
-name = "goose-uniffi-bindgen"
+name = "codev-uniffi-bindgen"
 path = "src/bin/uniffi-bindgen.rs"
 required-features = ["uniffi"]
 
@@ -22,7 +22,7 @@ default = []
 uniffi = ["dep:uniffi", "dep:thiserror"]
 
 [dependencies]
-goose-sdk-types = { path = "../goose-sdk-types" }
+codev-sdk-types = { path = "../codev-sdk-types" }
 agent-client-protocol = { workspace = true, features = ["unstable"] }
 agent-client-protocol-schema = { workspace = true }
 

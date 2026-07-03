@@ -1,5 +1,5 @@
 [package]
-name = "goose-server"
+name = "codev-server"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -22,15 +22,15 @@ default = [
     "rustls-tls",
     "system-keyring",
 ]
-code-mode = ["goose/code-mode"]
-local-inference = ["goose/local-inference"]
-aws-providers = ["goose/aws-providers"]
-cuda = ["goose/cuda", "local-inference"]
-vulkan = ["goose/vulkan", "local-inference"]
-telemetry = ["goose/telemetry"]
-nostr = ["goose/nostr"]
-otel = ["goose/otel"]
-system-keyring = ["goose/system-keyring"]
+code-mode = ["codev/code-mode"]
+local-inference = ["codev/local-inference"]
+aws-providers = ["codev/aws-providers"]
+cuda = ["codev/cuda", "local-inference"]
+vulkan = ["codev/vulkan", "local-inference"]
+telemetry = ["codev/telemetry"]
+nostr = ["codev/nostr"]
+otel = ["codev/otel"]
+system-keyring = ["codev/system-keyring"]
 portable-default = ["rustls-tls", "aws-providers", "telemetry", "otel"]
 rustls-tls = [
     "reqwest/rustls",
@@ -38,22 +38,22 @@ rustls-tls = [
     "axum-server/tls-rustls",
     "dep:rustls",
     "dep:aws-lc-rs",
-    "goose/rustls-tls",
-    "goose-mcp/rustls-tls",
+    "codev/rustls-tls",
+    "codev-mcp/rustls-tls",
 ]
 native-tls = [
     "reqwest/native-tls",
     "tokio-tungstenite/native-tls",
     "axum-server/tls-openssl",
     "dep:openssl",
-    "goose/native-tls",
-    "goose-mcp/native-tls",
+    "codev/native-tls",
+    "codev-mcp/native-tls",
 ]
 
 [dependencies]
-goose = { path = "../goose", default-features = false }
-goose-mcp = { path = "../goose-mcp", default-features = false }
-goose-providers = { path = "../goose-providers", default-features = false }
+codev = { path = "../codev", default-features = false }
+codev-mcp = { path = "../codev-mcp", default-features = false }
+codev-providers = { path = "../codev-providers", default-features = false }
 rmcp = { workspace = true }
 axum = { workspace = true, features = ["ws", "macros"] }
 tokio = { workspace = true }
@@ -95,7 +95,7 @@ pem = { version = "3.0.2", default-features = false, features = ["std"] }
 winreg = { version = "0.56", default-features = false }
 
 [[bin]]
-name = "goosed"
+name = "codevd"
 path = "src/main.rs"
 
 [[bin]]

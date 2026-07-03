@@ -1,5 +1,5 @@
 use anyhow::Result;
-use goose_cli::cli::cli;
+use codev_cli::cli::cli;
 
 /// Enable ANSI/VT escape sequence processing on Windows Console Host.
 ///
@@ -15,7 +15,7 @@ fn enable_windows_vt_processing() {
 }
 
 async fn run() -> Result<()> {
-    if let Err(e) = goose_cli::logging::setup_logging(None) {
+    if let Err(e) = codev_cli::logging::setup_logging(None) {
         eprintln!("Warning: Failed to initialize logging: {}", e);
     }
 

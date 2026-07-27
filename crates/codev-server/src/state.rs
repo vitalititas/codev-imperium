@@ -1,8 +1,8 @@
 use axum::http::StatusCode;
-use goose::builtin_extension::register_builtin_extensions;
-use goose::execution::manager::AgentManager;
-use goose::scheduler_trait::SchedulerTrait;
-use goose::session::SessionManager;
+use codev::builtin_extension::register_builtin_extensions;
+use codev::execution::manager::AgentManager;
+use codev::scheduler_trait::SchedulerTrait;
+use codev::session::SessionManager;
 use std::collections::{HashMap, HashSet};
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -13,10 +13,10 @@ use tokio::task::JoinHandle;
 
 use crate::session_event_bus::SessionEventBus;
 use crate::tunnel::TunnelManager;
-use goose::agents::ExtensionLoadResult;
-use goose::gateway::manager::GatewayManager;
+use codev::agents::ExtensionLoadResult;
+use codev::gateway::manager::GatewayManager;
 #[cfg(feature = "local-inference")]
-use goose::providers::local_inference::InferenceRuntime;
+use codev::providers::local_inference::InferenceRuntime;
 
 type ExtensionLoadingTasks =
     Arc<Mutex<HashMap<String, Arc<Mutex<Option<JoinHandle<Vec<ExtensionLoadResult>>>>>>>>;
@@ -36,7 +36,7 @@ pub struct AppState {
 
 impl AppState {
     pub async fn new(tls: bool) -> anyhow::Result<Arc<AppState>> {
-        register_builtin_extensions(goose_mcp::BUILTIN_EXTENSIONS.clone());
+        register_builtin_extensions(codev_mcp::BUILTIN_EXTENSIONS.clone());
 
         let agent_manager = AgentManager::instance().await?;
         let tunnel_manager = Arc::new(TunnelManager::new(tls));
@@ -149,14 +149,14 @@ impl AppState {
         buses.get(session_id).cloned()
     }
 
-    pub async fn get_agent(&self, session_id: String) -> anyhow::Result<Arc<goose::agents::Agent>> {
+    pub async fn get_agent(&self, session_id: String) -> anyhow::Result<Arc<codev::agents::Agent>> {
         self.agent_manager.get_or_create_agent(session_id).await
     }
 
     pub async fn get_agent_for_route(
         &self,
         session_id: String,
-    ) -> Result<Arc<goose::agents::Agent>, StatusCode> {
+    ) -> Result<Arc<codev::agents::Agent>, StatusCode> {
         self.get_agent(session_id).await.map_err(|e| {
             tracing::error!("Failed to get agent: {}", e);
             StatusCode::INTERNAL_SERVER_ERROR

@@ -1,15 +1,15 @@
-use goose::agents::extension::Envs;
-use goose::agents::extension::ToolInfo;
-use goose::agents::ExtensionConfig;
-use goose::config::permission::PermissionLevel;
-use goose::config::ExtensionEntry;
-use goose::conversation::Conversation;
-use goose::download_manager::{DownloadProgress, DownloadStatus};
-use goose::model::ModelConfig;
-use goose::permission::permission_confirmation::{Permission, PrincipalType};
-use goose::providers::base::{ConfigKey, ModelInfo, ProviderMetadata, ProviderType};
-use goose::session::{Session, SessionType, SystemInfo};
-use goose_providers::thinking::ThinkingEffort;
+use codev::agents::extension::Envs;
+use codev::agents::extension::ToolInfo;
+use codev::agents::ExtensionConfig;
+use codev::config::permission::PermissionLevel;
+use codev::config::ExtensionEntry;
+use codev::conversation::Conversation;
+use codev::download_manager::{DownloadProgress, DownloadStatus};
+use codev::model::ModelConfig;
+use codev::permission::permission_confirmation::{Permission, PrincipalType};
+use codev::providers::base::{ConfigKey, ModelInfo, ProviderMetadata, ProviderType};
+use codev::session::{Session, SessionType, SystemInfo};
+use codev_providers::thinking::ThinkingEffort;
 use rmcp::model::{
     Annotations, Content, EmbeddedResource, Icon, IconTheme, ImageContent, JsonObject,
     RawAudioContent, RawContent, RawEmbeddedResource, RawImageContent, RawResource, RawTextContent,
@@ -17,10 +17,10 @@ use rmcp::model::{
 };
 use utoipa::{OpenApi, ToSchema};
 
-use goose::config::declarative_providers::{
+use codev::config::declarative_providers::{
     DeclarativeProviderConfig, EnvVarConfig, LoadedProvider, ProviderEngine,
 };
-use goose::conversation::message::{
+use codev::conversation::message::{
     ActionRequired, ActionRequiredData, FrontendToolRequest, InferenceMetadata, Message,
     MessageContent, MessageMetadata, RedactedThinkingContent, SystemNotificationContent,
     SystemNotificationType, ThinkingContent, TokenState, ToolConfirmationRequest, ToolRequest,
@@ -497,10 +497,10 @@ derive_utoipa!(IconTheme as IconThemeSchema);
         super::routes::config_management::ToolPermission,
         super::routes::config_management::UpsertPermissionsQuery,
         super::routes::config_management::UpdateCustomProviderRequest,
-        goose::providers::catalog::ProviderCatalogEntry,
-        goose::providers::catalog::ProviderTemplate,
-        goose::providers::catalog::ModelTemplate,
-        goose::providers::catalog::ModelCapabilities,
+        codev::providers::catalog::ProviderCatalogEntry,
+        codev::providers::catalog::ProviderTemplate,
+        codev::providers::catalog::ModelTemplate,
+        codev::providers::catalog::ModelCapabilities,
         super::routes::config_management::CreateCustomProviderResponse,
         super::routes::config_management::CheckProviderRequest,
         super::routes::config_management::SetProviderRequest,
@@ -510,7 +510,7 @@ derive_utoipa!(IconTheme as IconThemeSchema);
         super::routes::prompts::PromptsListResponse,
         super::routes::prompts::PromptContentResponse,
         super::routes::prompts::SavePromptRequest,
-        goose::prompt_template::Template,
+        codev::prompt_template::Template,
         super::routes::action_required::ConfirmToolActionRequest,
         super::routes::reply::ChatRequest,
         super::routes::session_events::SessionReplyRequest,
@@ -578,18 +578,18 @@ derive_utoipa!(IconTheme as IconThemeSchema);
         ThinkingEffort,
         super::routes::config_management::ProviderModelInfoQuery,
         Session,
-        goose::config::goose_mode::GooseMode,
+        codev::config::goose_mode::GooseMode,
         SessionType,
         SystemInfo,
         Conversation,
         IconSchema,
         IconThemeSchema,
-        goose::session::extension_data::ExtensionData,
+        codev::session::extension_data::ExtensionData,
         super::routes::schedule::CreateScheduleRequest,
         super::routes::schedule::UpdateScheduleRequest,
         super::routes::schedule::KillJobResponse,
         super::routes::schedule::InspectJobResponse,
-        goose::scheduler::ScheduledJob,
+        codev::scheduler::ScheduledJob,
         super::routes::schedule::RunNowResponse,
         super::routes::schedule::ListSchedulesResponse,
         super::routes::schedule::SessionsQuery,
@@ -614,16 +614,16 @@ derive_utoipa!(IconTheme as IconThemeSchema);
         super::routes::recipe::ParseRecipeResponse,
         super::routes::recipe::RecipeToYamlRequest,
         super::routes::recipe::RecipeToYamlResponse,
-        goose::recipe::Recipe,
-        goose::recipe::Author,
-        goose::recipe::Settings,
-        goose::recipe::RecipeParameter,
-        goose::recipe::RecipeParameterInputType,
-        goose::recipe::RecipeParameterRequirement,
-        goose::recipe::Response,
-        goose::recipe::SubRecipe,
-        goose::agents::types::RetryConfig,
-        goose::agents::types::SuccessCheck,
+        codev::recipe::Recipe,
+        codev::recipe::Author,
+        codev::recipe::Settings,
+        codev::recipe::RecipeParameter,
+        codev::recipe::RecipeParameterInputType,
+        codev::recipe::RecipeParameterRequirement,
+        codev::recipe::Response,
+        codev::recipe::SubRecipe,
+        codev::agents::types::RetryConfig,
+        codev::agents::types::SuccessCheck,
         super::routes::agent::UpdateProviderRequest,
         super::routes::agent::UpdateSessionRequest,
         super::routes::agent::GetToolsQuery,
@@ -646,21 +646,21 @@ derive_utoipa!(IconTheme as IconThemeSchema);
         super::routes::agent::RemoveExtensionRequest,
         super::routes::agent::ResumeAgentResponse,
         super::routes::agent::RestartAgentResponse,
-        goose::agents::ExtensionLoadResult,
+        codev::agents::ExtensionLoadResult,
         super::routes::setup::SetupResponse,
         super::tunnel::TunnelInfo,
         super::tunnel::TunnelState,
         super::routes::telemetry::TelemetryEventRequest,
-        goose::goose_apps::GooseApp,
-        goose::goose_apps::WindowProps,
-        goose::goose_apps::McpAppResource,
-        goose::goose_apps::CspMetadata,
-        goose::goose_apps::PermissionsMetadata,
-        goose::goose_apps::UiMetadata,
-        goose::goose_apps::ResourceMetadata,
+        codev::goose_apps::GooseApp,
+        codev::goose_apps::WindowProps,
+        codev::goose_apps::McpAppResource,
+        codev::goose_apps::CspMetadata,
+        codev::goose_apps::PermissionsMetadata,
+        codev::goose_apps::UiMetadata,
+        codev::goose_apps::ResourceMetadata,
         super::routes::dictation::TranscribeRequest,
         super::routes::dictation::TranscribeResponse,
-        goose::dictation::providers::DictationProvider,
+        codev::dictation::providers::DictationProvider,
         super::routes::dictation::DictationProviderStatus,
         super::routes::features::FeaturesResponse,
         DownloadProgress,
@@ -695,14 +695,14 @@ pub struct ApiDoc;
         super::routes::local_inference::LocalModelResponse,
         super::routes::local_inference::ModelDownloadStatus,
         super::routes::local_inference::DownloadModelRequest,
-        goose::providers::local_inference::hf_models::HfModelInfo,
-        goose::providers::local_inference::hf_models::HfGgufFile,
-        goose::providers::local_inference::hf_models::HfQuantVariant,
+        codev::providers::local_inference::hf_models::HfModelInfo,
+        codev::providers::local_inference::hf_models::HfGgufFile,
+        codev::providers::local_inference::hf_models::HfQuantVariant,
         super::routes::local_inference::RepoVariantsResponse,
-        goose::providers::local_inference::local_model_registry::ModelSettings,
-        goose::providers::local_inference::local_model_registry::ChatTemplate,
-        goose::providers::local_inference::local_model_registry::SamplingConfig,
-        goose::providers::local_inference::local_model_registry::ToolCallingMode,
+        codev::providers::local_inference::local_model_registry::ModelSettings,
+        codev::providers::local_inference::local_model_registry::ChatTemplate,
+        codev::providers::local_inference::local_model_registry::SamplingConfig,
+        codev::providers::local_inference::local_model_registry::ToolCallingMode,
     ))
 )]
 pub struct LocalInferenceApiDoc;

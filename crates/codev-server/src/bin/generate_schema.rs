@@ -1,4 +1,4 @@
-use goose_server::openapi;
+use codev_server::openapi;
 use std::env;
 use std::fs;
 use std::path::PathBuf;

@@ -1,4 +1,4 @@
-use goose_server::tls::{self_signed_config, TlsConfig};
+use codev_server::tls::{self_signed_config, TlsConfig};
 
 #[cfg(not(feature = "native-tls"))]
 #[test]

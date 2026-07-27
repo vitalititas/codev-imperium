@@ -1,6 +1,6 @@
 use axum::{extract::State, http::StatusCode, routing::post, Json, Router};
 #[cfg(feature = "telemetry")]
-use goose::posthog::emit_event;
+use codev::posthog::emit_event;
 use serde::Deserialize;
 use std::collections::HashMap;
 use std::sync::Arc;

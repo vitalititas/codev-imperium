@@ -1,8 +1,8 @@
 use crate::routes::errors::ErrorResponse;
 use crate::state::AppState;
 use axum::{extract::State, routing::post, Json, Router};
-use goose::permission::permission_confirmation::PrincipalType;
-use goose::permission::{Permission, PermissionConfirmation};
+use codev::permission::permission_confirmation::PrincipalType;
+use codev::permission::{Permission, PermissionConfirmation};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::sync::Arc;

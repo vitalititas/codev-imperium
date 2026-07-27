@@ -3,7 +3,7 @@ use axum::extract::State;
 use axum::http::HeaderValue;
 use axum::response::IntoResponse;
 use axum::{extract::Path, http::StatusCode, routing::get, Json, Router};
-use goose::session::{generate_diagnostics, get_system_info, SystemInfo};
+use codev::session::{generate_diagnostics, get_system_info, SystemInfo};
 use std::sync::Arc;
 
 use crate::state::AppState;

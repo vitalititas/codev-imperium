@@ -1,7 +1,7 @@
-use goose::config::declarative_providers::{load_provider, LoadedProvider};
-use goose::config::Config;
-use goose::providers::base::{ConfigKey, ProviderMetadata, ProviderType};
-use goose::providers::huggingface_auth;
+use codev::config::declarative_providers::{load_provider, LoadedProvider};
+use codev::config::Config;
+use codev::providers::base::{ConfigKey, ProviderMetadata, ProviderType};
+use codev::providers::huggingface_auth;
 use serde::{Deserialize, Serialize};
 use std::env;
 use std::error::Error;
@@ -144,7 +144,7 @@ fn check_provider_configured_with_huggingface_oauth(
     // OAuth providers: trust the structured configured flag or legacy marker
     let has_oauth_key = metadata.config_keys.iter().any(|key| key.oauth_flow);
     if has_oauth_key {
-        if let Some(entry) = goose::config::get_provider_entry(config, &metadata.name) {
+        if let Some(entry) = codev::config::get_provider_entry(config, &metadata.name) {
             if entry.configured {
                 return true;
             }
@@ -157,7 +157,7 @@ fn check_provider_configured_with_huggingface_oauth(
 
     // Zero-config providers (no config keys): trust structured flag or active status
     if metadata.config_keys.is_empty() {
-        if let Some(entry) = goose::config::get_provider_entry(config, &metadata.name) {
+        if let Some(entry) = codev::config::get_provider_entry(config, &metadata.name) {
             if entry.configured {
                 return true;
             }
@@ -252,8 +252,8 @@ fn accepts_huggingface_oauth(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goose::config::declarative_providers::{DeclarativeProviderConfig, ProviderEngine};
-    use goose::providers::base::ModelInfo;
+    use codev::config::declarative_providers::{DeclarativeProviderConfig, ProviderEngine};
+    use codev::providers::base::ModelInfo;
 
     fn huggingface_metadata() -> ProviderMetadata {
         ProviderMetadata::new(

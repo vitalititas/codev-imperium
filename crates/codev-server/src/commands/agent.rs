@@ -3,13 +3,13 @@ use crate::state;
 use anyhow::Result;
 use axum::middleware;
 use axum_server::Handle;
-use goose::acp::server_factory::{AcpServer, AcpServerFactoryConfig};
-use goose::acp::transport::create_acp_router;
-use goose::agents::GoosePlatform;
-use goose::config::paths::Paths;
-use goose_server::auth::{check_acp_token, check_token};
+use codev::acp::server_factory::{AcpServer, AcpServerFactoryConfig};
+use codev::acp::transport::create_acp_router;
+use codev::agents::GoosePlatform;
+use codev::config::paths::Paths;
+use codev_server::auth::{check_acp_token, check_token};
 #[cfg(any(feature = "rustls-tls", feature = "native-tls"))]
-use goose_server::tls::setup_tls;
+use codev_server::tls::setup_tls;
 use std::sync::Arc;
 use tower_http::cors::{Any, CorsLayer};
 use tracing::info;
@@ -155,8 +155,8 @@ pub async fn run() -> Result<()> {
     }
 
     #[cfg(feature = "otel")]
-    if goose::otel::otlp::is_otlp_initialized() {
-        goose::otel::otlp::shutdown_otlp();
+    if codev::otel::otlp::is_otlp_initialized() {
+        codev::otel::otlp::shutdown_otlp();
     }
 
     info!("server shutdown complete");

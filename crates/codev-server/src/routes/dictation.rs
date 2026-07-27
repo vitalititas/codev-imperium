@@ -10,14 +10,14 @@ use axum::{
 use axum::{extract::Path, routing::delete};
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 #[cfg(feature = "local-inference")]
-use goose::dictation::providers::transcribe_local;
-use goose::dictation::providers::{
+use codev::dictation::providers::transcribe_local;
+use codev::dictation::providers::{
     all_providers, is_configured, transcribe_with_provider, DictationProvider,
 };
 #[cfg(feature = "local-inference")]
-use goose::dictation::whisper;
+use codev::dictation::whisper;
 #[cfg(feature = "local-inference")]
-use goose::download_manager::{get_download_manager, DownloadProgress};
+use codev::download_manager::{get_download_manager, DownloadProgress};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -194,7 +194,7 @@ pub async fn transcribe_dictation(
 )]
 pub async fn get_dictation_config(
 ) -> Result<Json<HashMap<DictationProvider, DictationProviderStatus>>, ErrorResponse> {
-    let config = goose::config::Config::global();
+    let config = codev::config::Config::global();
     let mut providers = HashMap::new();
 
     for def in all_providers() {
@@ -274,7 +274,7 @@ pub async fn download_model(Path(model_id): Path<String>) -> Result<StatusCode, 
             model.url.to_string(),
             model.local_path(),
             Some(Box::new(move || {
-                let _ = goose::config::Config::global()
+                let _ = codev::config::Config::global()
                     .set_param(whisper::LOCAL_WHISPER_MODEL_CONFIG_KEY, model_id_for_config);
             })),
         )

@@ -4,8 +4,8 @@ use axum::{
     middleware::Next,
     response::Response,
 };
-pub use goose::acp::transport::auth::check_acp_token;
-use goose::acp::transport::auth::token_matches;
+pub use codev::acp::transport::auth::check_acp_token;
+use codev::acp::transport::auth::token_matches;
 
 pub async fn check_token(
     State(state): State<String>,

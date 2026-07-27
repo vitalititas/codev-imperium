@@ -18,7 +18,7 @@
 
 use clap::CommandFactory;
 use clap_mangen::Man;
-use goose_cli::Cli;
+use codev_cli::Cli;
 use std::env;
 use std::fs;
 use std::io::Result;

@@ -4,11 +4,11 @@ use anyhow::{Context, Result};
 use cliclack::{confirm, multiselect, select};
 use etcetera::home_dir;
 #[cfg(feature = "nostr")]
-use goose::config::Config;
+use codev::config::Config;
 #[cfg(feature = "nostr")]
-use goose::session::nostr_share;
-use goose::session::{generate_diagnostics, Session, SessionManager, SessionType};
-use goose::utils::safe_truncate;
+use codev::session::nostr_share;
+use codev::session::{generate_diagnostics, Session, SessionManager, SessionType};
+use codev::utils::safe_truncate;
 use regex::Regex;
 use std::fs;
 use std::io::{self, Write};
@@ -300,12 +300,12 @@ pub async fn handle_session_import(input: String, nostr: bool) -> Result<()> {
             .with_context(|| format!("Failed to read session import file: {input}"))?
     };
 
-    let format = goose::session::import_formats::detect_format(&json);
+    let format = codev::session::import_formats::detect_format(&json);
     let label = match format {
-        goose::session::import_formats::ImportFormat::Goose => "goose",
-        goose::session::import_formats::ImportFormat::ClaudeCode => "Claude Code",
-        goose::session::import_formats::ImportFormat::Codex => "Codex",
-        goose::session::import_formats::ImportFormat::Pi => "Pi",
+        codev::session::import_formats::ImportFormat::Goose => "goose",
+        codev::session::import_formats::ImportFormat::ClaudeCode => "Claude Code",
+        codev::session::import_formats::ImportFormat::Codex => "Codex",
+        codev::session::import_formats::ImportFormat::Pi => "Pi",
     };
     println!("Detected format: {}", label);
 
@@ -356,7 +356,7 @@ pub async fn handle_diagnostics(session_id: &str, output_path: Option<PathBuf>) 
 }
 
 fn export_session_to_markdown(
-    messages: Vec<goose::conversation::message::Message>,
+    messages: Vec<codev::conversation::message::Message>,
     session_name: &String,
 ) -> String {
     let mut markdown_output = String::new();
@@ -379,7 +379,7 @@ fn export_session_to_markdown(
             && message.content.iter().all(|content| {
                 matches!(
                     content,
-                    goose::conversation::message::MessageContent::ToolResponse(_)
+                    codev::conversation::message::MessageContent::ToolResponse(_)
                 )
             });
 
@@ -413,7 +413,7 @@ fn export_session_to_markdown(
         if message.content.iter().any(|content| {
             matches!(
                 content,
-                goose::conversation::message::MessageContent::ToolRequest(_)
+                codev::conversation::message::MessageContent::ToolRequest(_)
             )
         }) {
             skip_next_if_tool_response = true;

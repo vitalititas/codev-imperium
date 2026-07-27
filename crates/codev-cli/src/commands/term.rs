@@ -1,8 +1,8 @@
 use anyhow::{anyhow, Result};
 use chrono;
-use goose::config::Config;
-use goose::conversation::message::{Message, MessageContent, MessageMetadata};
-use goose::session::{SessionManager, SessionType};
+use codev::config::Config;
+use codev::conversation::message::{Message, MessageContent, MessageMetadata};
+use codev::session::{SessionManager, SessionType};
 use rmcp::model::Role;
 
 use crate::session::{build_session, SessionBuilderConfig};
@@ -326,7 +326,7 @@ pub async fn handle_term_info() -> Result<()> {
     let session = session_manager.get_session(&session_id, false).await.ok();
     let total_tokens = session.as_ref().and_then(|s| s.total_tokens).unwrap_or(0) as usize;
 
-    let config = goose::config::Config::global();
+    let config = codev::config::Config::global();
     let model_name = config
         .get_goose_model()
         .ok()
@@ -345,7 +345,7 @@ pub async fn handle_term_info() -> Result<()> {
         .ok()
         .and_then(|model_name| {
             config.get_goose_provider().ok().and_then(|provider_name| {
-                goose::model::ModelConfig::new(&model_name)
+                codev::model::ModelConfig::new(&model_name)
                     .ok()
                     .map(|c| c.with_canonical_limits(&provider_name))
             })

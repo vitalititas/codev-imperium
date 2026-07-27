@@ -1,7 +1,7 @@
 use anyhow::Result;
 use console::{measure_text_width, Term};
-use goose::skills::list_installed_skills;
-use goose::token_counter::create_token_counter;
+use codev::skills::list_installed_skills;
+use codev::token_counter::create_token_counter;
 
 const DESCRIPTION_PREVIEW_CHARS: usize = 50;
 const SEPARATOR: &str = " | ";

@@ -1,9 +1,9 @@
 use anyhow::{bail, Context, Result};
-use goose::scheduler::{
+use codev::scheduler::{
     get_default_scheduled_recipes_dir, get_default_scheduler_storage_path, ScheduledJob, Scheduler,
     SchedulerError,
 };
-use goose::session::SessionManager;
+use codev::session::SessionManager;
 use std::path::Path;
 use std::sync::Arc;
 

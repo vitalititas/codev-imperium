@@ -1,6 +1,6 @@
 use crate::recipes::search_recipe::load_recipe_file;
-use goose::agents::extension::ExtensionConfig;
-use goose::recipe::Recipe;
+use codev::agents::extension::ExtensionConfig;
+use codev::recipe::Recipe;
 use regex::{NoExpand, Regex};
 use std::collections::HashSet;
 
@@ -147,8 +147,8 @@ fn load_sub_recipe(recipe_path: &str) -> Result<(Recipe, String), Box<dyn std::e
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goose::agents::extension::{Envs, ExtensionConfig};
-    use goose::recipe::Recipe;
+    use codev::agents::extension::{Envs, ExtensionConfig};
+    use codev::recipe::Recipe;
     use std::collections::HashMap;
 
     fn create_test_recipe_with_extensions() -> Recipe {
@@ -308,7 +308,7 @@ mod tests {
 
     #[test]
     fn test_discover_recipe_secrets_with_sub_recipes() {
-        use goose::recipe::SubRecipe;
+        use codev::recipe::SubRecipe;
 
         let recipe = Recipe {
             version: "1.0.0".to_string(),

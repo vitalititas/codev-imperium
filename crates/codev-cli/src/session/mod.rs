@@ -12,7 +12,7 @@ mod thinking;
 use crate::session::task_execution_display::{
     format_task_execution_notification, TASK_EXECUTION_NOTIFICATION_TYPE,
 };
-use goose::conversation::Conversation;
+use codev::conversation::Conversation;
 use std::io::Write;
 use std::str::FromStr;
 use tokio::signal::ctrl_c;
@@ -21,29 +21,29 @@ use tokio_util::task::AbortOnDropHandle;
 pub use self::export::message_to_markdown;
 pub use builder::{build_session, SessionBuilderConfig};
 use console::Color;
-use goose::agents::AgentEvent;
-use goose::agents::SUBAGENT_TOOL_REQUEST_TYPE;
-use goose::permission::permission_confirmation::PrincipalType;
-use goose::permission::Permission;
-use goose::permission::PermissionConfirmation;
-use goose::providers::base::Provider;
-use goose::utils::safe_truncate;
+use codev::agents::AgentEvent;
+use codev::agents::SUBAGENT_TOOL_REQUEST_TYPE;
+use codev::permission::permission_confirmation::PrincipalType;
+use codev::permission::Permission;
+use codev::permission::PermissionConfirmation;
+use codev::providers::base::Provider;
+use codev::utils::safe_truncate;
 
 use anyhow::{Context, Result};
 use completion::GooseCompleter;
-use goose::agents::extension::{Envs, ExtensionConfig, PLATFORM_EXTENSIONS};
-use goose::agents::types::RetryConfig;
-use goose::agents::{Agent, SessionConfig, COMPACT_TRIGGERS};
-use goose::config::extensions::name_to_key;
-use goose::config::{Config, GooseMode};
+use codev::agents::extension::{Envs, ExtensionConfig, PLATFORM_EXTENSIONS};
+use codev::agents::types::RetryConfig;
+use codev::agents::{Agent, SessionConfig, COMPACT_TRIGGERS};
+use codev::config::extensions::name_to_key;
+use codev::config::{Config, GooseMode};
 use input::InputResult;
 use rmcp::model::PromptMessage;
 use rmcp::model::ServerNotification;
 use rmcp::model::{ErrorCode, ErrorData};
 use strum::VariantNames;
 
-use goose::config::paths::Paths;
-use goose::conversation::message::{ActionRequiredData, Message, MessageContent};
+use codev::config::paths::Paths;
+use codev::conversation::message::{ActionRequiredData, Message, MessageContent};
 use rustyline::EditMode;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -281,7 +281,7 @@ impl CliSession {
     /// Parse a stdio extension command string into an ExtensionConfig
     /// Format: "ENV1=val1 ENV2=val2 command args..."
     pub fn parse_stdio_extension(extension_command: &str) -> Result<ExtensionConfig> {
-        let mut parts = goose::utils::split_command_args(extension_command)?;
+        let mut parts = codev::utils::split_command_args(extension_command)?;
         let mut envs = HashMap::new();
 
         while let Some(part) = parts.first() {
@@ -310,8 +310,8 @@ impl CliSession {
             args: parts,
             envs: Envs::new(envs),
             env_keys: Vec::new(),
-            description: goose::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
-            timeout: Some(goose::config::DEFAULT_EXTENSION_TIMEOUT),
+            description: codev::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
+            timeout: Some(codev::config::DEFAULT_EXTENSION_TIMEOUT),
             bundled: None,
             available_tools: Vec::new(),
         })
@@ -345,7 +345,7 @@ impl CliSession {
             envs: Envs::new(HashMap::new()),
             env_keys: Vec::new(),
             headers: HashMap::new(),
-            description: goose::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
+            description: codev::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
             timeout: Some(timeout),
             socket: None,
             bundled: None,
@@ -402,7 +402,7 @@ impl CliSession {
     pub async fn add_streamable_http_extension(&mut self, extension_url: String) -> Result<()> {
         let config = Self::parse_streamable_http_extension(
             &extension_url,
-            goose::config::DEFAULT_EXTENSION_TIMEOUT,
+            codev::config::DEFAULT_EXTENSION_TIMEOUT,
         );
         self.add_and_persist_extensions(vec![config]).await
     }
@@ -479,13 +479,13 @@ impl CliSession {
     /// Start an interactive session, optionally with an initial message
     pub async fn interactive(&mut self, prompt: Option<String>) -> Result<()> {
         self.agent
-            .emit_hook(goose::hooks::HookEvent::SessionStart, &self.session_id)
+            .emit_hook(codev::hooks::HookEvent::SessionStart, &self.session_id)
             .await;
 
         let result = self.run_interactive(prompt).await;
 
         self.agent
-            .emit_hook(goose::hooks::HookEvent::SessionEnd, &self.session_id)
+            .emit_hook(codev::hooks::HookEvent::SessionEnd, &self.session_id)
             .await;
 
         if result.is_ok() {
@@ -849,7 +849,7 @@ impl CliSession {
 
         let extensions = self.agent.get_extension_configs().await;
         let new_provider =
-            goose::providers::create(&current_provider_name, new_model_config, extensions)
+            codev::providers::create(&current_provider_name, new_model_config, extensions)
                 .await
                 .map_err(|e| anyhow::anyhow!("Failed to create provider: {e}"))?;
 
@@ -972,8 +972,8 @@ impl CliSession {
 
     async fn handle_list_skills(&mut self) -> Result<()> {
         use comfy_table::{presets, Cell, ContentArrangement, Table};
-        use goose::custom_requests::SourceType;
-        use goose::skills::list_installed_skills;
+        use codev::custom_requests::SourceType;
+        use codev::skills::list_installed_skills;
         let cwd = std::env::current_dir().unwrap_or_default();
         let skills = list_installed_skills(Some(&cwd));
 
@@ -1122,14 +1122,14 @@ impl CliSession {
     /// Process a single message and exit
     pub async fn headless(&mut self, prompt: String) -> Result<()> {
         self.agent
-            .emit_hook(goose::hooks::HookEvent::SessionStart, &self.session_id)
+            .emit_hook(codev::hooks::HookEvent::SessionStart, &self.session_id)
             .await;
         let message = Message::user().with_text(&prompt);
         let result = self
             .process_message(message, CancellationToken::default(), false)
             .await;
         self.agent
-            .emit_hook(goose::hooks::HookEvent::SessionEnd, &self.session_id)
+            .emit_hook(codev::hooks::HookEvent::SessionEnd, &self.session_id)
             .await;
         result?;
         Ok(())
@@ -1534,7 +1534,7 @@ impl CliSession {
         println!();
     }
 
-    pub async fn get_session(&self) -> Result<goose::session::Session> {
+    pub async fn get_session(&self) -> Result<codev::session::Session> {
         self.agent
             .config
             .session_manager
@@ -1671,7 +1671,7 @@ impl CliSession {
     /// * `Result<PathBuf, String>` - The path the recipe was saved to or an error message
     fn save_recipe(
         &self,
-        recipe: &goose::recipe::Recipe,
+        recipe: &codev::recipe::Recipe,
         filepath_str: &str,
     ) -> anyhow::Result<PathBuf> {
         let path_buf = PathBuf::from(filepath_str);
@@ -2091,11 +2091,11 @@ fn handle_agent_error(e: &anyhow::Error, is_stream_json_mode: bool) {
         });
     }
 
-    if e.downcast_ref::<goose_providers::errors::ProviderError>()
+    if e.downcast_ref::<codev_providers::errors::ProviderError>()
         .map(|provider_error| {
             matches!(
                 provider_error,
-                goose_providers::errors::ProviderError::ContextLengthExceeded(_)
+                codev_providers::errors::ProviderError::ContextLengthExceeded(_)
             )
         })
         .unwrap_or(false)
@@ -2116,8 +2116,8 @@ fn handle_agent_error(e: &anyhow::Error, is_stream_json_mode: bool) {
 }
 
 async fn get_reasoner() -> Result<Arc<dyn Provider>, anyhow::Error> {
-    use goose::model::ModelConfig;
-    use goose::providers::create;
+    use codev::model::ModelConfig;
+    use codev::providers::create;
 
     let config = Config::global();
 
@@ -2143,7 +2143,7 @@ async fn get_reasoner() -> Result<Arc<dyn Provider>, anyhow::Error> {
 
     let model_config =
         ModelConfig::new_with_context_env(model, &provider, Some("GOOSE_PLANNER_CONTEXT_LIMIT"))?;
-    let extensions = goose::config::extensions::get_enabled_extensions_with_config(config);
+    let extensions = codev::config::extensions::get_enabled_extensions_with_config(config);
     let reasoner = create(&provider, model_config, extensions).await?;
 
     Ok(reasoner)
@@ -2165,9 +2165,9 @@ fn format_elapsed_time(duration: std::time::Duration) -> String {
 fn build_switched_model_config(
     provider_name: &str,
     model_name: &str,
-    current_model_config: &goose::model::ModelConfig,
-) -> Result<goose::model::ModelConfig> {
-    goose::model::ModelConfig::new(model_name)
+    current_model_config: &codev::model::ModelConfig,
+) -> Result<codev::model::ModelConfig> {
+    codev::model::ModelConfig::new(model_name)
         .map(|config| {
             config
                 .with_canonical_limits(provider_name)
@@ -2181,8 +2181,8 @@ fn build_switched_model_config(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goose::agents::extension::Envs;
-    use goose::config::ExtensionConfig;
+    use codev::agents::extension::Envs;
+    use codev::config::ExtensionConfig;
     use std::collections::HashMap;
     use std::time::Duration;
     use test_case::test_case;
@@ -2261,8 +2261,8 @@ mod tests {
             args: vec![],
             envs: Envs::default(),
             env_keys: vec![],
-            description: goose::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
-            timeout: Some(goose::config::DEFAULT_EXTENSION_TIMEOUT),
+            description: codev::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
+            timeout: Some(codev::config::DEFAULT_EXTENSION_TIMEOUT),
             bundled: None,
             available_tools: vec![],
         }
@@ -2276,8 +2276,8 @@ mod tests {
             args: vec!["-y".into(), "@modelcontextprotocol/server-everything".into()],
             envs: Envs::new([("MY_SECRET".into(), "s3cret".into())].into()),
             env_keys: vec![],
-            description: goose::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
-            timeout: Some(goose::config::DEFAULT_EXTENSION_TIMEOUT),
+            description: codev::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
+            timeout: Some(codev::config::DEFAULT_EXTENSION_TIMEOUT),
             bundled: None,
             available_tools: vec![],
         }
@@ -2291,8 +2291,8 @@ mod tests {
             args: vec!["-classpath".into(), "/path/with spaces/lib.jar".into(), "Main".into()],
             envs: Envs::default(),
             env_keys: vec![],
-            description: goose::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
-            timeout: Some(goose::config::DEFAULT_EXTENSION_TIMEOUT),
+            description: codev::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
+            timeout: Some(codev::config::DEFAULT_EXTENSION_TIMEOUT),
             bundled: None,
             available_tools: vec![],
         }
@@ -2317,7 +2317,7 @@ mod tests {
             ("GOOSE_TOOLSHIM_OLLAMA_MODEL", None::<&str>),
         ]);
 
-        let current_model_config = goose::model::ModelConfig {
+        let current_model_config = codev::model::ModelConfig {
             model_name: "gpt-4o".to_string(),
             context_limit: Some(128_000),
             temperature: Some(0.25),
@@ -2334,7 +2334,7 @@ mod tests {
 
         let switched =
             build_switched_model_config("openai", "gpt-5.4", &current_model_config).unwrap();
-        let expected = goose::model::ModelConfig::new_or_fail("gpt-5.4")
+        let expected = codev::model::ModelConfig::new_or_fail("gpt-5.4")
             .with_canonical_limits("openai")
             .with_temperature(Some(0.25))
             .with_toolshim(true)
@@ -2362,11 +2362,11 @@ mod tests {
         ]);
 
         let current =
-            goose::model::ModelConfig::new_or_fail("gpt-5.4-high").with_canonical_limits("openai");
+            codev::model::ModelConfig::new_or_fail("gpt-5.4-high").with_canonical_limits("openai");
         assert_eq!(current.model_name, "gpt-5.4");
         assert_eq!(
             current.thinking_effort(),
-            Some(goose_providers::thinking::ThinkingEffort::High)
+            Some(codev_providers::thinking::ThinkingEffort::High)
         );
 
         let switched = build_switched_model_config("openai", "gpt-5.4", &current).unwrap();
@@ -2378,18 +2378,18 @@ mod tests {
     #[test]
     fn test_split_command_args_windows_paths() {
         assert_eq!(
-            goose::utils::split_command_args(r"C:\tools\mcp.exe --arg value").unwrap(),
+            codev::utils::split_command_args(r"C:\tools\mcp.exe --arg value").unwrap(),
             vec![r"C:\tools\mcp.exe", "--arg", "value"]
         );
         assert_eq!(
-            goose::utils::split_command_args(r#""C:\Program Files\server\mcp.exe" --arg"#).unwrap(),
+            codev::utils::split_command_args(r#""C:\Program Files\server\mcp.exe" --arg"#).unwrap(),
             vec![r"C:\Program Files\server\mcp.exe", "--arg"]
         );
     }
 
     #[test]
     fn test_split_command_args_unmatched_quote() {
-        assert!(goose::utils::split_command_args(r#""unmatched"#).is_err());
+        assert!(codev::utils::split_command_args(r#""unmatched"#).is_err());
     }
 
     #[test_case(
@@ -2400,7 +2400,7 @@ mod tests {
             envs: Envs::default(),
             env_keys: vec![],
             headers: HashMap::new(),
-            description: goose::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
+            description: codev::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
             timeout: Some(300),
             socket: None,
             bundled: None,
@@ -2416,7 +2416,7 @@ mod tests {
             envs: Envs::default(),
             env_keys: vec![],
             headers: HashMap::new(),
-            description: goose::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
+            description: codev::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
             timeout: Some(300),
             socket: None,
             bundled: None,
@@ -2432,7 +2432,7 @@ mod tests {
             envs: Envs::default(),
             env_keys: vec![],
             headers: HashMap::new(),
-            description: goose::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
+            description: codev::config::DEFAULT_EXTENSION_DESCRIPTION.to_string(),
             timeout: Some(300),
             socket: None,
             bundled: None,

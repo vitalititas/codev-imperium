@@ -3,13 +3,13 @@ use crate::cli::StreamableHttpOptions;
 use super::output;
 use super::CliSession;
 use console::style;
-use goose::agents::{Agent, Container, ExtensionError};
-use goose::config::resolve_extensions_for_new_session;
-use goose::config::{Config, ExtensionConfig, GooseMode};
-use goose::providers::create;
-use goose::recipe::Recipe;
-use goose::session::session_manager::SessionType;
-use goose::session::EnabledExtensionsState;
+use codev::agents::{Agent, Container, ExtensionError};
+use codev::config::resolve_extensions_for_new_session;
+use codev::config::{Config, ExtensionConfig, GooseMode};
+use codev::providers::create;
+use codev::recipe::Recipe;
+use codev::session::session_manager::SessionType;
+use codev::session::EnabledExtensionsState;
 use rustyline::EditMode;
 use std::collections::BTreeSet;
 use std::process;
@@ -226,14 +226,14 @@ async fn load_extensions(
 struct ResolvedProviderConfig {
     provider_name: String,
     model_name: String,
-    model_config: goose::model::ModelConfig,
+    model_config: codev::model::ModelConfig,
 }
 
 fn resolve_provider_and_model(
     session_config: &SessionBuilderConfig,
     config: &Config,
     saved_provider: Option<String>,
-    saved_model_config: Option<goose::model::ModelConfig>,
+    saved_model_config: Option<codev::model::ModelConfig>,
 ) -> ResolvedProviderConfig {
     let recipe_settings = session_config
         .recipe
@@ -275,7 +275,7 @@ fn resolve_provider_and_model(
         config
     } else {
         let temperature = recipe_settings.and_then(|s| s.temperature);
-        goose::model::ModelConfig::new(&model_name)
+        codev::model::ModelConfig::new(&model_name)
             .unwrap_or_else(|e| {
                 output::render_error(&format!("Failed to create model configuration: {}", e));
                 process::exit(1);
@@ -293,7 +293,7 @@ fn resolve_provider_and_model(
 
 async fn resolve_session_id(
     session_config: &SessionBuilderConfig,
-    session_manager: &goose::session::session_manager::SessionManager,
+    session_manager: &codev::session::session_manager::SessionManager,
     goose_mode: GooseMode,
 ) -> String {
     if session_config.no_session {
@@ -438,7 +438,7 @@ async fn resolve_and_load_extensions(
     extensions: Vec<ExtensionConfig>,
     session_id: &str,
 ) -> Arc<Agent> {
-    for warning in goose::config::get_warnings() {
+    for warning in codev::config::get_warnings() {
         eprintln!("{}", style(format!("Warning: {}", warning)).yellow());
     }
 
@@ -482,7 +482,7 @@ async fn configure_session_prompts(
 
 pub async fn build_session(session_config: SessionBuilderConfig) -> CliSession {
     #[cfg(feature = "telemetry")]
-    goose::posthog::set_session_context("cli", session_config.resume);
+    codev::posthog::set_session_context("cli", session_config.resume);
 
     let config = Config::global();
     let agent: Agent = Agent::new();
@@ -635,7 +635,7 @@ mod tests {
             extensions: vec!["echo test".to_string()],
             streamable_http_extensions: vec![StreamableHttpOptions {
                 url: "http://localhost:8080/mcp".to_string(),
-                timeout: goose::config::DEFAULT_EXTENSION_TIMEOUT,
+                timeout: codev::config::DEFAULT_EXTENSION_TIMEOUT,
             }],
             builtins: vec!["developer".to_string()],
             no_profile: false,

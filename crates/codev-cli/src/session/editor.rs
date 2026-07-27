@@ -1,5 +1,5 @@
 use anyhow::Result;
-use goose::config::Config;
+use codev::config::Config;
 use std::fs;
 use std::io::Read;
 use std::path::PathBuf;

@@ -1,18 +1,18 @@
 use dotenvy::dotenv;
-use goose::conversation::Conversation;
+use codev::conversation::Conversation;
 
 use crate::scenario_tests::message_generator::MessageGenerator;
 use crate::scenario_tests::mock_client::weather_client;
 use crate::scenario_tests::provider_configs::{get_provider_configs, ProviderConfig};
 use crate::session::CliSession;
 use anyhow::Result;
-use goose::agents::{Agent, AgentConfig, GoosePlatform};
-use goose::config::permission::PermissionManager;
-use goose::config::GooseMode;
-use goose::model::ModelConfig;
-use goose::providers::{create, testprovider::TestProvider};
-use goose::session::session_manager::SessionType;
-use goose::session::SessionManager;
+use codev::agents::{Agent, AgentConfig, GoosePlatform};
+use codev::config::permission::PermissionManager;
+use codev::config::GooseMode;
+use codev::model::ModelConfig;
+use codev::providers::{create, testprovider::TestProvider};
+use codev::session::session_manager::SessionType;
+use codev::session::SessionManager;
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -141,9 +141,9 @@ async fn run_provider_scenario_with_validation<F>(
 where
     F: Fn(&ScenarioResult) -> Result<()>,
 {
-    use goose::config::ExtensionConfig;
+    use codev::config::ExtensionConfig;
 
-    goose::agents::moim::SKIP.with(|f| f.set(true));
+    codev::agents::moim::SKIP.with(|f| f.set(true));
 
     if let Ok(path) = dotenv() {
         println!("Loaded environment from {:?}", path);
@@ -248,7 +248,7 @@ where
 
     agent
         .update_provider(
-            provider_arc as Arc<dyn goose::providers::base::Provider>,
+            provider_arc as Arc<dyn codev::providers::base::Provider>,
             &session.id,
         )
         .await?;

@@ -1,11 +1,11 @@
 use anyhow::Result;
 use console::style;
-use goose::recipe::validate_recipe::validate_recipe_template_from_file;
+use codev::recipe::validate_recipe::validate_recipe_template_from_file;
 use std::collections::HashMap;
 
 use crate::recipes::github_recipe::RecipeSource;
 use crate::recipes::search_recipe::{list_available_recipes, load_recipe_file};
-use goose::recipe_deeplink;
+use codev::recipe_deeplink;
 
 pub fn handle_validate(recipe_name: &str) -> Result<()> {
     // Load and validate the recipe file
@@ -168,7 +168,7 @@ fn parse_params(params: &[String]) -> Result<HashMap<String, String>> {
 fn generate_deeplink(
     recipe_name: &str,
     params: HashMap<String, String>,
-) -> Result<(String, goose::recipe::Recipe)> {
+) -> Result<(String, codev::recipe::Recipe)> {
     let recipe_file = load_recipe_file(recipe_name)?;
     // Load the recipe file first to validate it
     let recipe = validate_recipe_template_from_file(&recipe_file)?;

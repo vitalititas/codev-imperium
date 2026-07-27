@@ -2,8 +2,8 @@ use std::io;
 
 use clap::{Parser, Subcommand, ValueEnum};
 
-use goose_test::mcp::stdio::playback::playback;
-use goose_test::mcp::stdio::record::record;
+use codev_test::mcp::stdio::playback::playback;
+use codev_test::mcp::stdio::record::record;
 
 #[derive(Parser)]
 struct Cli {

@@ -1,11 +1,11 @@
 use anyhow::{anyhow, Result};
 use console::style;
-use goose::recipe::template_recipe::parse_recipe_content;
-use goose::recipe::RECIPE_FILE_EXTENSIONS;
+use codev::recipe::template_recipe::parse_recipe_content;
+use codev::recipe::RECIPE_FILE_EXTENSIONS;
 use serde::{Deserialize, Serialize};
 
-use goose::recipe::read_recipe_file_content::RecipeFile;
-use goose::subprocess::SubprocessExt;
+use codev::recipe::read_recipe_file_content::RecipeFile;
+use codev::subprocess::SubprocessExt;
 use std::env;
 use std::fs;
 

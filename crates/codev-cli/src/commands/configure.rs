@@ -446,7 +446,7 @@ fn interactive_model_search(models: &[String]) -> anyhow::Result<String> {
 
 fn select_model_from_list(
     models: &[String],
-    provider_meta: &goose::providers::base::ProviderMetadata,
+    provider_meta: &codev::providers::base::ProviderMetadata,
 ) -> anyhow::Result<String> {
     const MAX_MODELS: usize = 10;
     const UNLISTED_MODEL_KEY: &str = "__unlisted__";
@@ -520,7 +520,7 @@ fn select_model_from_list(
 }
 
 fn prompt_unlisted_model(
-    provider_meta: &goose::providers::base::ProviderMetadata,
+    provider_meta: &codev::providers::base::ProviderMetadata,
 ) -> anyhow::Result<String> {
     let model: String = cliclack::input("Enter the model name:")
         .placeholder(&provider_meta.default_model)
@@ -765,7 +765,7 @@ pub async fn configure_provider_dialog() -> anyhow::Result<bool> {
     {
         let supports_thinking = match temp_provider.fetch_model_info(&model).await {
             Ok(model_info) => model_info.reasoning,
-            Err(_) => goose::model::ModelConfig::new(&model)
+            Err(_) => codev::model::ModelConfig::new(&model)
                 .map(|c| c.is_reasoning_model())
                 .unwrap_or(false),
         };
@@ -795,7 +795,7 @@ pub async fn configure_provider_dialog() -> anyhow::Result<bool> {
     match test_provider_configuration(provider_name, &model, toolshim_enabled, toolshim_model).await
     {
         Ok(()) => {
-            goose::config::set_active_provider(config, provider_name, &model)?;
+            codev::config::set_active_provider(config, provider_name, &model)?;
             print_config_file_saved()?;
             Ok(true)
         }
@@ -814,7 +814,7 @@ pub async fn configure_provider_dialog() -> anyhow::Result<bool> {
 /// Configure extensions that can be used with goose
 /// Dialog for toggling which extensions are enabled/disabled
 pub fn toggle_extensions_dialog() -> anyhow::Result<()> {
-    for warning in goose::config::get_warnings() {
+    for warning in codev::config::get_warnings() {
         eprintln!("{}", style(format!("Warning: {}", warning)).yellow());
     }
 
@@ -877,7 +877,7 @@ pub fn toggle_extensions_dialog() -> anyhow::Result<()> {
 fn prompt_extension_timeout() -> anyhow::Result<u64> {
     Ok(
         cliclack::input("Please set the timeout for this tool (in secs):")
-            .placeholder(&goose::config::DEFAULT_EXTENSION_TIMEOUT.to_string())
+            .placeholder(&codev::config::DEFAULT_EXTENSION_TIMEOUT.to_string())
             .validate(|input: &String| match input.parse::<u64>() {
                 Ok(_) => Ok(()),
                 Err(_) => Err("Please enter a valid timeout"),
@@ -1059,7 +1059,7 @@ fn configure_stdio_extension() -> anyhow::Result<()> {
 
     let timeout = prompt_extension_timeout()?;
 
-    let mut parts = goose::utils::split_command_args(&command_str)?;
+    let mut parts = codev::utils::split_command_args(&command_str)?;
     let cmd = if parts.is_empty() {
         String::new()
     } else {
@@ -1164,7 +1164,7 @@ pub fn configure_extensions_dialog() -> anyhow::Result<()> {
 }
 
 pub fn remove_extension_dialog() -> anyhow::Result<()> {
-    for warning in goose::config::get_warnings() {
+    for warning in codev::config::get_warnings() {
         eprintln!("{}", style(format!("Warning: {}", warning)).yellow());
     }
 
@@ -1771,7 +1771,7 @@ pub async fn handle_openrouter_auth() -> anyhow::Result<()> {
     // Test configuration - get the model that was configured
     println!("\nTesting configuration...");
     let configured_model: String = config.get_goose_model()?;
-    let model_config = match goose::model::ModelConfig::new(&configured_model) {
+    let model_config = match codev::model::ModelConfig::new(&configured_model) {
         Ok(config) => config.with_canonical_limits("openrouter"),
         Err(e) => {
             eprintln!("⚠️  Invalid model configuration: {}", e);
@@ -1809,7 +1809,7 @@ pub async fn handle_openrouter_auth() -> anyhow::Result<()> {
                             config: ExtensionConfig::Platform {
                                 name: "developer".to_string(),
                                 description: "Developer extension".to_string(),
-                                display_name: Some(goose::config::DEFAULT_DISPLAY_NAME.to_string()),
+                                display_name: Some(codev::config::DEFAULT_DISPLAY_NAME.to_string()),
                                 bundled: Some(true),
                                 available_tools: Vec::new(),
                             },
@@ -1852,7 +1852,7 @@ pub async fn handle_tetrate_auth() -> anyhow::Result<()> {
     // Test configuration
     println!("\nTesting configuration...");
     let configured_model: String = config.get_goose_model()?;
-    let model_config = match goose::model::ModelConfig::new(&configured_model) {
+    let model_config = match codev::model::ModelConfig::new(&configured_model) {
         Ok(config) => config.with_canonical_limits("tetrate"),
         Err(e) => {
             eprintln!("⚠️  Invalid model configuration: {}", e);
@@ -1880,7 +1880,7 @@ pub async fn handle_tetrate_auth() -> anyhow::Result<()> {
                             config: ExtensionConfig::Platform {
                                 name: "developer".to_string(),
                                 description: "Developer extension".to_string(),
-                                display_name: Some(goose::config::DEFAULT_DISPLAY_NAME.to_string()),
+                                display_name: Some(codev::config::DEFAULT_DISPLAY_NAME.to_string()),
                                 bundled: Some(true),
                                 available_tools: Vec::new(),
                             },
@@ -2073,9 +2073,9 @@ fn add_provider() -> anyhow::Result<()> {
 }
 
 async fn remove_provider() -> anyhow::Result<()> {
-    let custom_providers_dir = goose::config::declarative_providers::custom_providers_dir();
+    let custom_providers_dir = codev::config::declarative_providers::custom_providers_dir();
     let custom_providers = if custom_providers_dir.exists() {
-        goose::config::declarative_providers::load_custom_providers(&custom_providers_dir)?
+        codev::config::declarative_providers::load_custom_providers(&custom_providers_dir)?
     } else {
         Vec::new()
     };
@@ -2096,7 +2096,7 @@ async fn remove_provider() -> anyhow::Result<()> {
         .interact()?;
 
     // Clean up provider-specific cache files (e.g., OAuth tokens) before removing config
-    if let Err(e) = goose::providers::cleanup_provider(selected_id).await {
+    if let Err(e) = codev::providers::cleanup_provider(selected_id).await {
         tracing::warn!("Failed to clean up provider cache: {}", e);
     }
 

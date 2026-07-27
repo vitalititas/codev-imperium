@@ -17,14 +17,14 @@ fn setup_logging_internal(name: Option<&str>, force: bool) -> Result<()> {
         result = (|| {
             use tracing_subscriber::util::SubscriberInitExt;
 
-            let config = goose::logging::LoggingConfig {
+            let config = codev::logging::LoggingConfig {
                 component: "cli",
                 name,
                 extra_directives: &["goose_cli=info"],
                 console: false,
                 json: true,
             };
-            let subscriber = goose::logging::build_logging_subscriber(&config)?;
+            let subscriber = codev::logging::build_logging_subscriber(&config)?;
 
             if force {
                 let _guard = subscriber.set_default();
@@ -52,7 +52,7 @@ fn setup_logging_internal(name: Option<&str>, force: bool) -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use goose::tracing::langfuse_layer;
+    use codev::tracing::langfuse_layer;
     use std::env;
     use tempfile::TempDir;
 
@@ -69,7 +69,7 @@ mod tests {
     #[test]
     fn test_log_directory_creation() {
         let _temp_dir = setup_temp_home();
-        let log_dir = goose::logging::prepare_log_directory("cli", true).unwrap();
+        let log_dir = codev::logging::prepare_log_directory("cli", true).unwrap();
         assert!(log_dir.exists());
         assert!(log_dir.is_dir());
 
@@ -129,13 +129,13 @@ mod tests {
         // The shared helper honours RUST_LOG; without it the defaults apply.
         // We just smoke-check that building the subscriber doesn't panic.
         let _temp_dir = setup_temp_home();
-        let config = goose::logging::LoggingConfig {
+        let config = codev::logging::LoggingConfig {
             component: "cli-test",
             name: None,
             extra_directives: &["goose_cli=info"],
             console: false,
             json: true,
         };
-        assert!(goose::logging::build_logging_subscriber(&config).is_ok());
+        assert!(codev::logging::build_logging_subscriber(&config).is_ok());
     }
 }

@@ -1,15 +1,15 @@
 use anstream::println;
 use bat::WrappingMode;
 use console::{measure_text_width, style, Color, Term};
-use goose::config::Config;
-use goose::conversation::message::{
+use codev::config::Config;
+use codev::conversation::message::{
     ActionRequiredData, Message, MessageContent, SystemNotificationContent, SystemNotificationType,
     ToolRequest, ToolResponse,
 };
-use goose::providers::canonical::maybe_get_canonical_model;
+use codev::providers::canonical::maybe_get_canonical_model;
 #[cfg(target_os = "windows")]
-use goose::subprocess::SubprocessExt;
-use goose::utils::safe_truncate;
+use codev::subprocess::SubprocessExt;
+use codev::utils::safe_truncate;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use rmcp::model::{CallToolRequestParams, JsonObject, PromptArgument};
 use serde_json::Value;

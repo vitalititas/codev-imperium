@@ -4,14 +4,14 @@ mod common_tests;
 
 use common_tests::fixtures::server::AcpServerConnection;
 use common_tests::fixtures::{run_test, send_custom, Connection, TestConnectionConfig};
-use goose::config::paths::Paths;
-use goose::config::{Config, ConfigError};
-use goose::model::ModelConfig;
-use goose::providers::base::{MessageStream, Provider};
-use goose::providers::inventory::ProviderInventoryService;
-use goose::session::session_manager::SessionStorage;
-use goose_providers::errors::ProviderError;
-use goose_test_support::EnforceSessionId;
+use codev::config::paths::Paths;
+use codev::config::{Config, ConfigError};
+use codev::model::ModelConfig;
+use codev::providers::base::{MessageStream, Provider};
+use codev::providers::inventory::ProviderInventoryService;
+use codev::session::session_manager::SessionStorage;
+use codev_providers::errors::ProviderError;
+use codev_test_support::EnforceSessionId;
 use serial_test::serial;
 use std::sync::Arc;
 
@@ -31,7 +31,7 @@ impl Provider for MockProvider {
         _model_config: &ModelConfig,
         _session_id: &str,
         _system: &str,
-        _messages: &[goose::conversation::message::Message],
+        _messages: &[codev::conversation::message::Message],
         _tools: &[rmcp::model::Tool],
     ) -> Result<MessageStream, ProviderError> {
         unimplemented!()
@@ -46,7 +46,7 @@ impl Provider for MockProvider {
     }
 }
 
-fn mock_provider_factory() -> goose::acp::server::AcpProviderFactory {
+fn mock_provider_factory() -> codev::acp::server::AcpProviderFactory {
     Arc::new(|provider_name, model_config, _extensions, _working_dir| {
         Box::pin(async move {
             Ok(Arc::new(MockProvider {
@@ -60,7 +60,7 @@ fn mock_provider_factory() -> goose::acp::server::AcpProviderFactory {
 fn write_config(config_dir: &std::path::Path) {
     std::fs::create_dir_all(config_dir).unwrap();
     std::fs::write(
-        config_dir.join(goose::config::base::CONFIG_YAML_NAME),
+        config_dir.join(codev::config::base::CONFIG_YAML_NAME),
         "GOOSE_MODEL: gpt-4o\nGOOSE_PROVIDER: openai\nGOOSE_DISABLE_KEYRING: true\n",
     )
     .unwrap();

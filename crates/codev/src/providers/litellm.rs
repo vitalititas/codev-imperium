@@ -1,9 +1,9 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::future::BoxFuture;
-use goose_providers::conversation::token_usage::ProviderUsage;
-use goose_providers::errors::ProviderError;
-use goose_providers::images::ImageFormat;
+use codev_providers::conversation::token_usage::ProviderUsage;
+use codev_providers::errors::ProviderError;
+use codev_providers::images::ImageFormat;
 use serde_json::{json, Value};
 use std::collections::HashMap;
 
@@ -18,7 +18,7 @@ use super::retry::ProviderRetry;
 use super::utils::{get_model, RequestLog};
 use crate::conversation::message::Message;
 use crate::model::ModelConfig;
-use goose_providers::formats::openai::ModelConfigParams;
+use codev_providers::formats::openai::ModelConfigParams;
 use rmcp::model::Tool;
 
 const LITELLM_PROVIDER_NAME: &str = "litellm";
@@ -228,7 +228,7 @@ impl Provider for LiteLLMProvider {
         } else {
             Some(session_id)
         };
-        let mut payload = goose_providers::formats::openai::create_request(
+        let mut payload = codev_providers::formats::openai::create_request(
             ModelConfigParams {
                 model_name: model_config.model_name.as_str(),
                 thinking_effort: model_config.thinking_effort(),
@@ -254,8 +254,8 @@ impl Provider for LiteLLMProvider {
             })
             .await?;
 
-        let message = goose_providers::formats::openai::response_to_message(&response)?;
-        let usage = goose_providers::formats::openai::get_usage(&response);
+        let message = codev_providers::formats::openai::response_to_message(&response)?;
+        let usage = codev_providers::formats::openai::get_usage(&response);
         let response_model = get_model(&response);
         let mut log = RequestLog::start(model_config, &payload)?;
         log.write(&response, Some(&usage))?;

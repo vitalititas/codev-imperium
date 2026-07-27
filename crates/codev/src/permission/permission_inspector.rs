@@ -299,7 +299,7 @@ mod tests {
             tool_meta: None,
         };
         let results = inspector
-            .inspect(goose_test_support::TEST_SESSION_ID, &[req], &[], mode)
+            .inspect(codev_test_support::TEST_SESSION_ID, &[req], &[], mode)
             .await
             .unwrap();
         assert_eq!(results[0].action, expected);

@@ -3,10 +3,10 @@ use async_stream::try_stream;
 use async_trait::async_trait;
 use futures::future::BoxFuture;
 use futures::TryStreamExt;
-use goose_providers::formats::openai::{
+use codev_providers::formats::openai::{
     self, extract_reasoning_effort, is_openai_responses_model, ModelConfigParams,
 };
-use goose_providers::images::ImageFormat;
+use codev_providers::images::ImageFormat;
 use serde::Serialize;
 use serde_json::Value;
 use std::io;
@@ -32,7 +32,7 @@ use crate::providers::retry::{
     RetryConfig, DEFAULT_BACKOFF_MULTIPLIER, DEFAULT_INITIAL_RETRY_INTERVAL_MS,
     DEFAULT_MAX_RETRIES, DEFAULT_MAX_RETRY_INTERVAL_MS,
 };
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use rmcp::model::Tool;
 
 const DATABRICKS_V2_PROVIDER_NAME: &str = "databricks_v2";

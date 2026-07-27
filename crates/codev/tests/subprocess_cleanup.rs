@@ -1,6 +1,6 @@
 #![cfg(target_os = "linux")]
 
-use goose::subprocess::configure_subprocess;
+use codev::subprocess::configure_subprocess;
 use std::io::{BufRead, BufReader, Write};
 use std::path::PathBuf;
 use std::process::{Command, Stdio};

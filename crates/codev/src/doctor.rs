@@ -10,7 +10,7 @@ use crate::providers::base::Provider;
 use crate::session::{
     config_path, latest_llm_log_path, latest_server_log_path, read_capped, read_tail, SystemInfo,
 };
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 
 pub async fn run(agent: &crate::agents::Agent, session_id: &str) -> anyhow::Result<Message> {
     if let Some(msg) = ensure_working_provider(agent, session_id).await? {

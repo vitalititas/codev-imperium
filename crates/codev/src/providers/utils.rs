@@ -1,8 +1,8 @@
 use crate::config::paths::Paths;
 use anyhow::{anyhow, Result};
 use fs_err::File;
-use goose_providers::conversation::token_usage::Usage;
-use goose_providers::errors::{GoogleErrorCode, ProviderError};
+use codev_providers::conversation::token_usage::Usage;
+use codev_providers::errors::{GoogleErrorCode, ProviderError};
 use reqwest::{Response, StatusCode};
 use serde::Serialize;
 use serde_json::Value;

@@ -7,8 +7,8 @@ use crate::providers::base::Provider;
 use crate::providers::base::{stream_from_single_message, MessageStream};
 use crate::{config::Config, token_counter::create_token_counter};
 use anyhow::Result;
-use goose_providers::conversation::token_usage::ProviderUsage;
-use goose_providers::errors::ProviderError;
+use codev_providers::conversation::token_usage::ProviderUsage;
+use codev_providers::errors::ProviderError;
 use indoc::indoc;
 use rmcp::model::Role;
 use serde::Serialize;
@@ -569,8 +569,8 @@ mod tests {
     use super::*;
     use crate::model::ModelConfig;
     use async_trait::async_trait;
-    use goose_providers::conversation::token_usage::Usage;
-    use goose_providers::errors::ProviderError;
+    use codev_providers::conversation::token_usage::Usage;
+    use codev_providers::errors::ProviderError;
     use rmcp::model::{AnnotateAble, CallToolRequestParams, RawContent, Tool};
 
     fn create_tool_pair(

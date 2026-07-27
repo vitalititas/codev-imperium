@@ -10,11 +10,11 @@ use common_tests::fixtures::{
     run_test, send_custom, Connection, PermissionDecision, Session, SessionData,
     TestConnectionConfig,
 };
-use goose::acp::server::AcpProviderFactory;
-use goose::model::ModelConfig;
-use goose::providers::base::{MessageStream, Provider};
-use goose_providers::errors::ProviderError;
-use goose_test_support::{EnforceSessionId, IgnoreSessionId};
+use codev::acp::server::AcpProviderFactory;
+use codev::model::ModelConfig;
+use codev::providers::base::{MessageStream, Provider};
+use codev_providers::errors::ProviderError;
+use codev_test_support::{EnforceSessionId, IgnoreSessionId};
 use serial_test::serial;
 use std::path::PathBuf;
 use std::sync::{Arc, LazyLock, Mutex};
@@ -31,14 +31,14 @@ static ACP_CONFIG_ROOT: LazyLock<tempfile::TempDir> =
 fn write_acp_global_config(contents: &str) -> PathBuf {
     std::env::set_var("GOOSE_PATH_ROOT", ACP_CONFIG_ROOT.path());
     std::env::set_var("GOOSE_DISABLE_KEYRING", "1");
-    let config_dir = goose::config::paths::Paths::config_dir();
+    let config_dir = codev::config::paths::Paths::config_dir();
     std::fs::create_dir_all(&config_dir).unwrap();
     let mut contents = contents.to_string();
     if !contents.contains("GOOSE_DISABLE_KEYRING") {
         contents.push_str("GOOSE_DISABLE_KEYRING: true\n");
     }
     std::fs::write(
-        config_dir.join(goose::config::base::CONFIG_YAML_NAME),
+        config_dir.join(codev::config::base::CONFIG_YAML_NAME),
         contents,
     )
     .unwrap();
@@ -63,7 +63,7 @@ impl Provider for MockProvider {
         _model_config: &ModelConfig,
         _session_id: &str,
         _system: &str,
-        _messages: &[goose::conversation::message::Message],
+        _messages: &[codev::conversation::message::Message],
         _tools: &[rmcp::model::Tool],
     ) -> Result<MessageStream, ProviderError> {
         unimplemented!()
@@ -224,7 +224,7 @@ fn test_custom_get_extensions() {
         )
         .await;
         assert!(add_result.is_ok(), "expected ok, got: {:?}", add_result);
-        let stored_inline_token = goose::config::Config::global()
+        let stored_inline_token = codev::config::Config::global()
             .get_secret::<String>("INLINE_TOKEN")
             .expect("inline env should be saved as a secret");
         assert!(

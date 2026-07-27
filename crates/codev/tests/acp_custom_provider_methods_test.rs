@@ -4,11 +4,11 @@ mod common_tests;
 
 use common_tests::fixtures::server::AcpServerConnection;
 use common_tests::fixtures::{run_test, send_custom, Connection, TestConnectionConfig};
-use goose::config::base::CONFIG_YAML_NAME;
-use goose::config::declarative_providers::load_provider;
-use goose::config::paths::Paths;
-use goose::config::{Config, ConfigError, DeclarativeProviderConfig};
-use goose_test_support::EnforceSessionId;
+use codev::config::base::CONFIG_YAML_NAME;
+use codev::config::declarative_providers::load_provider;
+use codev::config::paths::Paths;
+use codev::config::{Config, ConfigError, DeclarativeProviderConfig};
+use codev_test_support::EnforceSessionId;
 use serial_test::serial;
 use std::sync::Arc;
 
@@ -530,7 +530,7 @@ fn acp_catalog_and_custom_provider_methods_use_core_provider_store() {
 
         for valid_id in ["custom_openai", "openai-compat", "a1"] {
             assert!(
-                goose::config::declarative_providers::validate_provider_id(valid_id).is_ok(),
+                codev::config::declarative_providers::validate_provider_id(valid_id).is_ok(),
                 "provider id should be valid: {valid_id}"
             );
         }

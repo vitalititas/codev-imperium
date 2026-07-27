@@ -1,5 +1,5 @@
-use goose_providers::formats::openai::{extract_reasoning_effort, is_openai_responses_model};
-use goose_providers::thinking::ThinkingEffort;
+use codev_providers::formats::openai::{extract_reasoning_effort, is_openai_responses_model};
+use codev_providers::thinking::ThinkingEffort;
 use once_cell::sync::Lazy;
 use serde::de::Deserializer;
 use serde::{Deserialize, Serialize};

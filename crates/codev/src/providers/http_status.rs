@@ -7,7 +7,7 @@
 use std::time::{Duration, SystemTime};
 
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use reqwest::header::{HeaderMap, RETRY_AFTER};
 use reqwest::{Response, StatusCode};
 use serde_json::Value;

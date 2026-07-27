@@ -1,7 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use goose_providers::conversation::token_usage::ProviderUsage;
-use goose_providers::images::ImageFormat;
+use codev_providers::conversation::token_usage::ProviderUsage;
+use codev_providers::images::ImageFormat;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
@@ -13,7 +13,7 @@ use super::retry::ProviderRetry;
 use super::utils::{get_model, RequestLog};
 use crate::config::ConfigError;
 use crate::conversation::message::Message;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 
 use crate::model::ModelConfig;
 use futures::future::BoxFuture;

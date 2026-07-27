@@ -1,9 +1,9 @@
 use crate::model::ModelConfig;
 use anyhow::Result;
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-use goose_providers::errors::ProviderError;
-use goose_providers::formats::openai::{is_valid_function_name, sanitize_function_name};
-use goose_providers::thinking::ThinkingEffort;
+use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+use codev_providers::errors::ProviderError;
+use codev_providers::formats::openai::{is_valid_function_name, sanitize_function_name};
+use codev_providers::thinking::ThinkingEffort;
 use rmcp::model::{
     object, AnnotateAble, CallToolRequestParams, ErrorCode, ErrorData, RawContent, Role, Tool,
 };

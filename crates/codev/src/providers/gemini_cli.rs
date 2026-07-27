@@ -21,8 +21,8 @@ use crate::providers::base::ConfigKey;
 use crate::subprocess::configure_subprocess;
 use async_stream::try_stream;
 use futures::future::BoxFuture;
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-use goose_providers::errors::ProviderError;
+use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+use codev_providers::errors::ProviderError;
 use rmcp::model::Role;
 use rmcp::model::Tool;
 

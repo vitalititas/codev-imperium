@@ -16,13 +16,13 @@ use crate::conversation::message::Message;
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::future::BoxFuture;
-use goose_providers::conversation::token_usage::ProviderUsage;
-use goose_providers::errors::ProviderError;
-use goose_providers::formats::openai::{
+use codev_providers::conversation::token_usage::ProviderUsage;
+use codev_providers::errors::ProviderError;
+use codev_providers::formats::openai::{
     create_request_with_options, get_usage, response_to_message, OpenAiFormatOptions,
 };
-use goose_providers::formats::openai::{is_openai_responses_model, ModelConfigParams};
-use goose_providers::images::ImageFormat;
+use codev_providers::formats::openai::{is_openai_responses_model, ModelConfigParams};
+use codev_providers::images::ImageFormat;
 use reqwest::StatusCode;
 use std::collections::HashMap;
 

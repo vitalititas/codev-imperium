@@ -347,7 +347,7 @@ fn create_otlp_tracing_filter() -> FilterFn<impl Fn(&Metadata<'_>) -> bool> {
 
         if metadata.level() == &Level::DEBUG {
             let target = metadata.target();
-            if target.starts_with("goose::")
+            if target.starts_with("codev::")
                 || target.starts_with("opentelemetry")
                 || target.starts_with("tracing_opentelemetry")
             {
@@ -371,8 +371,8 @@ fn create_otlp_metrics_filter() -> FilterFn<impl Fn(&Metadata<'_>) -> bool> {
 
         if metadata.level() == &Level::DEBUG {
             let target = metadata.target();
-            if target.starts_with("goose::telemetry")
-                || target.starts_with("goose::metrics")
+            if target.starts_with("codev::telemetry")
+                || target.starts_with("codev::metrics")
                 || target.contains("metric")
             {
                 return true;
@@ -469,7 +469,7 @@ pub fn shutdown_otlp() {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goose_test_support::otel::clear_otel_env;
+    use codev_test_support::otel::clear_otel_env;
     use opentelemetry_sdk::metrics::Temporality;
     use test_case::test_case;
 

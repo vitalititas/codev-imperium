@@ -1,10 +1,10 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::future::BoxFuture;
-use goose_providers::formats::openai::{
+use codev_providers::formats::openai::{
     extract_reasoning_effort, is_openai_responses_model, openai_reasoning_effort_for_thinking,
 };
-use goose_providers::images::ImageFormat;
+use codev_providers::images::ImageFormat;
 use serde_json::Value;
 use std::collections::HashSet;
 use std::sync::LazyLock;
@@ -34,7 +34,7 @@ use crate::providers::retry::{
     RetryConfig, DEFAULT_BACKOFF_MULTIPLIER, DEFAULT_INITIAL_RETRY_INTERVAL_MS,
     DEFAULT_MAX_RETRIES, DEFAULT_MAX_RETRY_INTERVAL_MS,
 };
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use rmcp::model::Tool;
 use serde_json::json;
 

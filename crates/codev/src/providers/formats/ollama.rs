@@ -13,7 +13,7 @@ use crate::conversation::message::{Message, MessageContent};
 use async_stream::try_stream;
 use chrono;
 use futures::Stream;
-use goose_providers::{
+use codev_providers::{
     conversation::token_usage::ProviderUsage,
     formats::openai::{self, is_valid_function_name},
 };
@@ -23,7 +23,7 @@ use serde_json::Value;
 use std::borrow::Cow;
 use uuid::Uuid;
 
-pub use goose_providers::formats::openai::{
+pub use codev_providers::formats::openai::{
     create_request, format_messages, format_tools, get_usage, validate_tool_schemas,
 };
 

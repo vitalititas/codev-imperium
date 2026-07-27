@@ -1,9 +1,9 @@
 use anyhow::Result;
 use futures::StreamExt;
-use goose::conversation::message::{Message, MessageContent};
-use goose::model::ModelConfig;
-use goose::providers::base::Provider;
-use goose::providers::tetrate::TetrateProvider;
+use codev::conversation::message::{Message, MessageContent};
+use codev::model::ModelConfig;
+use codev::providers::base::Provider;
+use codev::providers::tetrate::TetrateProvider;
 use rmcp::model::Tool;
 use rmcp::object;
 use serial_test::serial;
@@ -329,7 +329,7 @@ mod tetrate_streaming_tests {
 
     // Helper function to process a stream and collect content
     async fn process_stream(
-        mut stream: goose::providers::base::MessageStream,
+        mut stream: codev::providers::base::MessageStream,
         label: &str,
     ) -> Result<String> {
         let mut content = String::new();

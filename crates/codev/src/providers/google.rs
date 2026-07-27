@@ -4,7 +4,7 @@ use super::openai_compatible::{handle_status, map_http_error_to_provider_error, 
 use super::retry::ProviderRetry;
 use super::utils::RequestLog;
 use crate::conversation::message::Message;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 
 use crate::model::ModelConfig;
 use crate::providers::base::{ConfigKey, Provider, ProviderDef, ProviderMetadata};

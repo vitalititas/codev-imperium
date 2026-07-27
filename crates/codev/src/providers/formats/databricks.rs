@@ -6,12 +6,12 @@ use crate::providers::formats::anthropic::{
 };
 
 use anyhow::{anyhow, Error};
-use goose_providers::formats::openai::{
+use codev_providers::formats::openai::{
     extract_reasoning_effort, is_openai_responses_model, is_valid_function_name,
     openai_reasoning_effort_for_thinking, sanitize_function_name,
 };
-use goose_providers::images::{convert_image, detect_image_path, load_image_file, ImageFormat};
-use goose_providers::json::safely_parse_json;
+use codev_providers::images::{convert_image, detect_image_path, load_image_file, ImageFormat};
+use codev_providers::json::safely_parse_json;
 use rmcp::model::{
     object, AnnotateAble, CallToolRequestParams, Content, ErrorCode, ErrorData, RawContent,
     ResourceContents, Role, Tool,

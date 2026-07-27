@@ -1,8 +1,8 @@
 use anyhow::{anyhow, Result};
 use async_trait::async_trait;
-use goose::config::GooseMode;
-use goose::conversation::message::{Message, ToolRequest};
-use goose::tool_inspection::{
+use codev::config::GooseMode;
+use codev::conversation::message::{Message, ToolRequest};
+use codev::tool_inspection::{
     InspectionAction, InspectionResult, ToolInspectionManager, ToolInspector,
 };
 
@@ -89,7 +89,7 @@ async fn test_inspect_tools_aggregates_and_handles_errors() {
     // Act
     let results = manager
         .inspect_tools(
-            goose_test_support::TEST_SESSION_ID,
+            codev_test_support::TEST_SESSION_ID,
             &tool_requests,
             &messages,
             GooseMode::Approve,

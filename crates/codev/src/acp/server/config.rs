@@ -1,5 +1,5 @@
 use super::*;
-use goose_providers::thinking::ThinkingEffort;
+use codev_providers::thinking::ThinkingEffort;
 
 impl GooseAcpAgent {
     pub(super) async fn on_preferences_read(

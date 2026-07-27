@@ -1,18 +1,18 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::StreamExt;
-use goose::agents::{Agent, AgentEvent, SessionConfig};
-use goose::config::GooseMode;
-use goose::conversation::message::{Message, MessageContent};
-use goose::conversation::Conversation;
-use goose::model::ModelConfig;
-use goose::providers::base::{
+use codev::agents::{Agent, AgentEvent, SessionConfig};
+use codev::config::GooseMode;
+use codev::conversation::message::{Message, MessageContent};
+use codev::conversation::Conversation;
+use codev::model::ModelConfig;
+use codev::providers::base::{
     stream_from_single_message, MessageStream, Provider, ProviderDef, ProviderMetadata,
 };
-use goose::session::session_manager::SessionType;
-use goose::session::Session;
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-use goose_providers::errors::ProviderError;
+use codev::session::session_manager::SessionType;
+use codev::session::Session;
+use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+use codev_providers::errors::ProviderError;
 use rmcp::model::Tool;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
@@ -198,7 +198,7 @@ impl ProviderDef for MockCompactionProvider {
 
     fn from_env(
         _model: ModelConfig,
-        _extensions: Vec<goose::config::ExtensionConfig>,
+        _extensions: Vec<codev::config::ExtensionConfig>,
     ) -> futures::future::BoxFuture<'static, anyhow::Result<Self>> {
         Box::pin(async { Ok(Self::new()) })
     }

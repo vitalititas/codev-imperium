@@ -1,8 +1,8 @@
 use anyhow::Error;
 use async_stream::try_stream;
 use futures::TryStreamExt;
-use goose_providers::conversation::token_usage::ProviderUsage;
-use goose_providers::images::ImageFormat;
+use codev_providers::conversation::token_usage::ProviderUsage;
+use codev_providers::images::ImageFormat;
 use reqwest::Response;
 #[cfg(test)]
 use reqwest::StatusCode;
@@ -19,8 +19,8 @@ use super::utils::RequestLog;
 use crate::conversation::message::Message;
 use crate::model::ModelConfig;
 use crate::providers::formats::openai_responses::responses_api_to_streaming_message;
-use goose_providers::errors::ProviderError;
-use goose_providers::formats::openai::{
+use codev_providers::errors::ProviderError;
+use codev_providers::formats::openai::{
     create_request, get_usage, response_to_message, response_to_streaming_message,
     ModelConfigParams,
 };

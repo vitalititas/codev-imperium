@@ -1,4 +1,4 @@
-use goose::dictation::whisper::{get_model, WhisperTranscriber};
+use codev::dictation::whisper::{get_model, WhisperTranscriber};
 
 const WHISPER_TOKENIZER_JSON: &str = include_str!("../src/dictation/whisper_data/tokens.json");
 

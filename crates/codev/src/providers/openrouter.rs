@@ -1,7 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::future::BoxFuture;
-use goose_providers::images::ImageFormat;
+use codev_providers::images::ImageFormat;
 use serde_json::{json, Value};
 
 use super::api_client::{ApiClient, AuthMethod};
@@ -12,8 +12,8 @@ use super::utils::RequestLog;
 use crate::conversation::message::Message;
 use crate::model::ModelConfig;
 use crate::providers::formats::openrouter as openrouter_format;
-use goose_providers::errors::ProviderError;
-use goose_providers::formats::openai::{create_request, ModelConfigParams};
+use codev_providers::errors::ProviderError;
+use codev_providers::formats::openai::{create_request, ModelConfigParams};
 use rmcp::model::Tool;
 
 pub const OPENROUTER_PROVIDER_NAME: &str = "openrouter";

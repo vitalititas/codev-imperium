@@ -10,20 +10,20 @@ use rmcp::model::{CallToolRequestParams, CallToolResult, Tool};
 use rmcp::object;
 use tokio_util::sync::CancellationToken;
 
-use goose::agents::extension::{Envs, ExtensionConfig};
-use goose::agents::extension_manager::{ExtensionManager, ExtensionManagerCapabilities};
-use goose::agents::GoosePlatform;
-use goose::model::ModelConfig;
+use codev::agents::extension::{Envs, ExtensionConfig};
+use codev::agents::extension_manager::{ExtensionManager, ExtensionManagerCapabilities};
+use codev::agents::GoosePlatform;
+use codev::model::ModelConfig;
 
 use test_case::test_case;
 
 use async_trait::async_trait;
-use goose::conversation::message::Message;
-use goose::providers::base::{
+use codev::conversation::message::Message;
+use codev::providers::base::{
     stream_from_single_message, MessageStream, Provider, ProviderDef, ProviderMetadata,
 };
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-use goose_providers::errors::ProviderError;
+use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+use codev_providers::errors::ProviderError;
 use once_cell::sync::Lazy;
 use std::process::Command;
 
@@ -60,7 +60,7 @@ impl ProviderDef for MockProvider {
 
     fn from_env(
         model: ModelConfig,
-        _extensions: Vec<goose::config::ExtensionConfig>,
+        _extensions: Vec<codev::config::ExtensionConfig>,
     ) -> futures::future::BoxFuture<'static, anyhow::Result<Self>> {
         Box::pin(async move { Ok(Self::new(model)) })
     }
@@ -254,7 +254,7 @@ async fn test_replayed_session(
         model_config: ModelConfig::new("test-model").unwrap(),
     }) as Arc<dyn Provider>)));
     let temp_dir = tempfile::tempdir().unwrap();
-    let session_manager = Arc::new(goose::session::SessionManager::new(
+    let session_manager = Arc::new(codev::session::SessionManager::new(
         temp_dir.path().to_path_buf(),
     ));
     let extension_manager = Arc::new(ExtensionManager::new(
@@ -280,7 +280,7 @@ async fn test_replayed_session(
                 new_call = new_call.with_arguments(args);
             }
             let tool_call = new_call;
-            let ctx = goose::agents::ToolCallContext::new(
+            let ctx = codev::agents::ToolCallContext::new(
                 "test-session-id".to_string(),
                 None,
                 Some("test-id".to_string()),

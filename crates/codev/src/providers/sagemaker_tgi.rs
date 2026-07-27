@@ -15,12 +15,12 @@ use super::retry::ProviderRetry;
 use super::utils::RequestLog;
 use crate::conversation::message::{Message, MessageContent};
 use crate::session_context::SESSION_ID_HEADER;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 
 use crate::model::ModelConfig;
 use chrono::Utc;
 use futures::future::BoxFuture;
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
+use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
 use rmcp::model::Role;
 
 const SAGEMAKER_TGI_PROVIDER_NAME: &str = "sagemaker_tgi";

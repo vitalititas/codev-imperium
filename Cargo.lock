@@ -45,7 +45,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2af62fb84df2af0f933d8f5fd78b843fa5eb0ec5a48fa1b528c41951d0bbe36c"
 dependencies = [
  "agent-client-protocol-derive",
- "agent-client-protocol-schema",
+ "agent-client-protocol-schema 0.12.0",
  "anyhow",
  "futures",
  "futures-concurrency",
@@ -86,6 +86,21 @@ dependencies = [
  "serde_with",
  "strum 0.28.0",
  "tracing",
+]
+
+[[package]]
+name = "agent-client-protocol-schema"
+version = "1.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1c216d4b350cbc1b13f2b7d752af6698c8ba347be274275cb5a5c735da147066"
+dependencies = [
+ "anyhow",
+ "derive_more",
+ "schemars 1.2.1",
+ "serde",
+ "serde_json",
+ "serde_with",
+ "strum 0.28.0",
 ]
 
 [[package]]
@@ -2194,7 +2209,7 @@ name = "codev"
 version = "1.37.0"
 dependencies = [
  "agent-client-protocol",
- "agent-client-protocol-schema",
+ "agent-client-protocol-schema 1.6.0",
  "anyhow",
  "arboard",
  "async-stream",
@@ -2450,7 +2465,7 @@ name = "codev-sdk"
 version = "1.37.0"
 dependencies = [
  "agent-client-protocol",
- "agent-client-protocol-schema",
+ "agent-client-protocol-schema 1.6.0",
  "codev-sdk-types",
  "thiserror 2.0.18",
  "tokio",
@@ -2463,7 +2478,7 @@ name = "codev-sdk-types"
 version = "1.37.0"
 dependencies = [
  "agent-client-protocol",
- "agent-client-protocol-schema",
+ "agent-client-protocol-schema 1.6.0",
  "schemars 1.2.1",
  "serde",
  "serde_json",

@@ -1,9 +1,9 @@
-use goose::conversation::message::Message;
-use goose::model::ModelConfig;
-use goose::providers::api_client::{ApiClient, AuthMethod};
-use goose::providers::base::Provider;
-use goose::providers::openai::OpenAiProvider;
-use goose::session_context::SESSION_ID_HEADER;
+use codev::conversation::message::Message;
+use codev::model::ModelConfig;
+use codev::providers::api_client::{ApiClient, AuthMethod};
+use codev::providers::base::Provider;
+use codev::providers::openai::OpenAiProvider;
+use codev::session_context::SESSION_ID_HEADER;
 use serde_json::json;
 use std::sync::Arc;
 use std::sync::Mutex;

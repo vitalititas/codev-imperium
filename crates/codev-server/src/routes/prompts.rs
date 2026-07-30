@@ -4,7 +4,7 @@ use axum::{
     routing::{delete, get, put},
     Json, Router,
 };
-use goose::prompt_template::{
+use codev::prompt_template::{
     get_template, list_templates, reset_template, save_template, Template,
 };
 use serde::{Deserialize, Serialize};

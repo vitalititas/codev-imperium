@@ -12,7 +12,7 @@
 //! round-trip. It exists as a working scaffold for adding the real Goose SDK
 //! API: replace [`bindings`] with the actual implementation.
 
-pub use goose_sdk_types::{custom_notifications, custom_requests};
+pub use codev_sdk_types::{custom_notifications, custom_requests};
 
 #[cfg(feature = "uniffi")]
 uniffi::setup_scaffolding!("aaif_goose");

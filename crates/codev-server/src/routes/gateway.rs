@@ -7,8 +7,8 @@ use axum::{
     routing::{delete, get, post},
     Json, Router,
 };
-use goose::gateway::manager::GatewayStatus;
-use goose::gateway::GatewayConfig;
+use codev::gateway::manager::GatewayStatus;
+use codev::gateway::GatewayConfig;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use utoipa::ToSchema;
@@ -67,7 +67,7 @@ pub async fn start_gateway(
         max_sessions: request.max_sessions,
     };
 
-    let gw = match goose::gateway::create_gateway(&mut config) {
+    let gw = match codev::gateway::create_gateway(&mut config) {
         Ok(gw) => gw,
         Err(e) => return ErrorResponse::bad_request(e.to_string()).into_response(),
     };

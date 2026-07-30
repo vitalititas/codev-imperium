@@ -1,10 +1,10 @@
 use crate::routes::errors::ErrorResponse;
 use crate::state::AppState;
 use axum::{routing::post, Json, Router};
-use goose::config::signup_nanogpt::{complete_nanogpt_auth, configure_nanogpt};
-use goose::config::signup_openrouter::OpenRouterAuth;
-use goose::config::signup_tetrate::{configure_tetrate, TetrateAuth};
-use goose::config::{configure_openrouter, Config};
+use codev::config::signup_nanogpt::{complete_nanogpt_auth, configure_nanogpt};
+use codev::config::signup_openrouter::OpenRouterAuth;
+use codev::config::signup_tetrate::{configure_tetrate, TetrateAuth};
+use codev::config::{configure_openrouter, Config};
 use serde::Serialize;
 use std::sync::Arc;
 use utoipa::ToSchema;

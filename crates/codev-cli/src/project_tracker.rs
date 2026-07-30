@@ -1,6 +1,6 @@
 use anyhow::{Context, Result};
 use chrono::{DateTime, Utc};
-use goose::config::paths::Paths;
+use codev::config::paths::Paths;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fs;

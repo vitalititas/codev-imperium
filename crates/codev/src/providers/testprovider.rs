@@ -14,8 +14,8 @@ use crate::conversation::message::{Message, ToolResponse};
 use crate::model::ModelConfig;
 use crate::utils::bytes_to_hex;
 use futures::future::BoxFuture;
-use goose_providers::conversation::token_usage::ProviderUsage;
-use goose_providers::errors::ProviderError;
+use codev_providers::conversation::token_usage::ProviderUsage;
+use codev_providers::errors::ProviderError;
 use rmcp::model::{CallToolResult, Tool};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -227,7 +227,7 @@ mod tests {
     use super::*;
     use crate::conversation::message::{Message, MessageContent};
     use chrono::Utc;
-    use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
+    use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
     use rmcp::model::{RawTextContent, Role, TextContent};
     use std::env;
 

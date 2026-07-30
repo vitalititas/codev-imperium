@@ -1,31 +1,31 @@
 use anyhow::Result;
 use dotenvy::dotenv;
 use futures::StreamExt;
-use goose::acp::ACP_CURRENT_MODEL;
-use goose::agents::{Agent, AgentConfig, AgentEvent, GoosePlatform, PromptManager, SessionConfig};
-use goose::config::{ExtensionConfig, GooseMode, PermissionManager};
-use goose::conversation::message::{ActionRequiredData, Message, MessageContent};
-use goose::permission::permission_confirmation::PrincipalType;
-use goose::permission::{Permission, PermissionConfirmation};
-use goose::providers::anthropic::ANTHROPIC_DEFAULT_MODEL;
-use goose::providers::azure::AZURE_DEFAULT_MODEL;
-use goose::providers::base::Provider;
+use codev::acp::ACP_CURRENT_MODEL;
+use codev::agents::{Agent, AgentConfig, AgentEvent, GoosePlatform, PromptManager, SessionConfig};
+use codev::config::{ExtensionConfig, GooseMode, PermissionManager};
+use codev::conversation::message::{ActionRequiredData, Message, MessageContent};
+use codev::permission::permission_confirmation::PrincipalType;
+use codev::permission::{Permission, PermissionConfirmation};
+use codev::providers::anthropic::ANTHROPIC_DEFAULT_MODEL;
+use codev::providers::azure::AZURE_DEFAULT_MODEL;
+use codev::providers::base::Provider;
 #[cfg(feature = "aws-providers")]
-use goose::providers::bedrock::BEDROCK_DEFAULT_MODEL;
-use goose::providers::claude_code::CLAUDE_CODE_DEFAULT_MODEL;
-use goose::providers::codex::CODEX_DEFAULT_MODEL;
-use goose::providers::create_with_named_model;
-use goose::providers::databricks::DATABRICKS_DEFAULT_MODEL;
-use goose::providers::google::GOOGLE_DEFAULT_MODEL;
-use goose::providers::litellm::LITELLM_DEFAULT_MODEL;
-use goose::providers::openai::OPEN_AI_DEFAULT_MODEL;
+use codev::providers::bedrock::BEDROCK_DEFAULT_MODEL;
+use codev::providers::claude_code::CLAUDE_CODE_DEFAULT_MODEL;
+use codev::providers::codex::CODEX_DEFAULT_MODEL;
+use codev::providers::create_with_named_model;
+use codev::providers::databricks::DATABRICKS_DEFAULT_MODEL;
+use codev::providers::google::GOOGLE_DEFAULT_MODEL;
+use codev::providers::litellm::LITELLM_DEFAULT_MODEL;
+use codev::providers::openai::OPEN_AI_DEFAULT_MODEL;
 #[cfg(feature = "aws-providers")]
-use goose::providers::sagemaker_tgi::SAGEMAKER_TGI_DEFAULT_MODEL;
-use goose::providers::snowflake::SNOWFLAKE_DEFAULT_MODEL;
-use goose::providers::xai::XAI_DEFAULT_MODEL;
-use goose::session::{SessionManager, SessionType};
-use goose_providers::errors::ProviderError;
-use goose_test_support::{
+use codev::providers::sagemaker_tgi::SAGEMAKER_TGI_DEFAULT_MODEL;
+use codev::providers::snowflake::SNOWFLAKE_DEFAULT_MODEL;
+use codev::providers::xai::XAI_DEFAULT_MODEL;
+use codev::session::{SessionManager, SessionType};
+use codev_providers::errors::ProviderError;
+use codev_test_support::{
     EnforceSessionId, ExpectedSessionId, IgnoreSessionId, McpFixture, FAKE_CODE,
 };
 use std::collections::HashMap;
@@ -289,7 +289,7 @@ impl ProviderFixture {
     async fn tool_roundtrip(
         &self,
         prompt: &str,
-        model_config: Option<goose::model::ModelConfig>,
+        model_config: Option<codev::model::ModelConfig>,
     ) -> Result<Message> {
         let tools = self
             .agent
@@ -340,7 +340,7 @@ impl ProviderFixture {
         }
 
         let params = tool_req.tool_call.as_ref().unwrap().clone();
-        let ctx = goose::agents::ToolCallContext::new(
+        let ctx = codev::agents::ToolCallContext::new(
             self.session_id.to_string(),
             None,
             Some("test-id".to_string()),
@@ -445,7 +445,7 @@ impl ProviderFixture {
     async fn test_image_content_support(&self) -> Result<()> {
         let image_config = match &self.image_model {
             Some(model) => {
-                Some(goose::model::ModelConfig::new(model)?.with_canonical_limits(&self.name))
+                Some(codev::model::ModelConfig::new(model)?.with_canonical_limits(&self.name))
             }
             None => None,
         };
@@ -467,7 +467,7 @@ impl ProviderFixture {
     async fn test_model_switch(&self) -> Result<()> {
         let default = &self.provider.get_model_config().model_name;
         let alt = self.model_switch_name.as_deref().unwrap();
-        let alt_config = goose::model::ModelConfig::new(alt)?.with_canonical_limits(&self.name);
+        let alt_config = codev::model::ModelConfig::new(alt)?.with_canonical_limits(&self.name);
 
         let message = Message::user().with_text("Just say hello!");
         let (response, _) = self

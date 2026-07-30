@@ -2794,7 +2794,7 @@ impl GooseAcpAgent {
         effort_id: &str,
     ) -> Result<(), agent_client_protocol::Error> {
         let effort = effort_id
-            .parse::<goose_providers::thinking::ThinkingEffort>()
+            .parse::<codev_providers::thinking::ThinkingEffort>()
             .map_err(|_| {
                 agent_client_protocol::Error::invalid_params()
                     .data(format!("Invalid thinking effort: {}", effort_id))

@@ -1,6 +1,6 @@
 use crate::providers::base::Provider;
 use async_trait::async_trait;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use std::future::Future;
 use std::time::Duration;
 use tokio::time::sleep;

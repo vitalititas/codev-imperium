@@ -15,9 +15,9 @@ use async_stream::try_stream;
 use async_trait::async_trait;
 use backend::{BackendLoadedModel, LocalInferenceBackend};
 use futures::future::BoxFuture;
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-use goose_providers::errors::ProviderError;
-use goose_providers::images::ImageFormat;
+use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+use codev_providers::errors::ProviderError;
+use codev_providers::images::ImageFormat;
 use llamacpp::{LlamaCppBackend, LLAMACPP_BACKEND_ID};
 use local_model_registry::ChatTemplate;
 use rmcp::model::Tool;
@@ -189,7 +189,7 @@ pub fn recommend_local_model(runtime: &InferenceRuntime) -> String {
 }
 
 fn build_openai_messages_json(system: &str, messages: &[Message]) -> String {
-    use goose_providers::formats::openai::format_messages;
+    use codev_providers::formats::openai::format_messages;
 
     let mut arr: Vec<Value> = vec![json!({"role": "system", "content": system})];
     arr.extend(format_messages(messages, &ImageFormat::OpenAi));

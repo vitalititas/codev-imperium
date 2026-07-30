@@ -2,8 +2,8 @@ use anyhow::Result;
 use async_trait::async_trait;
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
 use futures::future::BoxFuture;
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-use goose_providers::thinking::ThinkingEffort;
+use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+use codev_providers::thinking::ThinkingEffort;
 use serde_json::json;
 use std::collections::HashMap;
 use std::io::Write;
@@ -22,7 +22,7 @@ use crate::config::{Config, ExtensionConfig, GooseMode};
 use crate::conversation::message::{Message, MessageContent};
 use crate::model::ModelConfig;
 use crate::subprocess::configure_subprocess;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use rmcp::model::Role;
 use rmcp::model::Tool;
 
@@ -754,7 +754,7 @@ impl Provider for CodexProvider {
 mod tests {
     use super::*;
     use crate::agents::extension::Envs;
-    use goose_test_support::TEST_IMAGE_B64;
+    use codev_test_support::TEST_IMAGE_B64;
     use std::collections::HashMap;
     use test_case::test_case;
 

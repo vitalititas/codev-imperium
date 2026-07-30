@@ -11,10 +11,10 @@ use axum::{
 };
 use bytes::Bytes;
 use futures::{stream::StreamExt, Stream};
-use goose::agents::{AgentEvent, SessionConfig};
-use goose::conversation::message::{Message, MessageContent, TokenState};
-use goose::conversation::Conversation;
-use goose::session::SessionManager;
+use codev::agents::{AgentEvent, SessionConfig};
+use codev::conversation::message::{Message, MessageContent, TokenState};
+use codev::conversation::Conversation;
+use codev::session::SessionManager;
 use rmcp::model::ServerNotification;
 use serde::{Deserialize, Serialize};
 use std::{
@@ -474,7 +474,7 @@ mod tests {
     mod integration_tests {
         use super::*;
         use axum::{body::Body, http::Request};
-        use goose::conversation::message::Message;
+        use codev::conversation::message::Message;
         use tower::ServiceExt;
 
         #[tokio::test(flavor = "multi_thread")]

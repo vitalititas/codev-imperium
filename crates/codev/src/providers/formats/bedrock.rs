@@ -15,7 +15,7 @@ use rmcp::model::{
 use serde_json::Value;
 
 use crate::conversation::message::{Message, MessageContent};
-use goose_providers::conversation::token_usage::Usage;
+use codev_providers::conversation::token_usage::Usage;
 
 pub fn to_bedrock_message_with_caching(
     message: &Message,
@@ -461,7 +461,7 @@ pub fn from_bedrock_json(document: &Document) -> Result<Value> {
 mod tests {
     use super::*;
     use anyhow::Result;
-    use goose_test_support::TEST_IMAGE_B64;
+    use codev_test_support::TEST_IMAGE_B64;
     use rmcp::model::{AnnotateAble, RawImageContent};
 
     #[test]

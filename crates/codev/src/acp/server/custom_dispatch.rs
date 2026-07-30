@@ -1,5 +1,5 @@
 use super::*;
-use goose_acp_macros::custom_methods;
+use codev_acp_macros::custom_methods;
 
 #[custom_methods]
 impl GooseAcpAgent {

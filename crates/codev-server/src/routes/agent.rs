@@ -11,21 +11,21 @@ use axum::{
     routing::{get, post},
     Json, Router,
 };
-use goose::agents::{Container, ExtensionLoadResult};
-use goose::goose_apps::{fetch_mcp_apps, GooseApp, McpAppCache};
+use codev::agents::{Container, ExtensionLoadResult};
+use codev::goose_apps::{fetch_mcp_apps, GooseApp, McpAppCache};
 
 use base64::Engine;
-use goose::agents::reply_parts::is_tool_visible_to_app;
-use goose::agents::ExtensionConfig;
-use goose::config::resolve_extensions_for_new_session;
-use goose::config::{Config, GooseMode};
-use goose::model::ModelConfig;
-use goose::providers::create;
-use goose::recipe::Recipe;
-use goose::recipe_deeplink;
-use goose::session::session_manager::SessionType;
-use goose::session::{EnabledExtensionsState, ExtensionState, Session};
-use goose::{
+use codev::agents::reply_parts::is_tool_visible_to_app;
+use codev::agents::ExtensionConfig;
+use codev::config::resolve_extensions_for_new_session;
+use codev::config::{Config, GooseMode};
+use codev::model::ModelConfig;
+use codev::providers::create;
+use codev::recipe::Recipe;
+use codev::recipe_deeplink;
+use codev::session::session_manager::SessionType;
+use codev::session::{EnabledExtensionsState, ExtensionState, Session};
+use codev::{
     agents::{extension::ToolInfo, extension_manager::get_parameter_names},
     config::permission::PermissionLevel,
 };
@@ -199,7 +199,7 @@ async fn start_agent(
     Json(payload): Json<StartAgentRequest>,
 ) -> Result<Json<Session>, ErrorResponse> {
     #[cfg(feature = "telemetry")]
-    goose::posthog::set_session_context("desktop", false);
+    codev::posthog::set_session_context("desktop", false);
 
     let StartAgentRequest {
         working_dir,
@@ -215,7 +215,7 @@ async fn start_agent(
             Err(err) => {
                 error!("Failed to decode recipe deeplink: {}", err);
                 #[cfg(feature = "telemetry")]
-                goose::posthog::emit_error("recipe_deeplink_decode_failed", &err.to_string());
+                codev::posthog::emit_error("recipe_deeplink_decode_failed", &err.to_string());
                 return Err(ErrorResponse {
                     message: err.to_string(),
                     status: StatusCode::BAD_REQUEST,
@@ -257,7 +257,7 @@ async fn start_agent(
         .map_err(|err| {
             error!("Failed to create session: {}", err);
             #[cfg(feature = "telemetry")]
-            goose::posthog::emit_error("session_create_failed", &err.to_string());
+            codev::posthog::emit_error("session_create_failed", &err.to_string());
             ErrorResponse {
                 message: format!("Failed to create session: {}", err),
                 status: StatusCode::BAD_REQUEST,
@@ -375,7 +375,7 @@ async fn resume_agent(
     Json(payload): Json<ResumeAgentRequest>,
 ) -> Result<Json<ResumeAgentResponse>, ErrorResponse> {
     #[cfg(feature = "telemetry")]
-    goose::posthog::set_session_context("desktop", true);
+    codev::posthog::set_session_context("desktop", true);
 
     let session = state
         .session_manager()
@@ -384,7 +384,7 @@ async fn resume_agent(
         .map_err(|err| {
             error!("Failed to resume session {}: {}", payload.session_id, err);
             #[cfg(feature = "telemetry")]
-            goose::posthog::emit_error("session_resume_failed", &err.to_string());
+            codev::posthog::emit_error("session_resume_failed", &err.to_string());
             ErrorResponse {
                 message: format!("Failed to resume session: {}", err),
                 status: StatusCode::NOT_FOUND,
@@ -726,7 +726,7 @@ async fn agent_add_extension(
         .await
         .map_err(|e| {
             #[cfg(feature = "telemetry")]
-            goose::posthog::emit_error(
+            codev::posthog::emit_error(
                 "extension_add_failed",
                 &format!("{}: {}", extension_name, e),
             );
@@ -1135,7 +1135,7 @@ async fn call_tool(
         params
     };
 
-    let ctx = goose::agents::ToolCallContext::new(payload.session_id.clone(), None, None);
+    let ctx = codev::agents::ToolCallContext::new(payload.session_id.clone(), None, None);
     let tool_result = agent
         .extension_manager
         .dispatch_tool_call(&ctx, tool_call, CancellationToken::default())
@@ -1384,8 +1384,8 @@ pub fn routes(state: Arc<AppState>) -> Router {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goose::config::GooseMode;
-    use goose::session::session_manager::SessionType;
+    use codev::config::GooseMode;
+    use codev::session::session_manager::SessionType;
     use rmcp::model::Tool;
     use rmcp::object;
 

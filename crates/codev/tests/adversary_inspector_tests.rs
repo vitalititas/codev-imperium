@@ -1,7 +1,7 @@
-use goose::config::GooseMode;
-use goose::conversation::message::{Message, MessageContent, ToolRequest};
-use goose::security::adversary_inspector::AdversaryInspector;
-use goose::tool_inspection::ToolInspector;
+use codev::config::GooseMode;
+use codev::conversation::message::{Message, MessageContent, ToolRequest};
+use codev::security::adversary_inspector::AdversaryInspector;
+use codev::tool_inspection::ToolInspector;
 use rmcp::model::CallToolRequestParams;
 use rmcp::object;
 use std::sync::Arc;
@@ -86,7 +86,7 @@ async fn test_adversary_enabled_default_tools() {
     assert_eq!(results.len(), 1);
     assert!(matches!(
         results[0].action,
-        goose::tool_inspection::InspectionAction::Allow
+        codev::tool_inspection::InspectionAction::Allow
     ));
 
     // write is NOT reviewed by default — skipped entirely

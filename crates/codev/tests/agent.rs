@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use futures::StreamExt;
-use goose::agents::{Agent, AgentEvent, GoosePlatform};
-use goose::config::extensions::{set_extension, ExtensionEntry};
+use codev::agents::{Agent, AgentEvent, GoosePlatform};
+use codev::config::extensions::{set_extension, ExtensionEntry};
 
 #[cfg(test)]
 mod tests {
@@ -14,13 +14,13 @@ mod tests {
         use super::*;
         use async_trait::async_trait;
         use chrono::{DateTime, Utc};
-        use goose::agents::platform_tools::PLATFORM_MANAGE_SCHEDULE_TOOL_NAME;
-        use goose::agents::AgentConfig;
-        use goose::config::permission::PermissionManager;
-        use goose::config::GooseMode;
-        use goose::scheduler::{ScheduledJob, SchedulerError};
-        use goose::scheduler_trait::SchedulerTrait;
-        use goose::session::{Session, SessionManager};
+        use codev::agents::platform_tools::PLATFORM_MANAGE_SCHEDULE_TOOL_NAME;
+        use codev::agents::AgentConfig;
+        use codev::config::permission::PermissionManager;
+        use codev::config::GooseMode;
+        use codev::scheduler::{ScheduledJob, SchedulerError};
+        use codev::scheduler_trait::SchedulerTrait;
+        use codev::session::{Session, SessionManager};
         use std::path::PathBuf;
         use std::sync::Arc;
         use tempfile::TempDir;
@@ -261,11 +261,11 @@ mod tests {
     #[cfg(test)]
     mod retry_tests {
         use super::*;
-        use goose::agents::types::{RetryConfig, SuccessCheck};
+        use codev::agents::types::{RetryConfig, SuccessCheck};
 
         #[tokio::test]
         async fn test_retry_success_check_execution() -> Result<()> {
-            use goose::agents::retry::execute_success_checks;
+            use codev::agents::retry::execute_success_checks;
 
             let retry_config = RetryConfig {
                 max_retries: 3,
@@ -339,16 +339,16 @@ mod tests {
     mod max_turns_tests {
         use super::*;
         use async_trait::async_trait;
-        use goose::agents::SessionConfig;
-        use goose::config::GooseMode;
-        use goose::conversation::message::{Message, MessageContent};
-        use goose::model::ModelConfig;
-        use goose::providers::base::{
+        use codev::agents::SessionConfig;
+        use codev::config::GooseMode;
+        use codev::conversation::message::{Message, MessageContent};
+        use codev::model::ModelConfig;
+        use codev::providers::base::{
             stream_from_single_message, MessageStream, Provider, ProviderDef, ProviderMetadata,
         };
-        use goose::session::session_manager::SessionType;
-        use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-        use goose_providers::errors::ProviderError;
+        use codev::session::session_manager::SessionType;
+        use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+        use codev_providers::errors::ProviderError;
         use rmcp::model::{CallToolRequestParams, Tool};
         use rmcp::object;
         use std::path::PathBuf;
@@ -380,7 +380,7 @@ mod tests {
 
             fn from_env(
                 _model: ModelConfig,
-                _extensions: Vec<goose::config::ExtensionConfig>,
+                _extensions: Vec<codev::config::ExtensionConfig>,
             ) -> futures::future::BoxFuture<'static, anyhow::Result<Self>> {
                 Box::pin(async { Ok(Self::new()) })
             }
@@ -453,12 +453,12 @@ mod tests {
                         if let Some(MessageContent::ActionRequired(action)) =
                             response.content.first()
                         {
-                            if let goose::conversation::message::ActionRequiredData::ToolConfirmation { id, .. } = &action.data {
+                            if let codev::conversation::message::ActionRequiredData::ToolConfirmation { id, .. } = &action.data {
                                 agent.handle_confirmation(
                                     id.clone(),
-                                    goose::permission::PermissionConfirmation {
-                                        principal_type: goose::permission::permission_confirmation::PrincipalType::Tool,
-                                        permission: goose::permission::Permission::AllowOnce,
+                                    codev::permission::PermissionConfirmation {
+                                        principal_type: codev::permission::permission_confirmation::PrincipalType::Tool,
+                                        permission: codev::permission::Permission::AllowOnce,
                                     }
                                 ).await;
                             }
@@ -499,17 +499,17 @@ mod tests {
     mod tool_pair_summarization_tests {
         use super::*;
         use async_trait::async_trait;
-        use goose::agents::SessionConfig;
-        use goose::config::base::Config;
-        use goose::config::GooseMode;
-        use goose::conversation::message::Message;
-        use goose::model::ModelConfig;
-        use goose::providers::base::{
+        use codev::agents::SessionConfig;
+        use codev::config::base::Config;
+        use codev::config::GooseMode;
+        use codev::conversation::message::Message;
+        use codev::model::ModelConfig;
+        use codev::providers::base::{
             stream_from_single_message, MessageStream, Provider, ProviderDef, ProviderMetadata,
         };
-        use goose::session::session_manager::SessionType;
-        use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-        use goose_providers::errors::ProviderError;
+        use codev::session::session_manager::SessionType;
+        use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+        use codev_providers::errors::ProviderError;
         use rmcp::model::{AnnotateAble, CallToolRequestParams, CallToolResult, RawContent, Tool};
         use std::path::PathBuf;
         use std::sync::atomic::{AtomicUsize, Ordering};
@@ -549,7 +549,7 @@ mod tests {
 
             fn from_env(
                 _model: ModelConfig,
-                _extensions: Vec<goose::config::ExtensionConfig>,
+                _extensions: Vec<codev::config::ExtensionConfig>,
             ) -> futures::future::BoxFuture<'static, anyhow::Result<Self>> {
                 Box::pin(async { Ok(Self::new()) })
             }
@@ -754,17 +754,17 @@ mod tests {
     #[cfg(test)]
     mod extension_manager_tests {
         use super::*;
-        use goose::agents::extension::ExtensionConfig;
-        use goose::agents::platform_extensions::{
+        use codev::agents::extension::ExtensionConfig;
+        use codev::agents::platform_extensions::{
             MANAGE_EXTENSIONS_TOOL_NAME, SEARCH_AVAILABLE_EXTENSIONS_TOOL_NAME,
         };
-        use goose::agents::AgentConfig;
-        use goose::config::permission::PermissionManager;
-        use goose::config::GooseMode;
-        use goose::session::SessionManager;
+        use codev::agents::AgentConfig;
+        use codev::config::permission::PermissionManager;
+        use codev::config::GooseMode;
+        use codev::session::SessionManager;
 
         async fn setup_agent_with_extension_manager() -> (Agent, String) {
-            use goose::session::session_manager::SessionType;
+            use codev::session::session_manager::SessionType;
 
             // Add the TODO extension to the config so it can be discovered by search_available_extensions
             // Set it as disabled initially so tests can enable it
@@ -852,16 +852,16 @@ mod tests {
     mod streaming_persistence_tests {
         use super::*;
         use async_trait::async_trait;
-        use goose::agents::{AgentConfig, SessionConfig};
-        use goose::config::permission::PermissionManager;
-        use goose::config::GooseMode;
-        use goose::conversation::message::Message;
-        use goose::model::ModelConfig;
-        use goose::providers::base::{MessageStream, Provider, ProviderDef, ProviderMetadata};
-        use goose::session::session_manager::SessionType;
-        use goose::session::SessionManager;
-        use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-        use goose_providers::errors::ProviderError;
+        use codev::agents::{AgentConfig, SessionConfig};
+        use codev::config::permission::PermissionManager;
+        use codev::config::GooseMode;
+        use codev::conversation::message::Message;
+        use codev::model::ModelConfig;
+        use codev::providers::base::{MessageStream, Provider, ProviderDef, ProviderMetadata};
+        use codev::session::session_manager::SessionType;
+        use codev::session::SessionManager;
+        use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+        use codev_providers::errors::ProviderError;
         use rmcp::model::{CallToolRequestParams, Role, Tool};
         use rmcp::object;
         use std::path::PathBuf;
@@ -901,7 +901,7 @@ mod tests {
 
             fn from_env(
                 _model: ModelConfig,
-                _extensions: Vec<goose::config::ExtensionConfig>,
+                _extensions: Vec<codev::config::ExtensionConfig>,
             ) -> futures::future::BoxFuture<'static, anyhow::Result<Self>> {
                 unimplemented!()
             }
@@ -1122,19 +1122,19 @@ mod tests {
     mod goal_checking_tests {
         use super::*;
         use async_trait::async_trait;
-        use goose::agents::AgentConfig;
-        use goose::agents::SessionConfig;
-        use goose::config::permission::PermissionManager;
-        use goose::config::GooseMode;
-        use goose::conversation::message::Message;
-        use goose::model::ModelConfig;
-        use goose::providers::base::{
+        use codev::agents::AgentConfig;
+        use codev::agents::SessionConfig;
+        use codev::config::permission::PermissionManager;
+        use codev::config::GooseMode;
+        use codev::conversation::message::Message;
+        use codev::model::ModelConfig;
+        use codev::providers::base::{
             stream_from_single_message, MessageStream, Provider, ProviderDef, ProviderMetadata,
         };
-        use goose::session::session_manager::SessionType;
-        use goose::session::SessionManager;
-        use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-        use goose_providers::errors::ProviderError;
+        use codev::session::session_manager::SessionType;
+        use codev::session::SessionManager;
+        use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+        use codev_providers::errors::ProviderError;
         use rmcp::model::Tool;
         use std::path::PathBuf;
         use std::sync::atomic::{AtomicU32, Ordering};
@@ -1171,7 +1171,7 @@ mod tests {
 
             fn from_env(
                 _model: ModelConfig,
-                _extensions: Vec<goose::config::ExtensionConfig>,
+                _extensions: Vec<codev::config::ExtensionConfig>,
             ) -> futures::future::BoxFuture<'static, anyhow::Result<Self>> {
                 Box::pin(async { Ok(Self::new()) })
             }
@@ -1391,16 +1391,16 @@ mod tests {
     mod cumulative_token_tests {
         use super::*;
         use async_trait::async_trait;
-        use goose::agents::{AgentConfig, SessionConfig};
-        use goose::config::permission::PermissionManager;
-        use goose::config::GooseMode;
-        use goose::conversation::message::Message;
-        use goose::model::ModelConfig;
-        use goose::providers::base::{stream_from_single_message, MessageStream, Provider};
-        use goose::session::session_manager::SessionType;
-        use goose::session::SessionManager;
-        use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
-        use goose_providers::errors::ProviderError;
+        use codev::agents::{AgentConfig, SessionConfig};
+        use codev::config::permission::PermissionManager;
+        use codev::config::GooseMode;
+        use codev::conversation::message::Message;
+        use codev::model::ModelConfig;
+        use codev::providers::base::{stream_from_single_message, MessageStream, Provider};
+        use codev::session::session_manager::SessionType;
+        use codev::session::SessionManager;
+        use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+        use codev_providers::errors::ProviderError;
         use rmcp::model::Tool;
         use std::path::PathBuf;
         use std::sync::Arc;
@@ -1504,11 +1504,11 @@ mod tests {
 
     mod frontend_extension_tests {
         use super::*;
-        use goose::agents::{AgentConfig, ExtensionConfig};
-        use goose::config::permission::PermissionManager;
-        use goose::config::GooseMode;
-        use goose::session::session_manager::SessionType;
-        use goose::session::{
+        use codev::agents::{AgentConfig, ExtensionConfig};
+        use codev::config::permission::PermissionManager;
+        use codev::config::GooseMode;
+        use codev::session::session_manager::SessionType;
+        use codev::session::{
             EnabledExtensionsState, ExtensionData, ExtensionState, SessionManager,
         };
         use rmcp::model::Tool;

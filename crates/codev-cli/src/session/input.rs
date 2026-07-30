@@ -1,7 +1,7 @@
 use super::completion::GooseCompleter;
 use super::{CompletionCache, HintStatus};
 use anyhow::Result;
-use goose::config::{Config, GooseMode};
+use codev::config::{Config, GooseMode};
 use rustyline::Editor;
 use shlex;
 use std::collections::HashMap;

@@ -1,11 +1,11 @@
 use dotenvy::dotenv;
 use futures::StreamExt;
-use goose::agents::{Agent, AgentEvent, ExtensionConfig, SessionConfig};
-use goose::config::{GooseMode, DEFAULT_EXTENSION_DESCRIPTION, DEFAULT_EXTENSION_TIMEOUT};
-use goose::conversation::message::Message;
-use goose::providers::create_with_named_model;
-use goose::providers::databricks::DATABRICKS_DEFAULT_MODEL;
-use goose::session::session_manager::SessionType;
+use codev::agents::{Agent, AgentEvent, ExtensionConfig, SessionConfig};
+use codev::config::{GooseMode, DEFAULT_EXTENSION_DESCRIPTION, DEFAULT_EXTENSION_TIMEOUT};
+use codev::conversation::message::Message;
+use codev::providers::create_with_named_model;
+use codev::providers::databricks::DATABRICKS_DEFAULT_MODEL;
+use codev::session::session_manager::SessionType;
 use std::path::PathBuf;
 
 #[tokio::main]

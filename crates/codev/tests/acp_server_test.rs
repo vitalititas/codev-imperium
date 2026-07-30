@@ -22,10 +22,10 @@ use common_tests::{
     run_prompt_model_mismatch, run_prompt_skill, run_session_name_update_notification,
     run_shell_terminal_false, run_shell_terminal_true,
 };
-use goose::config::GooseMode;
-use goose::conversation::message::Message;
-use goose::custom_requests::{GetSessionInfoRequest, GetSessionInfoResponse};
-use goose::session::{SessionManager, SessionType};
+use codev::config::GooseMode;
+use codev::conversation::message::Message;
+use codev::custom_requests::{GetSessionInfoRequest, GetSessionInfoResponse};
+use codev::session::{SessionManager, SessionType};
 use std::path::Path;
 
 tests_config_option_set_error!(AcpServerConnection);

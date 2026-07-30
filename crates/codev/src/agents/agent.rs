@@ -53,8 +53,8 @@ use crate::session::{Session, SessionManager, SessionNameUpdate};
 use crate::tool_inspection::ToolInspectionManager;
 use crate::tool_monitor::RepetitionInspector;
 use crate::utils::is_token_cancelled;
-use goose_providers::errors::ProviderError;
-use goose_providers::thinking::ThinkingEffort;
+use codev_providers::errors::ProviderError;
+use codev_providers::thinking::ThinkingEffort;
 use regex::Regex;
 use rmcp::model::{
     CallToolRequestParams, CallToolResult, Content, ErrorCode, ErrorData, GetPromptResult, Prompt,
@@ -1720,7 +1720,7 @@ impl Agent {
 
         let working_dir = session.working_dir.clone();
         let reply_stream_span = tracing::info_span!(
-            target: "goose::agents::agent",
+            target: "codev::agents::agent",
             "reply_stream",
             trace_output = tracing::field::Empty,
             session.id = %session_config.id,
@@ -3065,7 +3065,7 @@ mod tests {
     use crate::providers::base::{stream_from_single_message, MessageStream, PermissionRouting};
     use crate::recipe::Response;
     use crate::session::session_manager::SessionType;
-    use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
+    use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
     use rmcp::model::Tool;
     use std::path::PathBuf;
     use std::sync::atomic::{AtomicUsize, Ordering};

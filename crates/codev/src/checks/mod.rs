@@ -7,7 +7,7 @@
 
 use crate::sources::parse_frontmatter;
 use anyhow::{anyhow, bail, Context, Result};
-use goose_sdk_types::custom_requests::{SourceEntry, SourceType};
+use codev_sdk_types::custom_requests::{SourceEntry, SourceType};
 use serde::Deserialize;
 use std::collections::{BTreeMap, HashMap};
 use std::fs;
@@ -15,7 +15,7 @@ use std::path::{Path, PathBuf};
 
 /// Default maximum number of turns a check subagent may take.
 ///
-/// Mirrors `goose::agents::subagent_task_config::DEFAULT_SUBAGENT_MAX_TURNS`,
+/// Mirrors `codev::agents::subagent_task_config::DEFAULT_SUBAGENT_MAX_TURNS`,
 /// duplicated here to keep the checks module self-contained for parsing.
 pub const DEFAULT_CHECK_TURN_LIMIT: usize = 25;
 

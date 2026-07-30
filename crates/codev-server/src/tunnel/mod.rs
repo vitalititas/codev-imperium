@@ -2,7 +2,7 @@ pub mod lapstone;
 
 use crate::configuration::Settings;
 use fs2::FileExt as _;
-use goose::config::{paths::Paths, Config};
+use codev::config::{paths::Paths, Config};
 use serde::{Deserialize, Serialize};
 use std::fs::{File, OpenOptions};
 use std::io::Write;

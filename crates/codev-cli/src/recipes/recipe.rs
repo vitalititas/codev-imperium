@@ -5,12 +5,12 @@ use crate::recipes::print_recipe::{
 use crate::recipes::search_recipe::load_recipe_file;
 use crate::recipes::secret_discovery::{discover_recipe_secrets, SecretRequirement};
 use anyhow::Result;
-use goose::config::Config;
-use goose::recipe::build_recipe::{
+use codev::config::Config;
+use codev::recipe::build_recipe::{
     apply_values_to_parameters, build_recipe_from_template, RecipeError,
 };
-use goose::recipe::validate_recipe::parse_and_validate_parameters;
-use goose::recipe::Recipe;
+use codev::recipe::validate_recipe::parse_and_validate_parameters;
+use codev::recipe::Recipe;
 
 fn create_user_prompt_callback() -> impl Fn(&str, &str) -> Result<String> {
     |key: &str, description: &str| -> Result<String> {
@@ -154,7 +154,7 @@ pub fn explain_recipe(recipe_name: &str, params: Vec<(String, String)>) -> Resul
 
 #[cfg(test)]
 mod tests {
-    use goose::recipe::{RecipeParameterInputType, RecipeParameterRequirement};
+    use codev::recipe::{RecipeParameterInputType, RecipeParameterRequirement};
 
     use crate::recipes::recipe::load_recipe;
 

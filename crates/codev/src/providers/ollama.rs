@@ -16,9 +16,9 @@ use async_stream::try_stream;
 use async_trait::async_trait;
 use futures::future::BoxFuture;
 use futures::TryStreamExt;
-use goose_providers::errors::ProviderError;
-use goose_providers::formats::openai::ModelConfigParams;
-use goose_providers::images::ImageFormat;
+use codev_providers::errors::ProviderError;
+use codev_providers::formats::openai::ModelConfigParams;
+use codev_providers::images::ImageFormat;
 use reqwest::Response;
 use rmcp::model::Tool;
 use serde_json::{json, Value};
@@ -764,7 +764,7 @@ mod tests {
         assert!(config.transient_only);
 
         use super::super::retry::should_retry;
-        use goose_providers::errors::ProviderError;
+        use codev_providers::errors::ProviderError;
 
         assert!(!should_retry(
             &ProviderError::RequestFailed("Resource not found (404)".into()),

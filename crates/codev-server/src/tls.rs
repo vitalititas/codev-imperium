@@ -12,7 +12,7 @@
 //!   the server listener always uses OpenSSL when this feature is active.
 
 use anyhow::{bail, Result};
-use goose::config::paths::Paths;
+use codev::config::paths::Paths;
 use rcgen::{CertificateParams, DnType, KeyPair, SanType};
 use std::path::Path;
 

@@ -1,4 +1,4 @@
-pub use goose_providers::canonical::catalog::{
+pub use codev_providers::canonical::catalog::{
     ModelCapabilities, ModelTemplate, ProviderCatalogEntry, ProviderFormat,
     ProviderSetupCapabilities, ProviderSetupCatalogEntry, ProviderSetupCategory,
     ProviderSetupConfigKey, ProviderSetupField, ProviderSetupGroup, ProviderSetupMetadata,
@@ -39,7 +39,7 @@ pub async fn get_providers_by_format(format: ProviderFormat) -> Vec<ProviderCata
         .map(|(metadata, _)| metadata.name)
         .collect::<HashSet<_>>();
 
-    goose_providers::canonical::catalog::get_providers_by_format(format, &native_provider_ids)
+    codev_providers::canonical::catalog::get_providers_by_format(format, &native_provider_ids)
 }
 
 pub async fn get_setup_catalog_entries() -> Vec<ProviderSetupCatalogEntry> {
@@ -52,15 +52,15 @@ pub async fn get_setup_catalog_entries() -> Vec<ProviderSetupCatalogEntry> {
         })
         .collect::<HashMap<_, _>>();
 
-    goose_providers::canonical::catalog::get_setup_catalog_entries(&registry_metadata)
+    codev_providers::canonical::catalog::get_setup_catalog_entries(&registry_metadata)
 }
 
 pub fn get_provider_setup_category(provider_id: &str) -> Option<ProviderSetupCategory> {
-    goose_providers::canonical::catalog::get_provider_setup_category(provider_id)
+    codev_providers::canonical::catalog::get_provider_setup_category(provider_id)
 }
 
 pub fn get_provider_template(provider_id: &str) -> Option<ProviderTemplate> {
-    goose_providers::canonical::catalog::get_provider_template(provider_id)
+    codev_providers::canonical::catalog::get_provider_template(provider_id)
 }
 
 #[cfg(test)]

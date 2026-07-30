@@ -11,11 +11,11 @@ use crate::conversation::message::Message;
 use anyhow::Result;
 use async_trait::async_trait;
 use futures::future::BoxFuture;
-use goose_providers::errors::ProviderError;
-use goose_providers::images::ImageFormat;
+use codev_providers::errors::ProviderError;
+use codev_providers::images::ImageFormat;
 
 use crate::model::ModelConfig;
-use goose_providers::formats::openai::{create_request, ModelConfigParams};
+use codev_providers::formats::openai::{create_request, ModelConfigParams};
 use rmcp::model::Tool;
 use serde_json::Value;
 

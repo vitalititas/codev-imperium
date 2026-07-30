@@ -9,11 +9,11 @@ use axum::{
     Json, Router,
 };
 use futures::future::join_all;
-use goose::config::paths::Paths;
-use goose::download_manager::{get_download_manager, DownloadProgress};
-use goose::providers::huggingface_auth;
-use goose::providers::local_inference::hf_models::{self, HfModelInfo, HfQuantVariant};
-use goose::providers::local_inference::{
+use codev::config::paths::Paths;
+use codev::download_manager::{get_download_manager, DownloadProgress};
+use codev::providers::huggingface_auth;
+use codev::providers::local_inference::hf_models::{self, HfModelInfo, HfQuantVariant};
+use codev::providers::local_inference::{
     available_inference_memory_bytes, builtin_chat_template_names,
     hf_models::{resolve_model_spec_full, HfGgufFile},
     local_model_registry::{
@@ -259,7 +259,7 @@ async fn ensure_featured_models_in_registry() -> Result<(), ErrorResponse> {
             let download_id = format!("{}-mmproj", model_id);
             let dominated_by_active = dm
                 .get_progress(&download_id)
-                .is_some_and(|p| p.status == goose::download_manager::DownloadStatus::Downloading);
+                .is_some_and(|p| p.status == codev::download_manager::DownloadStatus::Downloading);
             if !dominated_by_active {
                 tracing::info!(model_id = %model_id, "Auto-downloading vision encoder for existing model");
                 if let Err(e) = dm
@@ -764,7 +764,7 @@ pub fn routes(state: Arc<AppState>) -> Router {
                 .collect()
         })
         .unwrap_or_default();
-    goose::download_manager::cleanup_partial_downloads(
+    codev::download_manager::cleanup_partial_downloads(
         &Paths::in_data_dir("models"),
         &registered_paths,
     );

@@ -9,13 +9,13 @@ use axum::{
     routing::{get, put},
     Json, Router,
 };
-use goose::agents::ExtensionConfig;
-use goose::recipe::Recipe;
+use codev::agents::ExtensionConfig;
+use codev::recipe::Recipe;
 #[cfg(feature = "nostr")]
-use goose::session::nostr_share;
+use codev::session::nostr_share;
 #[cfg(feature = "nostr")]
-use goose::session::session_manager::SessionType;
-use goose::session::{EnabledExtensionsState, Session};
+use codev::session::session_manager::SessionType;
+use codev::session::{EnabledExtensionsState, Session};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -261,7 +261,7 @@ async fn share_session_nostr(
             .await
             .map_err(|_| StatusCode::NOT_FOUND)?;
 
-        let relays = nostr_share::resolve_relays(request.relays, goose::config::Config::global());
+        let relays = nostr_share::resolve_relays(request.relays, codev::config::Config::global());
         let share = nostr_share::publish_session_json(&exported, relays)
             .await
             .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
@@ -356,7 +356,7 @@ async fn fork_session(
             .map_err(|e| {
                 tracing::error!("Failed to get session: {}", e);
                 #[cfg(feature = "telemetry")]
-                goose::posthog::emit_error("session_get_failed", &e.to_string());
+                codev::posthog::emit_error("session_get_failed", &e.to_string());
                 ErrorResponse {
                     message: if e.to_string().contains("not found") {
                         format!("Session {} not found", session_id)
@@ -377,7 +377,7 @@ async fn fork_session(
             .map_err(|e| {
                 tracing::error!("Failed to copy session: {}", e);
                 #[cfg(feature = "telemetry")]
-                goose::posthog::emit_error("session_copy_failed", &e.to_string());
+                codev::posthog::emit_error("session_copy_failed", &e.to_string());
                 ErrorResponse {
                     message: format!("Failed to copy session: {}", e),
                     status: StatusCode::INTERNAL_SERVER_ERROR,
@@ -396,7 +396,7 @@ async fn fork_session(
             .map_err(|e| {
                 tracing::error!("Failed to truncate conversation: {}", e);
                 #[cfg(feature = "telemetry")]
-                goose::posthog::emit_error("session_truncate_failed", &e.to_string());
+                codev::posthog::emit_error("session_truncate_failed", &e.to_string());
                 ErrorResponse {
                     message: format!("Failed to truncate conversation: {}", e),
                     status: StatusCode::INTERNAL_SERVER_ERROR,
@@ -444,7 +444,7 @@ async fn get_session_extensions(
 
     let extensions = EnabledExtensionsState::extensions_or_default(
         Some(&session.extension_data),
-        goose::config::Config::global(),
+        codev::config::Config::global(),
     );
 
     Ok(Json(SessionExtensionsResponse { extensions }))

@@ -30,7 +30,7 @@ use crate::providers::openai_compatible::{map_http_error_to_provider_error, sani
 use crate::providers::retry::RetryConfig;
 use crate::providers::utils::RequestLog;
 use crate::session_context::SESSION_ID_HEADER;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use rmcp::model::Tool;
 
 const GCP_VERTEX_AI_PROVIDER_NAME: &str = "gcp_vertex_ai";

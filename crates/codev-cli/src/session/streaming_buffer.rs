@@ -8,7 +8,7 @@
 //! # Example
 //!
 //! ```
-//! use goose_cli::session::streaming_buffer::MarkdownBuffer;
+//! use codev_cli::session::streaming_buffer::MarkdownBuffer;
 //!
 //! let mut buf = MarkdownBuffer::new();
 //!

@@ -9,7 +9,7 @@ use agent_client_protocol::schema::{
     SessionNotification, SessionUpdate, UnstructuredCommandInput,
 };
 use agent_client_protocol::{Client, ConnectionTo};
-use goose_providers::thinking::ThinkingEffort;
+use codev_providers::thinking::ThinkingEffort;
 use strum::{EnumMessage, VariantNames};
 
 use super::server::{build_usage_updates, DEFAULT_PROVIDER_ID, DEFAULT_PROVIDER_LABEL};

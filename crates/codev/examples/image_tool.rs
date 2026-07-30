@@ -1,11 +1,11 @@
 use anyhow::Result;
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine as _};
 use dotenvy::dotenv;
-use goose::conversation::message::Message;
-use goose::providers::anthropic::ANTHROPIC_DEFAULT_MODEL;
-use goose::providers::create_with_named_model;
-use goose::providers::databricks::DATABRICKS_DEFAULT_MODEL;
-use goose::providers::openai::OPEN_AI_DEFAULT_MODEL;
+use codev::conversation::message::Message;
+use codev::providers::anthropic::ANTHROPIC_DEFAULT_MODEL;
+use codev::providers::create_with_named_model;
+use codev::providers::databricks::DATABRICKS_DEFAULT_MODEL;
+use codev::providers::openai::OPEN_AI_DEFAULT_MODEL;
 use rmcp::model::{CallToolRequestParams, Content, Tool};
 use rmcp::object;
 use std::fs;
@@ -17,7 +17,7 @@ async fn main() -> Result<()> {
     dotenv().ok();
 
     // Create providers
-    let providers: Vec<Arc<dyn goose::providers::base::Provider>> = vec![
+    let providers: Vec<Arc<dyn codev::providers::base::Provider>> = vec![
         create_with_named_model("databricks", DATABRICKS_DEFAULT_MODEL, Vec::new()).await?,
         create_with_named_model("openai", OPEN_AI_DEFAULT_MODEL, Vec::new()).await?,
         create_with_named_model("anthropic", ANTHROPIC_DEFAULT_MODEL, Vec::new()).await?,

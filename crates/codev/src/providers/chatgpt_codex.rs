@@ -15,7 +15,7 @@ use base64::Engine;
 use chrono::{DateTime, Utc};
 use futures::future::BoxFuture;
 use futures::{StreamExt, TryStreamExt};
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use jsonwebtoken::jwk::JwkSet;
 use jsonwebtoken::{decode, decode_header, DecodingKey, Validation};
 use reqwest::header::{HeaderName, HeaderValue};
@@ -230,7 +230,7 @@ fn get_reasoning_effort(model_name: &str) -> String {
 }
 
 fn reasoning_effort_for_config(model_config: &ModelConfig) -> Option<String> {
-    use goose_providers::thinking::ThinkingEffort;
+    use codev_providers::thinking::ThinkingEffort;
 
     model_config
         .thinking_effort()
@@ -1058,7 +1058,7 @@ impl Provider for ChatGptCodexProvider {
 mod tests {
     use super::*;
     use crate::conversation::message::Message;
-    use goose_test_support::TEST_IMAGE_B64;
+    use codev_test_support::TEST_IMAGE_B64;
     use jsonwebtoken::{Algorithm, EncodingKey, Header};
     use rmcp::model::{CallToolRequestParams, CallToolResult, Content, ErrorCode, ErrorData};
     use rmcp::object;

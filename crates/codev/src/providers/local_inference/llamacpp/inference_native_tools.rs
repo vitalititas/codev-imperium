@@ -1,5 +1,5 @@
 use crate::conversation::message::{Message, MessageContent};
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use rmcp::model::CallToolRequestParams;
 use serde_json::Value;
 use std::borrow::Cow;

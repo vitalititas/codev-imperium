@@ -6,10 +6,10 @@ use std::sync::Arc;
 use axum::extract::rejection::JsonRejection;
 use axum::routing::get;
 use axum::{extract::State, http::StatusCode, routing::post, Json, Router};
-use goose::recipe::local_recipes;
-use goose::recipe::validate_recipe::validate_recipe_template_from_content;
-use goose::recipe::{strip_error_location, Recipe};
-use goose::{recipe_deeplink, slash_commands::recipe_slash_command};
+use codev::recipe::local_recipes;
+use codev::recipe::validate_recipe::validate_recipe_template_from_content;
+use codev::recipe::{strip_error_location, Recipe};
+use codev::{recipe_deeplink, slash_commands::recipe_slash_command};
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -200,7 +200,7 @@ async fn create_recipe(
     match recipe_result {
         Ok(mut recipe) => {
             if let Some(author_req) = request.author {
-                recipe.author = Some(goose::recipe::Author {
+                recipe.author = Some(codev::recipe::Author {
                     contact: author_req.contact,
                     metadata: author_req.metadata,
                 });
@@ -214,7 +214,7 @@ async fn create_recipe(
         Err(e) => {
             tracing::error!("Error details: {:?}", e);
             #[cfg(feature = "telemetry")]
-            goose::posthog::emit_error("recipe_create_failed", &e.to_string());
+            codev::posthog::emit_error("recipe_create_failed", &e.to_string());
             let error_response = CreateRecipeResponse {
                 recipe: None,
                 error: Some(format!("Failed to create recipe: {}", e)),
@@ -242,7 +242,7 @@ async fn encode_recipe(
         Err(err) => {
             tracing::error!("Failed to encode recipe: {}", err);
             #[cfg(feature = "telemetry")]
-            goose::posthog::emit_error("recipe_encode_failed", &err.to_string());
+            codev::posthog::emit_error("recipe_encode_failed", &err.to_string());
             Err(StatusCode::BAD_REQUEST)
         }
     }
@@ -269,7 +269,7 @@ async fn decode_recipe(
         Err(err) => {
             tracing::error!("Failed to decode deeplink: {}", err);
             #[cfg(feature = "telemetry")]
-            goose::posthog::emit_error("recipe_decode_failed", &err.to_string());
+            codev::posthog::emit_error("recipe_decode_failed", &err.to_string());
             Err(StatusCode::BAD_REQUEST)
         }
     }
@@ -396,7 +396,7 @@ async fn schedule_recipe(
         Err(e) => {
             tracing::error!("Failed to schedule recipe: {}", e);
             #[cfg(feature = "telemetry")]
-            goose::posthog::emit_error("recipe_schedule_failed", &e.to_string());
+            codev::posthog::emit_error("recipe_schedule_failed", &e.to_string());
             Err(StatusCode::INTERNAL_SERVER_ERROR)
         }
     }
@@ -588,7 +588,7 @@ pub fn routes(state: Arc<AppState>) -> Router {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goose::recipe::Recipe;
+    use codev::recipe::Recipe;
 
     #[tokio::test]
     async fn test_decode_and_encode_recipe() {

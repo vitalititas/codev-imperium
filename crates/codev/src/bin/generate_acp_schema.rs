@@ -1,5 +1,5 @@
-use goose::acp::custom_notifications::custom_notification_schemas;
-use goose::acp::server::GooseAcpAgent;
+use codev::acp::custom_notifications::custom_notification_schemas;
+use codev::acp::server::GooseAcpAgent;
 use schemars::SchemaGenerator;
 use serde_json::{json, Map, Value};
 use std::collections::{BTreeSet, HashMap};

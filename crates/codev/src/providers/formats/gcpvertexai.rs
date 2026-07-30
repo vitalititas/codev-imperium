@@ -2,7 +2,7 @@ use super::{anthropic, google};
 use crate::conversation::message::Message;
 use crate::model::ModelConfig;
 use anyhow::{Context, Result};
-use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
+use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
 use rmcp::model::Tool;
 use serde_json::Value;
 

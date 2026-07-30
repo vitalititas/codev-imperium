@@ -1,5 +1,5 @@
 use anyhow::Result;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use regex::Regex;
 use std::sync::Arc;
 
@@ -20,7 +20,7 @@ use crate::providers::toolshim::{
     augment_message_with_selected_tool_interpreter, convert_tool_messages_to_text,
     modify_system_prompt_for_tool_json, sanitize_residual_markers,
 };
-use goose_providers::conversation::token_usage::ProviderUsage;
+use codev_providers::conversation::token_usage::ProviderUsage;
 use rmcp::model::Tool;
 use tracing::warn;
 
@@ -626,7 +626,7 @@ mod tests {
     use crate::providers::base::Provider;
     use crate::session::session_manager::SessionType;
     use async_trait::async_trait;
-    use goose_providers::conversation::token_usage::{ProviderUsage, Usage};
+    use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
     use rmcp::object;
 
     #[derive(Clone)]

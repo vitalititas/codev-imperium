@@ -12,7 +12,7 @@ use crate::conversation::message::Message;
 use crate::model::ModelConfig;
 use anyhow::{anyhow, Result};
 use futures::future::BoxFuture;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use rmcp::model::Tool;
 
 pub const HUGGINGFACE_API_HOST: &str = "https://router.huggingface.co/v1";

@@ -38,7 +38,7 @@ use tokio::sync::Semaphore;
 use tokio::task::JoinSet;
 
 use super::handler::ReviewOptions;
-use goose::checks::{Check, DEFAULT_CHECK_TURN_LIMIT};
+use codev::checks::{Check, DEFAULT_CHECK_TURN_LIMIT};
 
 /// Maximum number of check subprocesses we run concurrently. 4 is
 /// empirically the sweet spot before LLM-side rate limits and local

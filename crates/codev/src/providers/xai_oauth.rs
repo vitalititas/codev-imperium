@@ -11,7 +11,7 @@ use axum::{extract::Query, response::Html, routing::get, Router};
 use base64::Engine;
 use chrono::{DateTime, Utc};
 use futures::future::BoxFuture;
-use goose_providers::errors::ProviderError;
+use codev_providers::errors::ProviderError;
 use rmcp::model::Tool;
 use serde::{Deserialize, Serialize};
 use sha2::Digest;

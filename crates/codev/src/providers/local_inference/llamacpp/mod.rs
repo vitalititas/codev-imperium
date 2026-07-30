@@ -29,8 +29,8 @@ use crate::providers::local_inference::tool_parsing::compact_tools_json;
 use crate::providers::local_inference::{
     build_openai_messages_json, build_openai_text_messages_json, ResolvedModelPaths,
 };
-use goose_providers::errors::ProviderError;
-use goose_providers::formats::openai::format_tools;
+use codev_providers::errors::ProviderError;
+use codev_providers::formats::openai::format_tools;
 
 pub(super) const LLAMACPP_BACKEND_ID: &str = "llamacpp";
 

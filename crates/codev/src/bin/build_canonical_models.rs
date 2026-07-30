@@ -9,8 +9,8 @@
 ///
 use anyhow::{Context, Result};
 use clap::Parser;
-use goose::providers::create_with_named_model;
-use goose_providers::canonical::{
+use codev::providers::create_with_named_model;
+use codev_providers::canonical::{
     canonical_name, CanonicalModel, CanonicalModelRegistry, Limit, Modalities, Modality,
     ModelMapping, Pricing, ThinkingMode,
 };

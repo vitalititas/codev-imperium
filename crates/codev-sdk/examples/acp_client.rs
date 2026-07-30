@@ -25,7 +25,7 @@ use agent_client_protocol::schema::{
     SessionNotification, SessionUpdate,
 };
 use agent_client_protocol::{Client, ConnectionTo};
-use goose_sdk::custom_requests::GetExtensionsRequest;
+use codev_sdk::custom_requests::GetExtensionsRequest;
 use std::path::PathBuf;
 use tokio_util::compat::{TokioAsyncReadCompatExt, TokioAsyncWriteCompatExt};
 

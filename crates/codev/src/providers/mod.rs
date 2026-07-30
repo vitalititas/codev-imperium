@@ -9,7 +9,7 @@ pub mod base;
 #[cfg(feature = "aws-providers")]
 pub mod bedrock;
 pub mod canonical {
-    pub use goose_providers::canonical::*;
+    pub use codev_providers::canonical::*;
 }
 mod catalog_util;
 pub mod catalog {

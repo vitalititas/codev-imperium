@@ -3,9 +3,9 @@ use std::sync::Arc;
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode};
 use axum::Router;
-use goose::acp::server_factory::{AcpServer, AcpServerFactoryConfig};
-use goose::acp::transport::create_router;
-use goose::agents::GoosePlatform;
+use codev::acp::server_factory::{AcpServer, AcpServerFactoryConfig};
+use codev::acp::transport::create_router;
+use codev::agents::GoosePlatform;
 use tower::ServiceExt;
 
 const SECRET: &str = "test-secret-token";

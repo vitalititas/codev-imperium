@@ -2,15 +2,15 @@ use anyhow::Result;
 use clap::{Args, CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell as ClapShell};
 use clap_complete_nushell::Nushell as ClapNushell;
-use goose::agents::GoosePlatform;
-use goose::builtin_extension::register_builtin_extensions;
-use goose::config::{Config, GooseMode};
+use codev::agents::GoosePlatform;
+use codev::builtin_extension::register_builtin_extensions;
+use codev::config::{Config, GooseMode};
 #[cfg(feature = "telemetry")]
-use goose::posthog::get_telemetry_choice;
-use goose::recipe::Recipe;
-use goose::source_roots::SourceRoot;
-use goose_mcp::mcp_server_runner::{serve, McpCommand};
-use goose_mcp::{AutoVisualiserRouter, ComputerControllerServer, MemoryServer, TutorialServer};
+use codev::posthog::get_telemetry_choice;
+use codev::recipe::Recipe;
+use codev::source_roots::SourceRoot;
+use codev_mcp::mcp_server_runner::{serve, McpCommand};
+use codev_mcp::{AutoVisualiserRouter, ComputerControllerServer, MemoryServer, TutorialServer};
 
 #[cfg(feature = "telemetry")]
 use crate::commands::configure::configure_telemetry_consent_dialog;
@@ -33,9 +33,9 @@ use crate::commands::skills::handle_skills_list;
 use crate::recipes::extract_from_cli::extract_recipe_info_from_cli;
 use crate::recipes::recipe::{explain_recipe, render_recipe_as_yaml};
 use crate::session::{build_session, SessionBuilderConfig};
-use goose::agents::Container;
-use goose::session::session_manager::SessionType;
-use goose::session::SessionManager;
+use codev::agents::Container;
+use codev::session::session_manager::SessionType;
+use codev::session::SessionManager;
 use std::io::Read;
 use std::path::PathBuf;
 use tracing::warn;
@@ -132,7 +132,7 @@ pub struct StreamableHttpOptions {
 
 fn parse_streamable_http_extension(input: &str) -> Result<StreamableHttpOptions, String> {
     let mut input_iter = input.split_whitespace();
-    let (mut url, mut timeout) = (String::new(), goose::config::DEFAULT_EXTENSION_TIMEOUT);
+    let (mut url, mut timeout) = (String::new(), codev::config::DEFAULT_EXTENSION_TIMEOUT);
 
     if let Some(url_str) = input_iter.next() {
         url.push_str(url_str);
@@ -1321,9 +1321,9 @@ async fn handle_mcp_command(server: McpCommand) -> Result<()> {
 }
 
 async fn handle_serve_command(host: String, port: u16, builtins: Vec<String>) -> Result<()> {
-    use goose::acp::server_factory::{AcpServer, AcpServerFactoryConfig};
-    use goose::acp::transport::create_router;
-    use goose::config::paths::Paths;
+    use codev::acp::server_factory::{AcpServer, AcpServerFactoryConfig};
+    use codev::acp::transport::create_router;
+    use codev::config::paths::Paths;
     use std::net::SocketAddr;
     use std::sync::Arc;
     use tracing::{info, warn};
@@ -1634,7 +1634,7 @@ fn parse_run_input(
             let recipe_version = crate::recipes::search_recipe::load_recipe_file(recipe_name)
                 .ok()
                 .and_then(|rf| {
-                    goose::recipe::template_recipe::parse_recipe_content(
+                    codev::recipe::template_recipe::parse_recipe_content(
                         &rf.content,
                         Some(rf.parent_dir.display().to_string()),
                     )
@@ -1849,8 +1849,8 @@ async fn handle_term_subcommand(command: TermCommand) -> Result<()> {
 
 #[cfg(feature = "local-inference")]
 async fn handle_local_models_command(command: LocalModelsCommand) -> Result<()> {
-    use goose::providers::local_inference::hf_models;
-    use goose::providers::local_inference::local_model_registry::{
+    use codev::providers::local_inference::hf_models;
+    use codev::providers::local_inference::local_model_registry::{
         get_registry, mmproj_local_path, model_id_from_repo, LocalModelEntry,
     };
 
@@ -1900,7 +1900,7 @@ async fn handle_local_models_command(command: LocalModelsCommand) -> Result<()> 
             let file = resolved.files.into_iter().next().unwrap();
             let model_id = model_id_from_repo(&repo_id, &file.quantization);
             let local_path =
-                goose::config::paths::Paths::in_data_dir("models").join(&file.filename);
+                codev::config::paths::Paths::in_data_dir("models").join(&file.filename);
             let mmproj_path = mmproj
                 .as_ref()
                 .map(|mmproj| mmproj_local_path(&repo_id, &mmproj.filename));
@@ -1949,8 +1949,8 @@ async fn handle_local_models_command(command: LocalModelsCommand) -> Result<()> 
             }
 
             // Download
-            let manager = goose::download_manager::get_download_manager();
-            let hf_token = goose::providers::huggingface_auth::resolve_token_async()
+            let manager = codev::download_manager::get_download_manager();
+            let hf_token = codev::providers::huggingface_auth::resolve_token_async()
                 .await
                 .ok()
                 .flatten();
@@ -1968,7 +1968,7 @@ async fn handle_local_models_command(command: LocalModelsCommand) -> Result<()> 
             loop {
                 if let Some(progress) = manager.get_progress(&format!("{}-model", model_id)) {
                     match progress.status {
-                        goose::download_manager::DownloadStatus::Downloading => {
+                        codev::download_manager::DownloadStatus::Downloading => {
                             print!(
                                 "\r  {:.1}% ({:.0}MB / {:.0}MB)",
                                 progress.progress_percent,
@@ -1978,15 +1978,15 @@ async fn handle_local_models_command(command: LocalModelsCommand) -> Result<()> 
                             use std::io::Write;
                             std::io::stdout().flush().ok();
                         }
-                        goose::download_manager::DownloadStatus::Completed => {
+                        codev::download_manager::DownloadStatus::Completed => {
                             println!("\nDownloaded: {}", model_id);
                             break;
                         }
-                        goose::download_manager::DownloadStatus::Failed => {
+                        codev::download_manager::DownloadStatus::Failed => {
                             let err = progress.error.unwrap_or_default();
                             anyhow::bail!("Download failed: {}", err);
                         }
-                        goose::download_manager::DownloadStatus::Cancelled => {
+                        codev::download_manager::DownloadStatus::Cancelled => {
                             println!("\nDownload cancelled.");
                             break;
                         }
@@ -2077,7 +2077,7 @@ async fn handle_default_session() -> Result<()> {
 }
 
 pub async fn cli() -> anyhow::Result<()> {
-    register_builtin_extensions(goose_mcp::BUILTIN_EXTENSIONS.clone());
+    register_builtin_extensions(codev_mcp::BUILTIN_EXTENSIONS.clone());
 
     let cli = Cli::parse();
 
@@ -2102,7 +2102,7 @@ pub async fn cli() -> anyhow::Result<()> {
         Some(Command::Doctor {}) => crate::commands::doctor::handle_doctor().await,
         Some(Command::Info { verbose, check }) => handle_info(verbose, check).await,
         Some(Command::Mcp { server }) => handle_mcp_command(server).await,
-        Some(Command::Acp { builtins }) => goose::acp::server::run(builtins).await,
+        Some(Command::Acp { builtins }) => codev::acp::server::run(builtins).await,
         Some(Command::Serve {
             host,
             port,
@@ -2216,7 +2216,7 @@ pub async fn cli() -> anyhow::Result<()> {
             .await
         }
         Some(Command::ValidateExtensions { file }) => {
-            use goose::agents::validate_extensions::validate_bundled_extensions;
+            use codev::agents::validate_extensions::validate_bundled_extensions;
             match validate_bundled_extensions(&file) {
                 Ok(msg) => {
                     println!("{msg}");

@@ -198,7 +198,7 @@ impl Drop for RequestGuard {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use goose::conversation::message::TokenState;
+    use codev::conversation::message::TokenState;
 
     #[tokio::test]
     async fn test_publish_and_subscribe() {

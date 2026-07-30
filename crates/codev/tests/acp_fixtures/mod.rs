@@ -10,17 +10,17 @@ use agent_client_protocol::schema::{
 };
 use async_trait::async_trait;
 use fs_err as fs;
-use goose::acp::server::{serve, AcpProviderFactory, GooseAcpAgent, GooseAcpAgentOptions};
-pub use goose::acp::{map_permission_response, PermissionDecision};
-use goose::agents::GoosePlatform;
-use goose::builtin_extension::register_builtin_extensions;
-use goose::config::paths::Paths;
-use goose::config::{GooseMode, PermissionManager};
-use goose::providers::api_client::{ApiClient, AuthMethod as ApiAuthMethod};
-use goose::providers::base::Provider;
-use goose::providers::openai::OpenAiProvider;
-use goose::session_context::SESSION_ID_HEADER;
-use goose_test_support::{ExpectedSessionId, TEST_MODEL};
+use codev::acp::server::{serve, AcpProviderFactory, GooseAcpAgent, GooseAcpAgentOptions};
+pub use codev::acp::{map_permission_response, PermissionDecision};
+use codev::agents::GoosePlatform;
+use codev::builtin_extension::register_builtin_extensions;
+use codev::config::paths::Paths;
+use codev::config::{GooseMode, PermissionManager};
+use codev::providers::api_client::{ApiClient, AuthMethod as ApiAuthMethod};
+use codev::providers::base::Provider;
+use codev::providers::openai::OpenAiProvider;
+use codev::session_context::SESSION_ID_HEADER;
+use codev_test_support::{ExpectedSessionId, TEST_MODEL};
 use std::collections::VecDeque;
 use std::future::Future;
 use std::path::{Path, PathBuf};
@@ -44,7 +44,7 @@ fn write_global_test_config(config_path: &Path, openai_base_url: &str) {
 
     let global_config_dir = Paths::config_dir();
     fs::create_dir_all(&global_config_dir).unwrap();
-    let global_config_path = global_config_dir.join(goose::config::base::CONFIG_YAML_NAME);
+    let global_config_path = global_config_dir.join(codev::config::base::CONFIG_YAML_NAME);
     fs::write(&global_config_path, serde_yaml::to_string(&config).unwrap()).unwrap();
 }
 
@@ -181,7 +181,7 @@ pub async fn spawn_acp_server_in_process(
     fs::create_dir_all(data_root).unwrap();
     // TODO: Paths::in_state_dir is global, ignoring per-test data_root
     fs::create_dir_all(Paths::in_state_dir("logs")).unwrap();
-    let config_path = data_root.join(goose::config::base::CONFIG_YAML_NAME);
+    let config_path = data_root.join(codev::config::base::CONFIG_YAML_NAME);
     if !config_path.exists() {
         fs::write(
             &config_path,
@@ -617,7 +617,7 @@ where
     if std::env::var_os("GOOSE_PATH_ROOT").is_none() {
         std::env::set_var("GOOSE_PATH_ROOT", ACP_CONFIG_ROOT.path());
     }
-    register_builtin_extensions(goose_mcp::BUILTIN_EXTENSIONS.clone());
+    register_builtin_extensions(codev_mcp::BUILTIN_EXTENSIONS.clone());
 
     let handle = std::thread::Builder::new()
         .name("acp-test".to_string())

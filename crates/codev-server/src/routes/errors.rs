@@ -3,9 +3,9 @@ use axum::{
     response::{IntoResponse, Response},
     Json,
 };
-use goose::config::ConfigError;
-use goose::model::ConfigError as ModelConfigError;
-use goose_providers::errors::ProviderError;
+use codev::config::ConfigError;
+use codev::model::ConfigError as ModelConfigError;
+use codev_providers::errors::ProviderError;
 use serde::Serialize;
 use utoipa::ToSchema;
 

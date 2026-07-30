@@ -12,8 +12,8 @@ use serde::{Deserialize, Serialize};
 use crate::routes::errors::ErrorResponse;
 use crate::routes::recipe_utils::validate_recipe;
 use crate::state::AppState;
-use goose::recipe::Recipe;
-use goose::scheduler::{get_default_scheduled_recipes_dir, ScheduledJob};
+use codev::recipe::Recipe;
+use codev::scheduler::{get_default_scheduled_recipes_dir, ScheduledJob};
 
 fn validate_schedule_id(id: &str) -> Result<(), ErrorResponse> {
     let is_valid = !id.is_empty()
@@ -152,13 +152,13 @@ async fn create_schedule(
         .add_scheduled_job(job.clone(), false)
         .await
         .map_err(|e| match e {
-            goose::scheduler::SchedulerError::CronParseError(msg) => {
+            codev::scheduler::SchedulerError::CronParseError(msg) => {
                 ErrorResponse::bad_request(format!("Invalid cron expression: {}", msg))
             }
-            goose::scheduler::SchedulerError::RecipeLoadError(msg) => {
+            codev::scheduler::SchedulerError::RecipeLoadError(msg) => {
                 ErrorResponse::bad_request(format!("Recipe load error: {}", msg))
             }
-            goose::scheduler::SchedulerError::JobIdExists(msg) => ErrorResponse {
+            codev::scheduler::SchedulerError::JobIdExists(msg) => ErrorResponse {
                 message: format!("Job ID already exists: {}", msg),
                 status: StatusCode::CONFLICT,
             },
@@ -210,7 +210,7 @@ async fn delete_schedule(
         .remove_scheduled_job(&id, false)
         .await
         .map_err(|e| match e {
-            goose::scheduler::SchedulerError::JobNotFound(msg) => {
+            codev::scheduler::SchedulerError::JobNotFound(msg) => {
                 ErrorResponse::not_found(format!("Schedule not found: {}", msg))
             }
             _ => ErrorResponse::internal(format!("Error removing schedule: {}", e)),
@@ -255,7 +255,7 @@ async fn run_now_handler(
                 .await
                 .ok()
                 .and_then(|content: String| {
-                    goose::recipe::template_recipe::parse_recipe_content(
+                    codev::recipe::template_recipe::parse_recipe_content(
                         &content,
                         Some(
                             std::path::Path::new(&job.source)
@@ -287,10 +287,10 @@ async fn run_now_handler(
     match scheduler.run_now(&id).await {
         Ok(session_id) => Ok(Json(RunNowResponse { session_id })),
         Err(e) => match e {
-            goose::scheduler::SchedulerError::JobNotFound(msg) => Err(ErrorResponse::not_found(
+            codev::scheduler::SchedulerError::JobNotFound(msg) => Err(ErrorResponse::not_found(
                 format!("Schedule not found: {}", msg),
             )),
-            goose::scheduler::SchedulerError::AnyhowError(ref err) => {
+            codev::scheduler::SchedulerError::AnyhowError(ref err) => {
                 // Check if this is a cancellation error
                 if err.to_string().contains("was successfully cancelled") {
                     // Return a special session_id to indicate cancellation
@@ -380,10 +380,10 @@ async fn pause_schedule(
     let scheduler = state.scheduler();
 
     scheduler.pause_schedule(&id).await.map_err(|e| match e {
-        goose::scheduler::SchedulerError::JobNotFound(msg) => {
+        codev::scheduler::SchedulerError::JobNotFound(msg) => {
             ErrorResponse::not_found(format!("Schedule not found: {}", msg))
         }
-        goose::scheduler::SchedulerError::AnyhowError(err) => {
+        codev::scheduler::SchedulerError::AnyhowError(err) => {
             ErrorResponse::bad_request(format!("Cannot pause schedule: {}", err))
         }
         _ => ErrorResponse::internal(format!("Error pausing schedule: {}", e)),
@@ -412,7 +412,7 @@ async fn unpause_schedule(
     let scheduler = state.scheduler();
 
     scheduler.unpause_schedule(&id).await.map_err(|e| match e {
-        goose::scheduler::SchedulerError::JobNotFound(msg) => {
+        codev::scheduler::SchedulerError::JobNotFound(msg) => {
             ErrorResponse::not_found(format!("Schedule not found: {}", msg))
         }
         _ => ErrorResponse::internal(format!("Error unpausing schedule: {}", e)),
@@ -447,13 +447,13 @@ async fn update_schedule(
         .update_schedule(&id, req.cron)
         .await
         .map_err(|e| match e {
-            goose::scheduler::SchedulerError::JobNotFound(msg) => {
+            codev::scheduler::SchedulerError::JobNotFound(msg) => {
                 ErrorResponse::not_found(format!("Schedule not found: {}", msg))
             }
-            goose::scheduler::SchedulerError::AnyhowError(err) => {
+            codev::scheduler::SchedulerError::AnyhowError(err) => {
                 ErrorResponse::bad_request(format!("Cannot update schedule: {}", err))
             }
-            goose::scheduler::SchedulerError::CronParseError(msg) => {
+            codev::scheduler::SchedulerError::CronParseError(msg) => {
                 ErrorResponse::bad_request(format!("Invalid cron expression: {}", msg))
             }
             _ => ErrorResponse::internal(format!("Error updating schedule: {}", e)),
@@ -484,10 +484,10 @@ pub async fn kill_running_job(
     let scheduler = state.scheduler();
 
     scheduler.kill_running_job(&id).await.map_err(|e| match e {
-        goose::scheduler::SchedulerError::JobNotFound(msg) => {
+        codev::scheduler::SchedulerError::JobNotFound(msg) => {
             ErrorResponse::not_found(format!("Job not found: {}", msg))
         }
-        goose::scheduler::SchedulerError::AnyhowError(err) => {
+        codev::scheduler::SchedulerError::AnyhowError(err) => {
             ErrorResponse::bad_request(format!("Cannot kill job: {}", err))
         }
         _ => ErrorResponse::internal(format!("Error killing job: {}", e)),
@@ -522,7 +522,7 @@ pub async fn inspect_running_job(
         .get_running_job_info(&id)
         .await
         .map_err(|e| match e {
-            goose::scheduler::SchedulerError::JobNotFound(msg) => {
+            codev::scheduler::SchedulerError::JobNotFound(msg) => {
                 ErrorResponse::not_found(format!("Job not found: {}", msg))
             }
             _ => ErrorResponse::internal(format!("Error inspecting job: {}", e)),

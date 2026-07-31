@@ -16,9 +16,9 @@ use crate::config::search_path::SearchPaths;
 use crate::conversation::message::{Message, MessageContent};
 use crate::model::ModelConfig;
 use crate::subprocess::configure_subprocess;
-use futures::future::BoxFuture;
 use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
 use codev_providers::errors::ProviderError;
+use futures::future::BoxFuture;
 use rmcp::model::Tool;
 
 const CURSOR_AGENT_PROVIDER_NAME: &str = "cursor-agent";

@@ -1,9 +1,9 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use futures::future::BoxFuture;
 use codev_providers::conversation::token_usage::ProviderUsage;
 use codev_providers::errors::ProviderError;
 use codev_providers::images::ImageFormat;
+use futures::future::BoxFuture;
 use serde_json::{json, Value};
 use std::collections::HashMap;
 

@@ -10,7 +10,9 @@ export type ActionRequired = {
 
 export type ActionRequiredData = {
     actionType: 'toolConfirmation';
-    arguments: JsonObject;
+    arguments: {
+        [key: string]: unknown;
+    };
     id: string;
     prompt?: string | null;
     toolName: string;
@@ -178,13 +180,13 @@ export type CreateCustomProviderResponse = {
 };
 
 export type CreateRecipeRequest = {
-    author?: AuthorRequest | null;
+    author?: null | AuthorRequest;
     session_id: string;
 };
 
 export type CreateRecipeResponse = {
     error?: string | null;
-    recipe?: Recipe | null;
+    recipe?: null | Recipe;
 };
 
 export type CreateScheduleRequest = {
@@ -322,6 +324,9 @@ export type DownloadProgress = {
      * Download speed in bytes per second
      */
     speed_bps?: number | null;
+    /**
+     * Download status
+     */
     status: DownloadStatus;
     /**
      * Total bytes to download
@@ -367,7 +372,7 @@ export type Envs = {
 };
 
 export type ErrorResponse = {
-    message: string;
+    error: string;
 };
 
 /**
@@ -451,7 +456,9 @@ export type ExtensionConfig = {
     /**
      * The tools provided by the frontend
      */
-    tools: Array<Tool>;
+    tools: Array<{
+        [key: string]: unknown;
+    }>;
     type: 'frontend';
 } | {
     available_tools?: Array<string>;
@@ -535,7 +542,7 @@ export type GetToolsQuery = {
     session_id: string;
 };
 
-export type GooseApp = McpAppResource & (WindowProps | null) & {
+export type GooseApp = McpAppResource & (null | WindowProps) & {
     mcpServers?: Array<string>;
     prd?: string | null;
 };
@@ -652,7 +659,7 @@ export type LoadedProvider = {
 export type LocalModelResponse = {
     filename: string;
     id: string;
-    mmproj_status?: ModelDownloadStatus | null;
+    mmproj_status?: null | ModelDownloadStatus;
     quantization: string;
     recommended: boolean;
     repo_id: string;
@@ -667,7 +674,7 @@ export type LocalModelResponse = {
  * Represents a UI resource that can be rendered in an MCP App
  */
 export type McpAppResource = {
-    _meta?: ResourceMetadata | null;
+    _meta?: null | ResourceMetadata;
     /**
      * Base64-encoded binary content (alternative to text)
      */
@@ -702,15 +709,19 @@ export type Message = {
     created: number;
     id?: string | null;
     metadata: MessageMetadata;
-    role: Role;
+    role: string;
 };
 
 /**
  * Content passed inside a message, which can be both simple content and tool content
  */
-export type MessageContent = (TextContent & {
+export type MessageContent = ({
+    [key: string]: unknown;
+} & {
     type: 'text';
-}) | (ImageContent & {
+}) | ({
+    [key: string]: unknown;
+} & {
     type: 'image';
 }) | (ToolRequest & {
     type: 'toolRequest';
@@ -765,7 +776,7 @@ export type MessageMetadata = {
      * Whether the message should be included in the agent's context window
      */
     agentVisible: boolean;
-    inference?: InferenceMetadata | null;
+    inference?: null | InferenceMetadata;
     /**
      * Whether this message is a steer injected into an active run. UI-only:
      * surfaced as `_meta.goose.steer` so clients can mark the steer boundary
@@ -870,7 +881,7 @@ export type ModelInfoQuery = {
 };
 
 export type ModelInfoResponse = {
-    model_info?: ModelInfoData | null;
+    model_info?: null | ModelInfoData;
     source: string;
 };
 
@@ -1129,15 +1140,15 @@ export type ReadResourceResponse = {
 
 export type Recipe = {
     activities?: Array<string> | null;
-    author?: Author | null;
+    author?: null | Author;
     description: string;
     extensions?: Array<ExtensionConfig> | null;
     instructions?: string | null;
     parameters?: Array<RecipeParameter> | null;
     prompt?: string | null;
-    response?: Response | null;
-    retry?: RetryConfig | null;
-    settings?: Settings | null;
+    response?: null | Response;
+    retry?: null | RetryConfig;
+    settings?: null | Settings;
     sub_recipes?: Array<SubRecipe> | null;
     title: string;
     version?: string;
@@ -1209,7 +1220,7 @@ export type ResourceContents = {
  * Resource metadata containing UI configuration
  */
 export type ResourceMetadata = {
-    ui?: UiMetadata | null;
+    ui?: null | UiMetadata;
 };
 
 export type Response = {
@@ -1316,7 +1327,10 @@ export type ScheduledJob = {
     currently_running?: boolean;
     id: string;
     last_run?: string | null;
-    parameters?: Array<Array<string>>;
+    parameters?: Array<[
+        string,
+        string
+    ]>;
     paused?: boolean;
     process_start_time?: string | null;
     /**
@@ -1334,19 +1348,19 @@ export type Session = {
     accumulated_output_tokens?: number | null;
     accumulated_total_tokens?: number | null;
     archived_at?: string | null;
-    conversation?: Conversation | null;
+    conversation?: null | Conversation;
     created_at: string;
     extension_data: ExtensionData;
     goose_mode?: GooseMode;
     id: string;
     input_tokens?: number | null;
     message_count: number;
-    model_config?: ModelConfig | null;
+    model_config?: null | ModelConfig;
     name: string;
     output_tokens?: number | null;
     project_id?: string | null;
     provider_name?: string | null;
-    recipe?: Recipe | null;
+    recipe?: null | Recipe;
     schedule_id?: string | null;
     session_type?: SessionType;
     total_tokens?: number | null;
@@ -1441,7 +1455,7 @@ export type SlashCommandsResponse = {
 
 export type StartAgentRequest = {
     extension_overrides?: Array<ExtensionConfig> | null;
-    recipe?: Recipe | null;
+    recipe?: null | Recipe;
     recipe_deeplink?: string | null;
     recipe_id?: string | null;
     working_dir: string;
@@ -1570,7 +1584,9 @@ export type ToolAnnotations = {
 export type ToolCallingMode = 'auto' | 'force_native' | 'force_emulated';
 
 export type ToolConfirmationRequest = {
-    arguments: JsonObject;
+    arguments: {
+        [key: string]: unknown;
+    };
     id: string;
     prompt?: string | null;
     toolName: string;
@@ -1592,7 +1608,7 @@ export type ToolInfo = {
     };
     name: string;
     parameters: Array<string>;
-    permission?: PermissionLevel | null;
+    permission?: null | PermissionLevel;
 };
 
 export type ToolPermission = {
@@ -1632,6 +1648,9 @@ export type TranscribeRequest = {
      * MIME type of the audio (e.g., "audio/webm", "audio/wav")
      */
     mime_type: string;
+    /**
+     * Transcription provider to use
+     */
     provider: DictationProvider;
 };
 
@@ -1655,11 +1674,14 @@ export type TunnelState = 'idle' | 'starting' | 'running' | 'error' | 'disabled'
  * UI-specific metadata for MCP resources
  */
 export type UiMetadata = {
-    csp?: CspMetadata | null;
+    csp?: null | CspMetadata;
     /**
      * Preferred domain for the app (used for CORS)
      */
     domain?: string | null;
+    /**
+     * Sandbox permissions requested by the UI
+     */
     permissions?: PermissionsMetadata;
     /**
      * Whether the app prefers to have a border around it
@@ -2159,7 +2181,7 @@ export type GetToolsData = {
         /**
          * Optional extension name to filter tools
          */
-        extension_name?: string | null;
+        extension_name?: string;
         /**
          * Required session ID to scope tools to a specific session
          */
@@ -2682,7 +2704,7 @@ export type GetProviderCatalogData = {
         /**
          * Filter by provider format (openai, anthropic, ollama)
          */
-        format?: string | null;
+        format?: string;
     };
     url: '/config/provider-catalog';
 };
@@ -3070,7 +3092,7 @@ export type DiagnosticsResponses = {
     /**
      * Diagnostics zip file
      */
-    200: Blob | File;
+    200: Array<number>;
 };
 
 export type DiagnosticsResponse = DiagnosticsResponses[keyof DiagnosticsResponses];
@@ -3531,7 +3553,7 @@ export type SearchHfModelsData = {
         /**
          * Max results
          */
-        limit?: number | null;
+        limit?: number;
     };
     url: '/local-inference/search';
 };

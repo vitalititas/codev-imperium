@@ -1,11 +1,11 @@
-use dotenvy::dotenv;
-use futures::StreamExt;
 use codev::agents::{Agent, AgentEvent, ExtensionConfig, SessionConfig};
 use codev::config::{GooseMode, DEFAULT_EXTENSION_DESCRIPTION, DEFAULT_EXTENSION_TIMEOUT};
 use codev::conversation::message::Message;
 use codev::providers::create_with_named_model;
 use codev::providers::databricks::DATABRICKS_DEFAULT_MODEL;
 use codev::session::session_manager::SessionType;
+use dotenvy::dotenv;
+use futures::StreamExt;
 use std::path::PathBuf;
 
 #[tokio::main]

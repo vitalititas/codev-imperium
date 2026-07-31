@@ -8,7 +8,6 @@ use agent_client_protocol::schema::{
 };
 use agent_client_protocol::{Channel, Client, ConnectTo, DynConnectTo};
 use async_trait::async_trait;
-use futures::StreamExt;
 use codev::acp::{AcpProvider, AcpProviderConfig};
 use codev::config::{GooseMode, PermissionManager};
 use codev::conversation::message::{ActionRequiredData, Message, MessageContent};
@@ -17,6 +16,7 @@ use codev::permission::permission_confirmation::PrincipalType;
 use codev::permission::{Permission, PermissionConfirmation};
 use codev::providers::base::Provider;
 use codev_test_support::{ExpectedSessionId, IgnoreSessionId, TEST_MODEL};
+use futures::StreamExt;
 use std::collections::{HashMap, HashSet};
 use std::str::FromStr;
 use std::sync::Arc;

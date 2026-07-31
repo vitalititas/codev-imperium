@@ -2,13 +2,13 @@ use crate::session::message_to_markdown;
 use anyhow::{Context, Result};
 
 use cliclack::{confirm, multiselect, select};
-use etcetera::home_dir;
 #[cfg(feature = "nostr")]
 use codev::config::Config;
 #[cfg(feature = "nostr")]
 use codev::session::nostr_share;
 use codev::session::{generate_diagnostics, Session, SessionManager, SessionType};
 use codev::utils::safe_truncate;
+use etcetera::home_dir;
 use regex::Regex;
 use std::fs;
 use std::io::{self, Write};

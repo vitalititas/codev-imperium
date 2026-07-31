@@ -344,9 +344,7 @@ fn convert_typed_schema(
             RefOr::T(Schema::Object(object_builder.build()))
         }
         "boolean" => RefOr::T(Schema::Object(
-            ObjectBuilder::new()
-                .schema_type(Type::Boolean)
-                .build(),
+            ObjectBuilder::new().schema_type(Type::Boolean).build(),
         )),
         "null" => RefOr::T(Schema::Object(
             ObjectBuilder::new().schema_type(Type::String).build(),

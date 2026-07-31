@@ -420,10 +420,8 @@ impl GatewayHandler {
                     if msg.role == rmcp::model::Role::Assistant {
                         for content in &msg.content {
                             match content {
-                                MessageContent::Text(t) => {
-                                    if !t.text.is_empty() {
-                                        pending_text.push_str(&t.text);
-                                    }
+                                MessageContent::Text(t) if !t.text.is_empty() => {
+                                    pending_text.push_str(&t.text);
                                 }
                                 MessageContent::ToolRequest(req) => {
                                     // Flush any accumulated text before

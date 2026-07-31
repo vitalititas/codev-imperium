@@ -1,10 +1,10 @@
 use anyhow::{anyhow, Result};
-use console::style;
 use codev::config::paths::Paths;
 use codev::config::Config;
 use codev::conversation::message::Message;
 use codev::session::session_manager::{DB_NAME, SESSIONS_FOLDER};
 use codev_providers::errors::ProviderError;
+use console::style;
 use serde_yaml;
 use std::time::Duration;
 

@@ -14,10 +14,10 @@ use anyhow::Result;
 use async_stream::try_stream;
 use async_trait::async_trait;
 use backend::{BackendLoadedModel, LocalInferenceBackend};
-use futures::future::BoxFuture;
 use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
 use codev_providers::errors::ProviderError;
 use codev_providers::images::ImageFormat;
+use futures::future::BoxFuture;
 use llamacpp::{LlamaCppBackend, LLAMACPP_BACKEND_ID};
 use local_model_registry::ChatTemplate;
 use rmcp::model::Tool;
@@ -169,7 +169,7 @@ pub fn recommend_local_model(runtime: &InferenceRuntime) -> String {
             .iter()
             .filter(|m| is_featured_model(&m.id) && m.size_bytes > 0)
             .collect();
-        models.sort_by(|a, b| b.size_bytes.cmp(&a.size_bytes));
+        models.sort_by_key(|m| std::cmp::Reverse(m.size_bytes));
 
         // Return largest that fits in available memory
         for model in &models {

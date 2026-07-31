@@ -8,7 +8,6 @@ use axum::{
     routing::{delete, get, post},
     Json, Router,
 };
-use futures::future::join_all;
 use codev::config::paths::Paths;
 use codev::download_manager::{get_download_manager, DownloadProgress};
 use codev::providers::huggingface_auth;
@@ -23,6 +22,7 @@ use codev::providers::local_inference::{
     },
     recommend_local_model,
 };
+use futures::future::join_all;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tracing::debug;

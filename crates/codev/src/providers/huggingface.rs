@@ -11,8 +11,8 @@ use crate::config::{Config, ConfigError};
 use crate::conversation::message::Message;
 use crate::model::ModelConfig;
 use anyhow::{anyhow, Result};
-use futures::future::BoxFuture;
 use codev_providers::errors::ProviderError;
+use futures::future::BoxFuture;
 use rmcp::model::Tool;
 
 pub const HUGGINGFACE_API_HOST: &str = "https://router.huggingface.co/v1";

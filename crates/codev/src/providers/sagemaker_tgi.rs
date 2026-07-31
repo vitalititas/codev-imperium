@@ -19,8 +19,8 @@ use codev_providers::errors::ProviderError;
 
 use crate::model::ModelConfig;
 use chrono::Utc;
-use futures::future::BoxFuture;
 use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+use futures::future::BoxFuture;
 use rmcp::model::Role;
 
 const SAGEMAKER_TGI_PROVIDER_NAME: &str = "sagemaker_tgi";

@@ -1,12 +1,12 @@
 use anyhow::Result;
 use async_stream::try_stream;
 use async_trait::async_trait;
-use futures::future::BoxFuture;
-use futures::TryStreamExt;
 use codev_providers::formats::openai::{
     self, extract_reasoning_effort, is_openai_responses_model, ModelConfigParams,
 };
 use codev_providers::images::ImageFormat;
+use futures::future::BoxFuture;
+use futures::TryStreamExt;
 use serde::Serialize;
 use serde_json::Value;
 use std::io;

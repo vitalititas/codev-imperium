@@ -1,8 +1,8 @@
 use anyhow::Error;
 use async_stream::try_stream;
-use futures::TryStreamExt;
 use codev_providers::conversation::token_usage::ProviderUsage;
 use codev_providers::images::ImageFormat;
+use futures::TryStreamExt;
 use reqwest::Response;
 #[cfg(test)]
 use reqwest::StatusCode;

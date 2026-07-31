@@ -2,8 +2,6 @@
 #[path = "acp_common_tests/mod.rs"]
 mod common_tests;
 
-use common_tests::fixtures::server::AcpServerConnection;
-use common_tests::fixtures::{run_test, send_custom, Connection, TestConnectionConfig};
 use codev::config::paths::Paths;
 use codev::config::{Config, ConfigError};
 use codev::model::ModelConfig;
@@ -12,6 +10,8 @@ use codev::providers::inventory::ProviderInventoryService;
 use codev::session::session_manager::SessionStorage;
 use codev_providers::errors::ProviderError;
 use codev_test_support::EnforceSessionId;
+use common_tests::fixtures::server::AcpServerConnection;
+use common_tests::fixtures::{run_test, send_custom, Connection, TestConnectionConfig};
 use serial_test::serial;
 use std::sync::Arc;
 

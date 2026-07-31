@@ -101,10 +101,8 @@ pub fn format_messages(messages: &[Message]) -> Vec<Value> {
             let mut parts = Vec::new();
             for message_content in message.content.iter() {
                 match message_content {
-                    MessageContent::Text(text) => {
-                        if !text.text.is_empty() {
-                            parts.push(json!({"text": text.text}));
-                        }
+                    MessageContent::Text(text) if !text.text.is_empty() => {
+                        parts.push(json!({"text": text.text}));
                     }
                     MessageContent::ToolRequest(request) => match &request.tool_call {
                         Ok(tool_call) => {

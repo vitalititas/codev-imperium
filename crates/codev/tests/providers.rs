@@ -1,6 +1,4 @@
 use anyhow::Result;
-use dotenvy::dotenv;
-use futures::StreamExt;
 use codev::acp::ACP_CURRENT_MODEL;
 use codev::agents::{Agent, AgentConfig, AgentEvent, GoosePlatform, PromptManager, SessionConfig};
 use codev::config::{ExtensionConfig, GooseMode, PermissionManager};
@@ -28,6 +26,8 @@ use codev_providers::errors::ProviderError;
 use codev_test_support::{
     EnforceSessionId, ExpectedSessionId, IgnoreSessionId, McpFixture, FAKE_CODE,
 };
+use dotenvy::dotenv;
+use futures::StreamExt;
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use tokio_util::sync::CancellationToken;
@@ -215,7 +215,7 @@ impl ProviderFixture {
         for &var in config.clear_env {
             env_vars.push((var, None));
         }
-        let guard = env_lock::lock_env(env_vars.into_iter());
+        let guard = env_lock::lock_env(env_vars);
 
         let expected_session_id = (config.expected_session_id)();
         let mcp = McpFixture::new(expected_session_id.clone()).await;

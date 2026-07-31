@@ -1,6 +1,5 @@
 use crate::recipes::github_recipe::GOOSE_RECIPE_GITHUB_REPO_CONFIG_KEY;
 use cliclack::spinner;
-use console::style;
 use codev::agents::extension::{ToolInfo, PLATFORM_EXTENSIONS};
 use codev::agents::extension_manager::get_parameter_names;
 use codev::agents::Agent;
@@ -26,6 +25,7 @@ use codev::providers::base::ConfigKey;
 use codev::providers::provider_test::test_provider_configuration;
 use codev::providers::{create, providers, retry_operation, RetryConfig};
 use codev::session::SessionType;
+use console::style;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::io::IsTerminal;

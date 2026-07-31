@@ -145,9 +145,7 @@ impl XlsxTool {
             .sheet_by_name_mut(worksheet_name)
             .context("Worksheet not found")?;
 
-        worksheet
-            .cell_mut((col, row))
-            .set_value(value.to_string());
+        worksheet.cell_mut((col, row)).set_value(value.to_string());
         Ok(())
     }
 

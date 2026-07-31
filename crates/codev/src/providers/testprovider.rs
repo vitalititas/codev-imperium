@@ -13,9 +13,9 @@ use super::base::{MessageStream, Provider, ProviderDef, ProviderMetadata};
 use crate::conversation::message::{Message, ToolResponse};
 use crate::model::ModelConfig;
 use crate::utils::bytes_to_hex;
-use futures::future::BoxFuture;
 use codev_providers::conversation::token_usage::ProviderUsage;
 use codev_providers::errors::ProviderError;
+use futures::future::BoxFuture;
 use rmcp::model::{CallToolResult, Tool};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

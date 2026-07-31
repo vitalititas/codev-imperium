@@ -9,7 +9,6 @@ use agent_client_protocol::schema::{
     WriteTextFileResponse,
 };
 use async_trait::async_trait;
-use fs_err as fs;
 use codev::acp::server::{serve, AcpProviderFactory, GooseAcpAgent, GooseAcpAgentOptions};
 pub use codev::acp::{map_permission_response, PermissionDecision};
 use codev::agents::GoosePlatform;
@@ -21,6 +20,7 @@ use codev::providers::base::Provider;
 use codev::providers::openai::OpenAiProvider;
 use codev::session_context::SESSION_ID_HEADER;
 use codev_test_support::{ExpectedSessionId, TEST_MODEL};
+use fs_err as fs;
 use std::collections::VecDeque;
 use std::future::Future;
 use std::path::{Path, PathBuf};
@@ -261,20 +261,20 @@ pub fn to_notifications(updates: &[SessionUpdate]) -> Vec<Notification> {
     let mut out = Vec::new();
     for u in updates {
         match u {
-            SessionUpdate::UserMessageChunk(_) => {
-                if out.last() != Some(&Notification::UserMessage) {
-                    out.push(Notification::UserMessage);
-                }
+            SessionUpdate::UserMessageChunk(_)
+                if out.last() != Some(&Notification::UserMessage) =>
+            {
+                out.push(Notification::UserMessage);
             }
-            SessionUpdate::AgentMessageChunk(_) => {
-                if out.last() != Some(&Notification::AgentMessage) {
-                    out.push(Notification::AgentMessage);
-                }
+            SessionUpdate::AgentMessageChunk(_)
+                if out.last() != Some(&Notification::AgentMessage) =>
+            {
+                out.push(Notification::AgentMessage);
             }
-            SessionUpdate::AgentThoughtChunk(_) => {
-                if out.last() != Some(&Notification::AgentThought) {
-                    out.push(Notification::AgentThought);
-                }
+            SessionUpdate::AgentThoughtChunk(_)
+                if out.last() != Some(&Notification::AgentThought) =>
+            {
+                out.push(Notification::AgentThought);
             }
             SessionUpdate::ToolCall(_) => out.push(Notification::ToolCall),
             SessionUpdate::ToolCallUpdate(upd) => {

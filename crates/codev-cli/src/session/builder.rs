@@ -2,7 +2,6 @@ use crate::cli::StreamableHttpOptions;
 
 use super::output;
 use super::CliSession;
-use console::style;
 use codev::agents::{Agent, Container, ExtensionError};
 use codev::config::resolve_extensions_for_new_session;
 use codev::config::{Config, ExtensionConfig, GooseMode};
@@ -10,6 +9,7 @@ use codev::providers::create;
 use codev::recipe::Recipe;
 use codev::session::session_manager::SessionType;
 use codev::session::EnabledExtensionsState;
+use console::style;
 use rustyline::EditMode;
 use std::collections::BTreeSet;
 use std::process;

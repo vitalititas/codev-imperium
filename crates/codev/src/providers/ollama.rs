@@ -14,11 +14,11 @@ use crate::providers::formats::ollama::{create_request, response_to_streaming_me
 use anyhow::{Error, Result};
 use async_stream::try_stream;
 use async_trait::async_trait;
-use futures::future::BoxFuture;
-use futures::TryStreamExt;
 use codev_providers::errors::ProviderError;
 use codev_providers::formats::openai::ModelConfigParams;
 use codev_providers::images::ImageFormat;
+use futures::future::BoxFuture;
+use futures::TryStreamExt;
 use reqwest::Response;
 use rmcp::model::Tool;
 use serde_json::{json, Value};

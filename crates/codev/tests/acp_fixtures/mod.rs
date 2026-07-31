@@ -9,7 +9,6 @@ use agent_client_protocol::schema::{
     WriteTextFileResponse,
 };
 use async_trait::async_trait;
-use fs_err as fs;
 use codev::acp::server::{serve, AcpProviderFactory, GooseAcpAgent, GooseAcpAgentOptions};
 pub use codev::acp::{map_permission_response, PermissionDecision};
 use codev::agents::GoosePlatform;
@@ -21,6 +20,7 @@ use codev::providers::base::Provider;
 use codev::providers::openai::OpenAiProvider;
 use codev::session_context::SESSION_ID_HEADER;
 use codev_test_support::{ExpectedSessionId, TEST_MODEL};
+use fs_err as fs;
 use std::collections::VecDeque;
 use std::future::Future;
 use std::path::{Path, PathBuf};

@@ -943,7 +943,10 @@ fn decode_audio_simple(audio_data: &[u8]) -> Result<Vec<f32>> {
     let mut packet_count = 0;
 
     // 0.6 signals end-of-stream with Ok(None) instead of an UnexpectedEof IoError.
-    while let Some(packet) = format.next_packet().context("Failed to read audio packet")? {
+    while let Some(packet) = format
+        .next_packet()
+        .context("Failed to read audio packet")?
+    {
         match decoder.decode(&packet) {
             Ok(decoded) => {
                 decoded.copy_to_vec_interleaved(&mut scratch);

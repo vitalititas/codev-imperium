@@ -608,7 +608,7 @@ impl Scheduler {
             .map(|s| (s.id.clone(), s))
             .collect();
 
-        schedule_sessions.sort_by(|a, b| b.1.created_at.cmp(&a.1.created_at));
+        schedule_sessions.sort_by_key(|s| std::cmp::Reverse(s.1.created_at));
         schedule_sessions.truncate(limit);
 
         Ok(schedule_sessions)

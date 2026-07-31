@@ -16,12 +16,12 @@ use candle_transformers::models::whisper::{self as m, audio, Config, N_FRAMES};
 use serde::{Deserialize, Serialize};
 use std::io::Cursor;
 use std::path::{Path, PathBuf};
-use symphonia::core::audio::{AudioBufferRef, Layout, Signal};
-use symphonia::core::codecs::DecoderOptions;
-use symphonia::core::formats::FormatOptions;
+use symphonia::core::codecs::audio::AudioDecoderOptions;
+use symphonia::core::codecs::CodecParameters;
+use symphonia::core::formats::probe::Hint;
+use symphonia::core::formats::{FormatOptions, TrackType};
 use symphonia::core::io::MediaSourceStream;
 use symphonia::core::meta::MetadataOptions;
-use symphonia::core::probe::Hint;
 use tokenizers::Tokenizer;
 use utoipa::ToSchema;
 
@@ -891,61 +891,63 @@ fn decode_audio_simple(audio_data: &[u8]) -> Result<Vec<f32>> {
 
     let hint = Hint::new();
 
-    let probed = symphonia::default::get_probe()
-        .format(
+    // symphonia 0.6 renamed Probe::format to Probe::probe. It returns the FormatReader
+    // directly rather than a ProbeResult wrapper, and takes its options by value.
+    let mut format = symphonia::default::get_probe()
+        .probe(
             &hint,
             mss,
-            &FormatOptions::default(),
-            &MetadataOptions::default(),
+            FormatOptions::default(),
+            MetadataOptions::default(),
         )
         .context("Failed to probe audio format - unsupported format")?;
 
-    let mut format = probed.format;
+    // 0.6 selects tracks by media type, and Track::codec_params became an
+    // Option<CodecParameters> enum split across audio/video/subtitle. Cloned because
+    // `track` borrows `format`, which the packet loop below needs mutably.
+    let audio_params = {
+        let track = format
+            .default_track(TrackType::Audio)
+            .context("No default audio track found")?;
 
-    let track = format
-        .default_track()
-        .context("No default audio track found")?;
+        match track.codec_params.as_ref() {
+            Some(CodecParameters::Audio(params)) => params.clone(),
+            _ => anyhow::bail!("Default audio track has no audio codec parameters"),
+        }
+    };
 
-    let sample_rate = track
-        .codec_params
+    let sample_rate = audio_params
         .sample_rate
         .context("No sample rate in audio track")?;
 
-    let channels = if let Some(ch) = track.codec_params.channels {
-        ch.count()
-    } else if let Some(layout) = track.codec_params.channel_layout {
-        match layout {
-            Layout::Mono => 1,
-            Layout::Stereo => 2,
-            _ => 1,
-        }
-    } else {
-        anyhow::bail!("No channel information in audio track (neither channels nor channel_layout)")
-    };
+    // 0.6 folded the old separate channel_layout into Channels, whose count() covers the
+    // positioned/discrete/ambisonic cases, so the Layout fallback is no longer needed.
+    let channels = audio_params
+        .channels
+        .as_ref()
+        .map(|ch| ch.count())
+        .context("No channel information in audio track")?;
 
     tracing::debug!(sample_rate, channels, "audio format detected");
 
     let mut decoder = symphonia::default::get_codecs()
-        .make(&track.codec_params, &DecoderOptions::default())
+        .make_audio_decoder(&audio_params, &AudioDecoderOptions::default())
         .context("Failed to create audio decoder - please ensure browser sends WAV format audio")?;
 
     let mut pcm_data = Vec::new();
+    // copy_to_vec_interleaved resizes its destination, so decode into a scratch buffer
+    // and append. It also handles every sample format and its normalisation, replacing
+    // the hand-written per-format match that silently emitted silence for anything
+    // outside F32/S16/S32/F64.
+    let mut scratch: Vec<f32> = Vec::new();
     let mut packet_count = 0;
 
-    loop {
-        let packet = match format.next_packet() {
-            Ok(packet) => packet,
-            Err(symphonia::core::errors::Error::IoError(e))
-                if e.kind() == std::io::ErrorKind::UnexpectedEof =>
-            {
-                break;
-            }
-            Err(e) => return Err(e).context("Failed to read audio packet")?,
-        };
-
+    // 0.6 signals end-of-stream with Ok(None) instead of an UnexpectedEof IoError.
+    while let Some(packet) = format.next_packet().context("Failed to read audio packet")? {
         match decoder.decode(&packet) {
             Ok(decoded) => {
-                pcm_data.extend(audio_buffer_to_f32(&decoded));
+                decoded.copy_to_vec_interleaved(&mut scratch);
+                pcm_data.extend_from_slice(&scratch);
                 packet_count += 1;
             }
             Err(symphonia::core::errors::Error::DecodeError(_)) => {
@@ -994,48 +996,6 @@ fn decode_audio_simple(audio_data: &[u8]) -> Result<Vec<f32>> {
     }
 
     Ok(resampled)
-}
-
-fn audio_buffer_to_f32(buffer: &AudioBufferRef) -> Vec<f32> {
-    let num_channels = buffer.spec().channels.count();
-    let num_frames = buffer.frames();
-    let mut samples = Vec::with_capacity(num_frames * num_channels);
-
-    match buffer {
-        AudioBufferRef::F32(buf) => {
-            for frame_idx in 0..num_frames {
-                for ch_idx in 0..num_channels {
-                    samples.push(buf.chan(ch_idx)[frame_idx]);
-                }
-            }
-        }
-        AudioBufferRef::S16(buf) => {
-            for frame_idx in 0..num_frames {
-                for ch_idx in 0..num_channels {
-                    samples.push(buf.chan(ch_idx)[frame_idx] as f32 / 32768.0);
-                }
-            }
-        }
-        AudioBufferRef::S32(buf) => {
-            for frame_idx in 0..num_frames {
-                for ch_idx in 0..num_channels {
-                    samples.push(buf.chan(ch_idx)[frame_idx] as f32 / 2147483648.0);
-                }
-            }
-        }
-        AudioBufferRef::F64(buf) => {
-            for frame_idx in 0..num_frames {
-                for ch_idx in 0..num_channels {
-                    samples.push(buf.chan(ch_idx)[frame_idx] as f32);
-                }
-            }
-        }
-        _ => {
-            tracing::warn!("Unsupported audio buffer format, returning silence");
-        }
-    }
-
-    samples
 }
 
 fn convert_to_mono(data: &[f32], channels: usize) -> Vec<f32> {

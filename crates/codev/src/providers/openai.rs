@@ -15,7 +15,6 @@ use crate::config::declarative_providers::DeclarativeProviderConfig;
 use crate::conversation::message::Message;
 use anyhow::Result;
 use async_trait::async_trait;
-use futures::future::BoxFuture;
 use codev_providers::conversation::token_usage::ProviderUsage;
 use codev_providers::errors::ProviderError;
 use codev_providers::formats::openai::{
@@ -23,6 +22,7 @@ use codev_providers::formats::openai::{
 };
 use codev_providers::formats::openai::{is_openai_responses_model, ModelConfigParams};
 use codev_providers::images::ImageFormat;
+use futures::future::BoxFuture;
 use reqwest::StatusCode;
 use std::collections::HashMap;
 

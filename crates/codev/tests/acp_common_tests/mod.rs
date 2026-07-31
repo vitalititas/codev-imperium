@@ -8,15 +8,15 @@ use agent_client_protocol::schema::{
     ContentBlock, ListSessionsResponse, McpServer, McpServerHttp, ModelId, SessionInfo,
     SessionModeId, SessionUpdate, ToolCallStatus, ToolKind,
 };
+use codev::acp::server::AcpProviderFactory;
+use codev::config::base::CONFIG_YAML_NAME;
+use codev::config::GooseMode;
+use codev_test_support::{McpFixture, FAKE_CODE, TEST_IMAGE_B64, TEST_MODEL};
 use fixtures::{
     assert_notifications, Connection, FsFixture, Notification, OpenAiFixture, PermissionDecision,
     Session, SessionData, TerminalCall, TerminalFixture, TestConnectionConfig,
 };
 use fs_err as fs;
-use codev::acp::server::AcpProviderFactory;
-use codev::config::base::CONFIG_YAML_NAME;
-use codev::config::GooseMode;
-use codev_test_support::{McpFixture, FAKE_CODE, TEST_IMAGE_B64, TEST_MODEL};
 use sqlx::sqlite::SqlitePoolOptions;
 use std::sync::Arc;
 use std::time::Duration;

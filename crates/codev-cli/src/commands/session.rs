@@ -2,13 +2,13 @@ use crate::session::message_to_markdown;
 use anyhow::{Context, Result};
 
 use cliclack::{confirm, multiselect, select};
-use etcetera::home_dir;
 #[cfg(feature = "nostr")]
 use codev::config::Config;
 #[cfg(feature = "nostr")]
 use codev::session::nostr_share;
 use codev::session::{generate_diagnostics, Session, SessionManager, SessionType};
 use codev::utils::safe_truncate;
+use etcetera::home_dir;
 use regex::Regex;
 use std::fs;
 use std::io::{self, Write};
@@ -168,9 +168,9 @@ pub async fn handle_session_list(
     }
 
     if ascending {
-        sessions.sort_by(|a, b| a.updated_at.cmp(&b.updated_at));
+        sessions.sort_by_key(|s| s.updated_at);
     } else {
-        sessions.sort_by(|a, b| b.updated_at.cmp(&a.updated_at));
+        sessions.sort_by_key(|s| std::cmp::Reverse(s.updated_at));
     }
 
     if let Some(n) = limit {

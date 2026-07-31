@@ -29,8 +29,8 @@ use super::retry::ProviderRetry;
 use super::utils::RequestLog;
 use crate::conversation::message::Message;
 use crate::model::ModelConfig;
-use futures::future::BoxFuture;
 use codev_providers::errors::ProviderError;
+use futures::future::BoxFuture;
 use rmcp::model::Tool;
 
 const KIMI_CODE_PROVIDER_NAME: &str = "kimi_code";

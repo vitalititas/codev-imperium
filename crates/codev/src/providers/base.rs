@@ -1,9 +1,9 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use futures::future::BoxFuture;
-use futures::Stream;
 use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
 use codev_providers::errors::ProviderError;
+use futures::future::BoxFuture;
+use futures::Stream;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 

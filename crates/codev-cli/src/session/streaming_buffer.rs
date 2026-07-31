@@ -509,10 +509,8 @@ impl MarkdownBuffer {
             "![" => {
                 state.in_image_alt = true;
             }
-            "[" => {
-                if !state.in_link_text && !state.in_image_alt {
-                    state.in_link_text = true;
-                }
+            "[" if !state.in_link_text && !state.in_image_alt => {
+                state.in_link_text = true;
             }
             "](" => {
                 if state.in_link_text {
@@ -524,10 +522,8 @@ impl MarkdownBuffer {
                 }
             }
             "]" => {}
-            ")" => {
-                if state.in_link_url {
-                    state.in_link_url = false;
-                }
+            ")" if state.in_link_url => {
+                state.in_link_url = false;
             }
             _ => {}
         }

@@ -230,7 +230,15 @@ impl CodeExecutionClient {
         .await
         .map_err(|e| format!("Typescript execution task failed: {e}"))??;
 
-        Ok(vec![Content::text(output.markdown())])
+        // pctx_code_mode 0.4 dropped ExecuteBashOutput::markdown() in favour of Display.
+        // We deliberately do NOT use Display here: its impl (model.rs:158) passes
+        // `self.stdout` twice, so the "# STDERR" section renders stdout and the real stderr
+        // never reaches the model. Formatting inline preserves 0.3's behaviour until that is
+        // fixed upstream. ExecuteTypescriptOutput::markdown() is unaffected and still used.
+        Ok(vec![Content::text(format!(
+            "Exit Code: {}\n\n# STDOUT\n{}\n\n# STDERR\n{}",
+            output.exit_code, output.stdout, output.stderr
+        ))])
     }
 
     /// Handle the execute typescript tool call

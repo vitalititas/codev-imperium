@@ -210,11 +210,13 @@ fn parse_think_tag(buffer: &str, start: usize) -> Option<(ThinkTag, usize)> {
     let mut last_non_ws: Option<u8> = None;
     while let Some(&byte) = bytes.get(idx) {
         match quote {
-            Some(quote_byte) => {
-                if byte == quote_byte {
-                    quote = None;
-                }
+            Some(quote_byte) if byte == quote_byte => {
+                quote = None;
             }
+            // Exhaustiveness: a guarded arm does not cover Some(_), and this match
+            // has no wildcard. Same no-op the old `if` produced when the byte did
+            // not close the quote.
+            Some(_) => {}
             None if matches!(byte, b'"' | b'\'') => {
                 quote = Some(byte);
                 last_non_ws = Some(byte);
@@ -260,11 +262,13 @@ fn contains_unquoted_gt(text: &str) -> bool {
     let mut quote: Option<u8> = None;
     for &byte in text.as_bytes() {
         match quote {
-            Some(quote_byte) => {
-                if byte == quote_byte {
-                    quote = None;
-                }
+            Some(quote_byte) if byte == quote_byte => {
+                quote = None;
             }
+            // Exhaustiveness: a guarded arm does not cover Some(_), and this match
+            // has no wildcard. Same no-op the old `if` produced when the byte did
+            // not close the quote.
+            Some(_) => {}
             None if matches!(byte, b'"' | b'\'') => quote = Some(byte),
             None if byte == b'>' => return true,
             None => {}

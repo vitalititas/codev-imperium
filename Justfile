@@ -24,7 +24,7 @@ release-binary:
     cargo build --release
     @just copy-binary
     @echo "Generating OpenAPI schema..."
-    cargo run -p goose-server --bin generate_schema
+    cargo run -p codev-server --bin generate_schema
 
 # Build Windows executable on a Windows host
 [unix]
@@ -34,7 +34,7 @@ release-windows:
 
 [windows]
 release-windows:
-    @powershell.exe -NoProfile -ExecutionPolicy Bypass -Command 'rustup target add x86_64-pc-windows-msvc; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; cargo build --release --target x86_64-pc-windows-msvc -p goose-server; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; Write-Host "Windows executable created at ./target/x86_64-pc-windows-msvc/release/goosed.exe"'
+    @powershell.exe -NoProfile -ExecutionPolicy Bypass -Command 'rustup target add x86_64-pc-windows-msvc; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; cargo build --release --target x86_64-pc-windows-msvc -p codev-server; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; Write-Host "Windows executable created at ./target/x86_64-pc-windows-msvc/release/goosed.exe"'
 
 # Build for Intel Mac
 release-intel:
@@ -43,18 +43,18 @@ release-intel:
     @just copy-binary-intel
 
 copy-binary BUILD_MODE="release":
-    @if [ -f ./target/{{BUILD_MODE}}/goosed ]; then \
-        echo "Copying goosed binary from target/{{BUILD_MODE}}..."; \
-        cp -p ./target/{{BUILD_MODE}}/goosed ./ui/desktop/src/bin/; \
+    @if [ -f ./target/{{BUILD_MODE}}/codevd ]; then \
+        echo "Copying codevd binary from target/{{BUILD_MODE}}..."; \
+        cp -p ./target/{{BUILD_MODE}}/codevd ./ui/desktop/src/bin/goosed; \
     else \
-        echo "Binary not found in target/{{BUILD_MODE}}"; \
+        echo "codevd binary not found in target/{{BUILD_MODE}}"; \
         exit 1; \
     fi
-    @if [ -f ./target/{{BUILD_MODE}}/goose ]; then \
-        echo "Copying goose CLI binary from target/{{BUILD_MODE}}..."; \
-        cp -p ./target/{{BUILD_MODE}}/goose ./ui/desktop/src/bin/; \
+    @if [ -f ./target/{{BUILD_MODE}}/codev ]; then \
+        echo "Copying codev CLI binary from target/{{BUILD_MODE}}..."; \
+        cp -p ./target/{{BUILD_MODE}}/codev ./ui/desktop/src/bin/goose; \
     else \
-        echo "goose CLI binary not found in target/{{BUILD_MODE}}"; \
+        echo "codev CLI binary not found in target/{{BUILD_MODE}}"; \
         exit 1; \
     fi
 
@@ -158,7 +158,7 @@ run-docs:
 # Run server
 run-server:
     @echo "Running server..."
-    cargo run -p goose-server --bin goosed agent
+    cargo run -p codev-server --bin codevd agent
 
 # Check if OpenAPI schema is up-to-date
 check-openapi-schema: generate-openapi
@@ -167,7 +167,7 @@ check-openapi-schema: generate-openapi
 # Generate OpenAPI specification without starting the UI
 generate-openapi:
     @echo "Generating OpenAPI schema..."
-    cargo run -p goose-server --bin generate_schema
+    cargo run -p codev-server --bin generate_schema
     @echo "Generating frontend API..."
     cd ui/desktop && npx @hey-api/openapi-ts
 
@@ -206,7 +206,7 @@ build-sdk: generate-acp-types
 # Generate manpages for the CLI
 generate-manpages:
     @echo "Generating manpages..."
-    cargo run -p goose-cli --bin generate_manpages
+    cargo run -p codev-cli --bin generate_manpages
     @echo "Manpages generated at target/man/"
 
 # make GUI with latest binary
@@ -371,7 +371,7 @@ set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 ### profile = --release or "" for debug
 ### allparam = OR/AND/ANY/NONE --workspace --all-features --all-targets
 win-bld profile allparam:
-  cargo run {{profile}} -p goose-server --bin  generate_schema
+  cargo run {{profile}} -p codev-server --bin  generate_schema
   cargo build {{profile}} {{allparam}}
 
 ### Build just debug
@@ -443,7 +443,7 @@ win-total-rls *allparam:
   just win-run-rls
 
 build-test-tools:
-  cargo build -p goose-test
+  cargo build -p codev-test
 
 record-mcp-tests: build-test-tools
   GOOSE_RECORD_MCP=1 cargo test --package goose --test mcp_integration_test

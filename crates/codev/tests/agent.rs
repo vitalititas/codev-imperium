@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
 use anyhow::Result;
-use futures::StreamExt;
 use codev::agents::{Agent, AgentEvent, GoosePlatform};
 use codev::config::extensions::{set_extension, ExtensionEntry};
+use futures::StreamExt;
 
 #[cfg(test)]
 mod tests {

@@ -1,5 +1,5 @@
-use dotenvy::dotenv;
 use codev::conversation::Conversation;
+use dotenvy::dotenv;
 
 use crate::scenario_tests::message_generator::MessageGenerator;
 use crate::scenario_tests::mock_client::weather_client;

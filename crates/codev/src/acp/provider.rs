@@ -13,8 +13,8 @@ use agent_client_protocol_schema::Usage as AcpUsage;
 use agent_client_protocol_schema::AGENT_METHOD_NAMES;
 use anyhow::{Context, Result};
 use async_stream::try_stream;
-use futures::future::BoxFuture;
 use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
+use futures::future::BoxFuture;
 use rmcp::model::{CallToolRequestParams, CallToolResult, Content as RmcpContent, Role, Tool};
 use std::collections::{HashMap, HashSet};
 use std::future::Future;
@@ -1237,16 +1237,12 @@ fn filter_supported_servers(
     servers
         .iter()
         .filter(|server| match server {
-            McpServer::Http(http) => {
-                if !capabilities.http {
-                    tracing::debug!(
-                        name = http.name,
-                        "skipping HTTP server, agent lacks capability"
-                    );
-                    false
-                } else {
-                    true
-                }
+            McpServer::Http(http) if !capabilities.http => {
+                tracing::debug!(
+                    name = http.name,
+                    "skipping HTTP server, agent lacks capability"
+                );
+                false
             }
             McpServer::Sse(sse) => {
                 tracing::debug!(name = sse.name, "skipping SSE server, unsupported");

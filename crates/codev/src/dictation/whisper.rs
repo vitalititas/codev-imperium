@@ -1158,4 +1158,113 @@ mod tests {
     fn test_split_into_sentences(input: &str, expected: Vec<&str>) {
         assert_eq!(split_into_sentences(input), expected);
     }
+
+    // ---- decode_audio_simple: the audio path had NO coverage before this ----
+    //
+    // Every test above exercises token/string logic. Nothing touched probing, decoding
+    // or sample conversion, so the symphonia 0.5 -> 0.6 port (which rewrote all three)
+    // could not be verified by the suite at all. These build a real WAV in memory and
+    // push it through the actual decoder.
+
+    /// Minimal 16-bit PCM WAV. Hand-rolled so the test needs no new dependency.
+    fn wav_16bit(samples: &[i16], channels: u16, sample_rate: u32) -> Vec<u8> {
+        let data_len = (samples.len() * 2) as u32;
+        let byte_rate = sample_rate * u32::from(channels) * 2;
+        let block_align = channels * 2;
+
+        let mut w = Vec::new();
+        w.extend_from_slice(b"RIFF");
+        w.extend_from_slice(&(36 + data_len).to_le_bytes());
+        w.extend_from_slice(b"WAVE");
+        w.extend_from_slice(b"fmt ");
+        w.extend_from_slice(&16u32.to_le_bytes()); // PCM fmt chunk size
+        w.extend_from_slice(&1u16.to_le_bytes()); // format = PCM
+        w.extend_from_slice(&channels.to_le_bytes());
+        w.extend_from_slice(&sample_rate.to_le_bytes());
+        w.extend_from_slice(&byte_rate.to_le_bytes());
+        w.extend_from_slice(&block_align.to_le_bytes());
+        w.extend_from_slice(&16u16.to_le_bytes()); // bits per sample
+        w.extend_from_slice(b"data");
+        w.extend_from_slice(&data_len.to_le_bytes());
+        for s in samples {
+            w.extend_from_slice(&s.to_le_bytes());
+        }
+        w
+    }
+
+    // Mono at 16 kHz is the passthrough case: no mono-mixing, no resampling, so the
+    // output samples are exactly what the decoder produced. That makes this the test
+    // that pins sample CONVERSION -- the part the port changed behaviourally when
+    // audio_buffer_to_f32 was replaced by copy_to_vec_interleaved.
+    #[test]
+    fn test_decode_audio_simple_mono_16k_converts_samples() {
+        let pcm = [0i16, 16384, -16384, 32767, -32768, 8192];
+        let wav = wav_16bit(&pcm, 1, 16000);
+
+        let out = decode_audio_simple(&wav).expect("decoding a valid mono WAV must succeed");
+
+        assert_eq!(out.len(), pcm.len(), "one output sample per input sample");
+        for (i, (&got, &raw)) in out.iter().zip(pcm.iter()).enumerate() {
+            let want = f32::from(raw) / 32768.0;
+            assert!(
+                (got - want).abs() < 1e-3,
+                "sample {i}: got {got}, want ~{want} (from i16 {raw})"
+            );
+            assert!(got >= -1.0 && got <= 1.0, "sample {i} out of range: {got}");
+        }
+    }
+
+    // Stereo at 8 kHz exercises the two stages the passthrough case skips: channel
+    // mixing and resampling to whisper's required 16 kHz.
+    //
+    // NOTE ON LENGTH: resample_audio drives rubato's SincFixedIn with sinc_len = 256.
+    // An input shorter than the filter cannot produce any output frames, so a handful of
+    // samples resamples to an EMPTY vec rather than erroring. (First cut of this test used
+    // 4 frames and failed for exactly that reason.) That is pre-existing behaviour and
+    // unrelated to the symphonia port, but it means sub-~32 ms clips at 8 kHz decode to
+    // silence. Use a realistic duration here: 0.1 s = 800 frames.
+    #[test]
+    fn test_decode_audio_simple_stereo_8k_downmixes_and_resamples() {
+        const FRAMES: usize = 800; // 0.1 s at 8 kHz
+        let mut pcm = Vec::with_capacity(FRAMES * 2);
+        for i in 0..FRAMES {
+            // A slow square-ish wave. Both channels carry the same value, so the mono
+            // downmix is predictable regardless of how the mix is weighted.
+            let v: i16 = if (i / 50) % 2 == 0 { 8000 } else { -8000 };
+            pcm.push(v); // L
+            pcm.push(v); // R
+        }
+        let wav = wav_16bit(&pcm, 2, 8000);
+
+        let out = decode_audio_simple(&wav).expect("decoding a valid stereo WAV must succeed");
+
+        assert!(!out.is_empty(), "stereo decode produced no samples");
+        // 800 frames at 8 kHz -> ~1600 at 16 kHz. Resampler edge handling makes the exact
+        // count implementation-defined, so bound it rather than pin it.
+        assert!(
+            out.len() >= 1200 && out.len() <= 2000,
+            "expected roughly 1600 samples after 8k->16k resample, got {}",
+            out.len()
+        );
+        // The signal must survive downmix+resample, not decay to silence.
+        let peak = out.iter().map(|s| s.abs()).fold(0.0f32, f32::max);
+        assert!(
+            peak > 0.1,
+            "expected the ~0.24 amplitude signal to survive, peak was {peak}"
+        );
+        for (i, &s) in out.iter().enumerate() {
+            assert!(s.is_finite(), "sample {i} is not finite: {s}");
+            assert!(s >= -1.0 && s <= 1.0, "sample {i} out of range: {s}");
+        }
+    }
+
+    // Garbage in must be an Err, not a panic and not silent empty audio.
+    #[test]
+    fn test_decode_audio_simple_rejects_non_audio() {
+        let junk = vec![0u8; 512];
+        assert!(
+            decode_audio_simple(&junk).is_err(),
+            "non-audio input must return Err, not silently decode"
+        );
+    }
 }

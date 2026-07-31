@@ -7,10 +7,10 @@ use crate::conversation::message::Message;
 use crate::model::ModelConfig;
 use anyhow::Result;
 use async_trait::async_trait;
-use futures::future::BoxFuture;
 use codev_providers::errors::ProviderError;
 use codev_providers::formats::openai::{create_request, ModelConfigParams};
 use codev_providers::images::ImageFormat;
+use futures::future::BoxFuture;
 use rmcp::model::Tool;
 
 pub const NANOGPT_PROVIDER_NAME: &str = "nano-gpt";

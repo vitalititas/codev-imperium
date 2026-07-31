@@ -20,7 +20,6 @@ use tokio_util::task::AbortOnDropHandle;
 
 pub use self::export::message_to_markdown;
 pub use builder::{build_session, SessionBuilderConfig};
-use console::Color;
 use codev::agents::AgentEvent;
 use codev::agents::SUBAGENT_TOOL_REQUEST_TYPE;
 use codev::permission::permission_confirmation::PrincipalType;
@@ -28,14 +27,15 @@ use codev::permission::Permission;
 use codev::permission::PermissionConfirmation;
 use codev::providers::base::Provider;
 use codev::utils::safe_truncate;
+use console::Color;
 
 use anyhow::{Context, Result};
-use completion::GooseCompleter;
 use codev::agents::extension::{Envs, ExtensionConfig, PLATFORM_EXTENSIONS};
 use codev::agents::types::RetryConfig;
 use codev::agents::{Agent, SessionConfig, COMPACT_TRIGGERS};
 use codev::config::extensions::name_to_key;
 use codev::config::{Config, GooseMode};
+use completion::GooseCompleter;
 use input::InputResult;
 use rmcp::model::PromptMessage;
 use rmcp::model::ServerNotification;
@@ -971,9 +971,9 @@ impl CliSession {
     }
 
     async fn handle_list_skills(&mut self) -> Result<()> {
-        use comfy_table::{presets, Cell, ContentArrangement, Table};
         use codev::custom_requests::SourceType;
         use codev::skills::list_installed_skills;
+        use comfy_table::{presets, Cell, ContentArrangement, Table};
         let cwd = std::env::current_dir().unwrap_or_default();
         let skills = list_installed_skills(Some(&cwd));
 

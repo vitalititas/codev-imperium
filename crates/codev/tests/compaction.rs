@@ -1,6 +1,5 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use futures::StreamExt;
 use codev::agents::{Agent, AgentEvent, SessionConfig};
 use codev::config::GooseMode;
 use codev::conversation::message::{Message, MessageContent};
@@ -13,6 +12,7 @@ use codev::session::session_manager::SessionType;
 use codev::session::Session;
 use codev_providers::conversation::token_usage::{ProviderUsage, Usage};
 use codev_providers::errors::ProviderError;
+use futures::StreamExt;
 use rmcp::model::Tool;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;

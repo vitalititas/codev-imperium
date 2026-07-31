@@ -2149,10 +2149,10 @@ impl Agent {
                                             .unwrap_or_else(|| Message::user().with_generated_id());
                                         yield AgentEvent::Message(final_response.clone());
                                         messages_to_add.push(final_response);
-                                    } else {
+                                    } else if let Err(tool_call_err) = request.tool_call.as_ref() {
                                         error!(
                                             "Tool call could not be parsed: {}",
-                                            request.tool_call.as_ref().unwrap_err(),
+                                            tool_call_err,
                                         );
                                         yield AgentEvent::Message(
                                             Message::assistant().with_text(

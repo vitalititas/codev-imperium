@@ -256,6 +256,9 @@ pub enum ExtensionConfig {
         #[schema(required)]
         description: String,
         /// The tools provided by the frontend
+        // rmcp derives schemars, not utoipa, so rmcp::model::Tool has no ToSchema under
+        // utoipa 5. Same reason as the rmcp types declared in conversation/message.rs.
+        #[schema(value_type = Vec<Object>)]
         tools: Vec<Tool>,
         /// Instructions for how to use these tools
         instructions: Option<String>,

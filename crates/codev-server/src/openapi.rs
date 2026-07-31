@@ -31,42 +31,36 @@ use crate::routes::recipe_utils::RecipeManifest;
 use crate::routes::reply::MessageEvent;
 use utoipa::openapi::schema::{
     AdditionalProperties, AnyOfBuilder, ArrayBuilder, ObjectBuilder, OneOfBuilder, Schema,
-    SchemaFormat, SchemaType,
+    SchemaFormat, Type,
 };
 use utoipa::openapi::{AllOfBuilder, Ref, RefOr};
 
+// utoipa 5 restructured the trait this bridge implements:
+//   - `ToSchema` lost its lifetime parameter and no longer carries the schema body.
+//   - The body moved to `PartialSchema::schema()`, which returns a bare `RefOr<Schema>`
+//     instead of the old `(name, schema)` tuple.
+//   - The name moved to `ToSchema::name() -> Cow<'static, str>`.
+//   - `aliases()` is gone entirely; nothing here used it (both arms returned empty).
+// The schemars-to-utoipa conversion itself is unchanged.
 macro_rules! derive_utoipa {
     ($inner_type:ident as $schema_name:ident) => {
-        pub struct $schema_name {}
-
-        impl<'__s> ToSchema<'__s> for $schema_name {
-            fn schema() -> (&'__s str, utoipa::openapi::RefOr<utoipa::openapi::Schema>) {
-                let settings = rmcp::schemars::generate::SchemaSettings::openapi3();
-                let generator = settings.into_generator();
-                let schema = generator.into_root_schema_for::<$inner_type>();
-                let schema = convert_schemars_to_utoipa(schema);
-                (stringify!($inner_type), schema)
-            }
-
-            fn aliases() -> Vec<(&'__s str, utoipa::openapi::schema::Schema)> {
-                Vec::new()
-            }
-        }
+        derive_utoipa!($inner_type as $schema_name => stringify!($inner_type));
     };
     ($inner_type:ident as $schema_name:ident => $output_name:expr) => {
         pub struct $schema_name {}
 
-        impl<'__s> ToSchema<'__s> for $schema_name {
-            fn schema() -> (&'__s str, utoipa::openapi::RefOr<utoipa::openapi::Schema>) {
+        impl utoipa::PartialSchema for $schema_name {
+            fn schema() -> utoipa::openapi::RefOr<utoipa::openapi::Schema> {
                 let settings = rmcp::schemars::generate::SchemaSettings::openapi3();
                 let generator = settings.into_generator();
                 let schema = generator.into_root_schema_for::<$inner_type>();
-                let schema = convert_schemars_to_utoipa(schema);
-                ($output_name, schema)
+                convert_schemars_to_utoipa(schema)
             }
+        }
 
-            fn aliases() -> Vec<(&'__s str, utoipa::openapi::schema::Schema)> {
-                Vec::new()
+        impl ToSchema for $schema_name {
+            fn name() -> std::borrow::Cow<'static, str> {
+                std::borrow::Cow::Borrowed($output_name)
             }
         }
     };
@@ -250,7 +244,7 @@ fn convert_typed_schema(
             RefOr::T(Schema::Array(array_builder.build()))
         }
         "string" => {
-            let mut object_builder = ObjectBuilder::new().schema_type(SchemaType::String);
+            let mut object_builder = ObjectBuilder::new().schema_type(Type::String);
 
             if let Some(Value::Array(enum_values)) = obj.get("enum") {
                 let values: Vec<serde_json::Value> = enum_values
@@ -288,7 +282,7 @@ fn convert_typed_schema(
             RefOr::T(Schema::Object(object_builder.build()))
         }
         "number" => {
-            let mut object_builder = ObjectBuilder::new().schema_type(SchemaType::Number);
+            let mut object_builder = ObjectBuilder::new().schema_type(Type::Number);
 
             if let Some(Value::Number(minimum)) = obj.get("minimum") {
                 if let Some(min) = minimum.as_f64() {
@@ -319,7 +313,7 @@ fn convert_typed_schema(
             RefOr::T(Schema::Object(object_builder.build()))
         }
         "integer" => {
-            let mut object_builder = ObjectBuilder::new().schema_type(SchemaType::Integer);
+            let mut object_builder = ObjectBuilder::new().schema_type(Type::Integer);
 
             if let Some(Value::Number(minimum)) = obj.get("minimum") {
                 if let Some(min) = minimum.as_f64() {
@@ -351,11 +345,11 @@ fn convert_typed_schema(
         }
         "boolean" => RefOr::T(Schema::Object(
             ObjectBuilder::new()
-                .schema_type(SchemaType::Boolean)
+                .schema_type(Type::Boolean)
                 .build(),
         )),
         "null" => RefOr::T(Schema::Object(
-            ObjectBuilder::new().schema_type(SchemaType::String).build(),
+            ObjectBuilder::new().schema_type(Type::String).build(),
         )),
         _ => RefOr::T(Schema::Object(ObjectBuilder::new().build())),
     }

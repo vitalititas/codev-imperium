@@ -190,6 +190,9 @@ pub struct ToolResponse {
 pub struct ToolConfirmationRequest {
     pub id: String,
     pub tool_name: String,
+    // utoipa 5 split ToSchema into PartialSchema + ToSchema and dropped the permissive
+    // handling of foreign types, so serde_json::Map must be declared explicitly.
+    #[schema(value_type = Object)]
     pub arguments: JsonObject,
     pub prompt: Option<String>,
 }
@@ -201,6 +204,7 @@ pub enum ActionRequiredData {
     ToolConfirmation {
         id: String,
         tool_name: String,
+        #[schema(value_type = Object)]
         arguments: JsonObject,
         prompt: Option<String>,
     },
@@ -262,7 +266,11 @@ pub struct SystemNotificationContent {
 /// Content passed inside a message, which can be both simple content and tool content
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum MessageContent {
+    // rmcp's TextContent/ImageContent are Annotated<Raw*Content>. rmcp derives schemars,
+    // not utoipa, so under utoipa 5 they have no ToSchema and must be declared here.
+    #[schema(value_type = Object)]
     Text(TextContent),
+    #[schema(value_type = Object)]
     Image(ImageContent),
     ToolRequest(ToolRequest),
     ToolResponse(ToolResponse),
@@ -761,6 +769,9 @@ impl MessageMetadata {
 #[serde(rename_all = "camelCase")]
 pub struct Message {
     pub id: Option<String>,
+    // rmcp's Role is a unit enum with #[serde(rename_all = "camelCase")], so it is
+    // "user" / "assistant" on the wire. String is the accurate schema type.
+    #[schema(value_type = String)]
     pub role: Role,
     pub created: i64,
     #[serde(deserialize_with = "deserialize_sanitized_content")]

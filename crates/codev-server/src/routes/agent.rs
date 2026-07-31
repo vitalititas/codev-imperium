@@ -147,13 +147,18 @@ pub struct CallToolRequest {
 #[allow(dead_code)]
 pub enum ContentBlock {}
 
-impl<'s> utoipa::ToSchema<'s> for ContentBlock {
-    fn schema() -> (
-        &'s str,
-        utoipa::openapi::RefOr<utoipa::openapi::schema::Schema>,
-    ) {
-        // Delegate to the auto-generated schema
-        crate::openapi::ContentBlockSchema::schema()
+// utoipa 5: the body moved to PartialSchema::schema() (bare RefOr, no name tuple) and
+// the name to ToSchema::name(). Delegation is unchanged — ContentBlockSchema still owns
+// the real schema, this alias only exists so utoipa emits a $ref to it.
+impl utoipa::PartialSchema for ContentBlock {
+    fn schema() -> utoipa::openapi::RefOr<utoipa::openapi::schema::Schema> {
+        <crate::openapi::ContentBlockSchema as utoipa::PartialSchema>::schema()
+    }
+}
+
+impl utoipa::ToSchema for ContentBlock {
+    fn name() -> std::borrow::Cow<'static, str> {
+        std::borrow::Cow::Borrowed("ContentBlock")
     }
 }
 

@@ -19,13 +19,6 @@ const POSTHOG_CAPTURE_URL: &str = "https://us.i.posthog.com/capture/";
 /// Config key for telemetry opt-out preference
 pub const TELEMETRY_ENABLED_KEY: &str = "CODEV_TELEMETRY_ENABLED";
 
-static TELEMETRY_DISABLED_BY_ENV: Lazy<AtomicBool> = Lazy::new(|| {
-    std::env::var("CODEV_TELEMETRY_OFF")
-        .map(|v| v == "1" || v.to_lowercase() == "true")
-        .unwrap_or(true) // Default to disabled
-        .into()
-});
-
 /// Check if the user has made a telemetry choice.
 ///
 /// Returns Some(true) if telemetry is enabled, Some(false) if disabled,

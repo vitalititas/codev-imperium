@@ -1,7 +1,7 @@
 use anyhow::Result;
-use console::{measure_text_width, Term};
 use codev::skills::list_installed_skills;
 use codev::token_counter::create_token_counter;
+use console::{measure_text_width, Term};
 
 const DESCRIPTION_PREVIEW_CHARS: usize = 50;
 const SEPARATOR: &str = " | ";

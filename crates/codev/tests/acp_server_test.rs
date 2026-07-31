@@ -6,6 +6,10 @@ use agent_client_protocol::schema::{
     SessionConfigOptionValue, SetSessionConfigOptionRequest,
 };
 use agent_client_protocol::ErrorCode;
+use codev::config::GooseMode;
+use codev::conversation::message::Message;
+use codev::custom_requests::{GetSessionInfoRequest, GetSessionInfoResponse};
+use codev::session::{SessionManager, SessionType};
 use common_tests::fixtures::server::AcpServerConnection;
 use common_tests::fixtures::{run_test, Connection, OpenAiFixture, Session, TestConnectionConfig};
 #[cfg(feature = "code-mode")]
@@ -22,10 +26,6 @@ use common_tests::{
     run_prompt_model_mismatch, run_prompt_skill, run_session_name_update_notification,
     run_shell_terminal_false, run_shell_terminal_true,
 };
-use codev::config::GooseMode;
-use codev::conversation::message::Message;
-use codev::custom_requests::{GetSessionInfoRequest, GetSessionInfoResponse};
-use codev::session::{SessionManager, SessionType};
 use std::path::Path;
 
 tests_config_option_set_error!(AcpServerConnection);

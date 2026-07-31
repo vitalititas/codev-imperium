@@ -1,6 +1,5 @@
 use anstream::println;
 use bat::WrappingMode;
-use console::{measure_text_width, style, Color, Term};
 use codev::config::Config;
 use codev::conversation::message::{
     ActionRequiredData, Message, MessageContent, SystemNotificationContent, SystemNotificationType,
@@ -10,6 +9,7 @@ use codev::providers::canonical::maybe_get_canonical_model;
 #[cfg(target_os = "windows")]
 use codev::subprocess::SubprocessExt;
 use codev::utils::safe_truncate;
+use console::{measure_text_width, style, Color, Term};
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use rmcp::model::{CallToolRequestParams, JsonObject, PromptArgument};
 use serde_json::Value;

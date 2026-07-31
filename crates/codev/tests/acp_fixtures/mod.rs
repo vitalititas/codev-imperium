@@ -261,20 +261,20 @@ pub fn to_notifications(updates: &[SessionUpdate]) -> Vec<Notification> {
     let mut out = Vec::new();
     for u in updates {
         match u {
-            SessionUpdate::UserMessageChunk(_) => {
-                if out.last() != Some(&Notification::UserMessage) {
-                    out.push(Notification::UserMessage);
-                }
+            SessionUpdate::UserMessageChunk(_)
+                if out.last() != Some(&Notification::UserMessage) =>
+            {
+                out.push(Notification::UserMessage);
             }
-            SessionUpdate::AgentMessageChunk(_) => {
-                if out.last() != Some(&Notification::AgentMessage) {
-                    out.push(Notification::AgentMessage);
-                }
+            SessionUpdate::AgentMessageChunk(_)
+                if out.last() != Some(&Notification::AgentMessage) =>
+            {
+                out.push(Notification::AgentMessage);
             }
-            SessionUpdate::AgentThoughtChunk(_) => {
-                if out.last() != Some(&Notification::AgentThought) {
-                    out.push(Notification::AgentThought);
-                }
+            SessionUpdate::AgentThoughtChunk(_)
+                if out.last() != Some(&Notification::AgentThought) =>
+            {
+                out.push(Notification::AgentThought);
             }
             SessionUpdate::ToolCall(_) => out.push(Notification::ToolCall),
             SessionUpdate::ToolCallUpdate(upd) => {

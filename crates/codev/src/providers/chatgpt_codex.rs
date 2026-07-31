@@ -136,15 +136,13 @@ fn build_input_items(messages: &[Message]) -> Result<Vec<Value>> {
 
         for content in &message.content {
             match content {
-                MessageContent::Text(text) => {
-                    if !text.text.is_empty() {
-                        let content_type = if message.role == Role::Assistant {
-                            "output_text"
-                        } else {
-                            "input_text"
-                        };
-                        content_items.push(json!({ "type": content_type, "text": text.text }));
-                    }
+                MessageContent::Text(text) if !text.text.is_empty() => {
+                    let content_type = if message.role == Role::Assistant {
+                        "output_text"
+                    } else {
+                        "input_text"
+                    };
+                    content_items.push(json!({ "type": content_type, "text": text.text }));
                 }
                 MessageContent::Image(img) => {
                     content_items.push(json!({

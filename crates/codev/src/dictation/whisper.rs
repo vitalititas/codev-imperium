@@ -1213,7 +1213,10 @@ mod tests {
                 (got - want).abs() < 1e-3,
                 "sample {i}: got {got}, want ~{want} (from i16 {raw})"
             );
-            assert!(got >= -1.0 && got <= 1.0, "sample {i} out of range: {got}");
+            assert!(
+                (-1.0..=1.0).contains(&got),
+                "sample {i} out of range: {got}"
+            );
         }
     }
 
@@ -1257,7 +1260,7 @@ mod tests {
         );
         for (i, &s) in out.iter().enumerate() {
             assert!(s.is_finite(), "sample {i} is not finite: {s}");
-            assert!(s >= -1.0 && s <= 1.0, "sample {i} out of range: {s}");
+            assert!((-1.0..=1.0).contains(&s), "sample {i} out of range: {s}");
         }
     }
 

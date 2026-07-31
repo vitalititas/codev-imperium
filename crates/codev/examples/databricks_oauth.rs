@@ -1,8 +1,8 @@
 use anyhow::Result;
-use dotenvy::dotenv;
 use codev::conversation::message::Message;
 use codev::providers::create_with_named_model;
 use codev::providers::databricks::DATABRICKS_DEFAULT_MODEL;
+use dotenvy::dotenv;
 
 #[tokio::main]
 async fn main() -> Result<()> {

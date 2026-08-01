@@ -176,7 +176,7 @@ check-acp-schema: generate-acp-types
     #!/usr/bin/env bash
     set -e
     echo "🔍 Checking ACP schema and generated types are up-to-date..."
-    if ! git diff --exit-code crates/goose/acp-schema.json crates/goose/acp-meta.json ui/sdk/src/generated/; then
+    if ! git diff --exit-code crates/codev/acp-schema.json crates/codev/acp-meta.json ui/sdk/src/generated/; then
       echo ""
       echo "❌ ACP generated files are out of date!"
       echo ""
@@ -188,8 +188,8 @@ check-acp-schema: generate-acp-types
 # Generate ACP JSON schema from Rust types
 generate-acp-schema:
     @echo "Generating ACP schema..."
-    cd crates/goose && cargo run --features code-mode,local-inference,aws-providers,telemetry,otel,rustls-tls,system-keyring --bin generate-acp-schema
-    @echo "ACP schema generated: crates/goose/acp-schema.json, crates/goose/acp-meta.json"
+    cd crates/codev && cargo run --features code-mode,local-inference,aws-providers,telemetry,otel,rustls-tls,system-keyring --bin generate-acp-schema
+    @echo "ACP schema generated: crates/codev/acp-schema.json, crates/codev/acp-meta.json"
 
 # Generate ACP TypeScript types from JSON schema (requires generate-acp-schema first)
 generate-acp-types: generate-acp-schema
@@ -330,8 +330,8 @@ prepare-release version:
         ui/desktop/package.json \
         ui/pnpm-lock.yaml \
         ui/desktop/openapi.json \
-        crates/goose-providers/src/canonical/data/canonical_models.json \
-        crates/goose-providers/src/canonical/data/provider_metadata.json
+        crates/codev-providers/src/canonical/data/canonical_models.json \
+        crates/codev-providers/src/canonical/data/provider_metadata.json
     @git commit --message "chore(release): release version {{ version }}"
 
 set-openapi-version version:
@@ -447,4 +447,4 @@ build-test-tools:
 
 record-mcp-tests: build-test-tools
   GOOSE_RECORD_MCP=1 cargo test --package goose --test mcp_integration_test
-  git add crates/goose/tests/mcp_replays/
+  git add crates/codev/tests/mcp_replays/

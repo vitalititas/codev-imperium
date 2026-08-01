@@ -38,6 +38,28 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    # Deferred: agent-client-protocol 0.11 -> 2.0 is a feature migration, not a bump.
+    # 2.0 DELETED SessionModelState and ModelInfo (present in schema 0.12 agent.rs,
+    # absent from 1.5.0 entirely — not in v1, not in v2). crates/codev/src/acp/
+    # provider.rs:1873-1899 uses them to advertise per-session models, and the
+    # replacement is a differently-shaped generic system (SessionConfigOption +
+    # SessionConfigSelectOptions + SetSessionConfigOptionRequest). Porting means
+    # deciding how model identity maps onto SessionConfigId and how "current model"
+    # becomes a selected value — a design call, not an import rewrite.
+    #
+    # The schema crate is pinned with it: acp 2.0 requires "=1.5.0" exactly, so
+    # bumping the schema alone can never resolve (that was #13).
+    #
+    # Settled while investigating, worth keeping: the target is schema::v1, NOT v2.
+    # ProtocolVersion::LATEST == V1; v2 is an explicitly unstable draft gated behind
+    # `unstable_protocol_v2` which this repo does not enable, and the crate removes
+    # LATEST entirely when that feature is on so nobody drifts onto a draft by
+    # accident. This app initializes with ProtocolVersion::LATEST.
+    ignore:
+      - dependency-name: "agent-client-protocol"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "agent-client-protocol-schema"
+        update-types: ["version-update:semver-major"]
     groups:
       cargo-minor-and-patch:
         update-types:

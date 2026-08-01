@@ -200,7 +200,7 @@ export default function CreateRecipeFromSessionModal({
 
   // Subscribe to form changes using the form's subscribe method
   useEffect(() => {
-    const unsubscribe = form.store.subscribe(() => {
+    const sub = form.store.subscribe(() => {
       const hasTitle = form.state.values.title?.trim();
       const hasDescription = form.state.values.description?.trim();
       const hasInstructions = form.state.values.instructions?.trim();
@@ -216,7 +216,7 @@ export default function CreateRecipeFromSessionModal({
     const valid = !!(hasTitle && hasDescription && hasInstructions);
     setIsFormValid(valid);
 
-    return unsubscribe;
+    return () => sub.unsubscribe();
   }, [form]);
 
   const handleCreateRecipe = async (formData: RecipeFormData, runAfterSave = false) => {

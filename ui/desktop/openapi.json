@@ -1,14 +1,15 @@
 {
-  "openapi": "3.0.3",
+  "openapi": "3.1.0",
   "info": {
-    "title": "goose-server",
-    "description": "An AI agent",
+    "title": "codev-server",
+    "description": "CoDev-Imperium AI agent",
     "contact": {
       "name": "AAIF",
       "email": "ai-oss-tools@block.xyz"
     },
     "license": {
-      "name": "Apache-2.0"
+      "name": "Apache-2.0",
+      "identifier": "Apache-2.0"
     },
     "version": "1.37.0"
   },
@@ -282,8 +283,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": [
+                "string",
+                "null"
+              ]
             }
           }
         ],
@@ -590,8 +593,7 @@
             "description": "Optional extension name to filter tools",
             "required": false,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           },
           {
@@ -1253,8 +1255,7 @@
             "description": "Filter by provider format (openai, anthropic, ollama)",
             "required": false,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": "string"
             }
           }
         ],
@@ -1648,8 +1649,10 @@
             "description": "Optional working directory to discover local skills from",
             "required": false,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "type": [
+                "string",
+                "null"
+              ]
             }
           }
         ],
@@ -1745,8 +1748,12 @@
             "content": {
               "application/zip": {
                 "schema": {
-                  "type": "string",
-                  "format": "binary"
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "format": "int32",
+                    "minimum": 0
+                  }
                 }
               }
             }
@@ -1772,6 +1779,9 @@
                   "type": "object",
                   "additionalProperties": {
                     "$ref": "#/components/schemas/DictationProviderStatus"
+                  },
+                  "propertyNames": {
+                    "type": "string"
                   }
                 }
               }
@@ -2353,7 +2363,6 @@
             "required": false,
             "schema": {
               "type": "integer",
-              "nullable": true,
               "minimum": 0
             }
           }
@@ -2410,7 +2419,10 @@
         ],
         "responses": {
           "200": {
-            "description": "MCP UI proxy HTML page"
+            "description": "MCP UI proxy HTML page",
+            "content": {
+              "text/html": {}
+            }
           },
           "401": {
             "description": "Unauthorized - invalid or missing secret"
@@ -3872,14 +3884,16 @@
                 ]
               },
               "arguments": {
-                "$ref": "#/components/schemas/JsonObject"
+                "type": "object"
               },
               "id": {
                 "type": "string"
               },
               "prompt": {
-                "type": "string",
-                "nullable": true
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "toolName": {
                 "type": "string"
@@ -3930,10 +3944,7 @@
               "user_data": {}
             }
           }
-        ],
-        "discriminator": {
-          "propertyName": "actionType"
-        }
+        ]
       },
       "AddExtensionRequest": {
         "type": "object",
@@ -3972,12 +3983,16 @@
         "type": "object",
         "properties": {
           "contact": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "metadata": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -3985,12 +4000,16 @@
         "type": "object",
         "properties": {
           "contact": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "metadata": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -4018,9 +4037,7 @@
           "isError"
         ],
         "properties": {
-          "_meta": {
-            "nullable": true
-          },
+          "_meta": {},
           "content": {
             "type": "array",
             "items": {
@@ -4030,9 +4047,7 @@
           "isError": {
             "type": "boolean"
           },
-          "structuredContent": {
-            "nullable": true
-          }
+          "structuredContent": {}
         }
       },
       "CancelRequest": {
@@ -4054,20 +4069,26 @@
         ],
         "properties": {
           "override_conversation": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/Message"
             },
-            "description": "Override the server's conversation history. Only use this when you need absolute control\nover the conversation state (e.g., administrative tools). For normal operations, the server\nis the source of truth - use truncate/fork endpoints to modify conversation history instead.",
-            "nullable": true
+            "description": "Override the server's conversation history. Only use this when you need absolute control\nover the conversation state (e.g., administrative tools). For normal operations, the server\nis the source of truth - use truncate/fork endpoints to modify conversation history instead."
           },
           "recipe_name": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "recipe_version": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "session_id": {
             "type": "string"
@@ -4129,10 +4150,7 @@
               }
             }
           }
-        ],
-        "discriminator": {
-          "propertyName": "type"
-        }
+        ]
       },
       "CheckProviderRequest": {
         "type": "object",
@@ -4165,9 +4183,11 @@
         ],
         "properties": {
           "default": {
-            "type": "string",
-            "description": "Optional default value for the key",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional default value for the key"
           },
           "device_code_flow": {
             "type": "boolean",
@@ -4218,7 +4238,10 @@
         "properties": {
           "config": {
             "type": "object",
-            "additionalProperties": {}
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            }
           }
         }
       },
@@ -4486,12 +4509,14 @@
         ],
         "properties": {
           "author": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/AuthorRequest"
               }
-            ],
-            "nullable": true
+            ]
           },
           "session_id": {
             "type": "string"
@@ -4502,16 +4527,20 @@
         "type": "object",
         "properties": {
           "error": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "recipe": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/Recipe"
               }
-            ],
-            "nullable": true
+            ]
           }
         }
       },
@@ -4539,36 +4568,44 @@
         "description": "Content Security Policy metadata for MCP Apps\nSpecifies allowed domains for network connections and resource loading",
         "properties": {
           "baseUriDomains": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             },
-            "description": "Domains allowed for base-uri",
-            "nullable": true
+            "description": "Domains allowed for base-uri"
           },
           "connectDomains": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             },
-            "description": "Domains allowed for connect-src (fetch, XHR, WebSocket)",
-            "nullable": true
+            "description": "Domains allowed for connect-src (fetch, XHR, WebSocket)"
           },
           "frameDomains": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             },
-            "description": "Domains allowed for frame-src (nested iframes)",
-            "nullable": true
+            "description": "Domains allowed for frame-src (nested iframes)"
           },
           "resourceDomains": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
             },
-            "description": "Domains allowed for resource loading (scripts, styles, images, fonts, media)",
-            "nullable": true
+            "description": "Domains allowed for resource loading (scripts, styles, images, fonts, media)"
           }
         }
       },
@@ -4586,52 +4623,71 @@
             "type": "string"
           },
           "base_path": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "base_url": {
             "type": "string"
           },
           "catalog_provider_id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "description": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "display_name": {
             "type": "string"
           },
           "dynamic_models": {
-            "type": "boolean",
-            "description": "Controls whether `fetch_supported_models` calls the provider's `/v1/models`\nendpoint or returns the static `models` list directly.\n\n- `Some(false)` + non-empty `models`: return the static list; no API call.\nConstruction fails if `models` is empty.\n- `Some(true)` or `None`: try the API; fall back to `models` on 404.",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Controls whether `fetch_supported_models` calls the provider's `/v1/models`\nendpoint or returns the static `models` list directly.\n\n- `Some(false)` + non-empty `models`: return the static list; no API call.\n  Construction fails if `models` is empty.\n- `Some(true)` or `None`: try the API; fall back to `models` on 404."
           },
           "engine": {
             "$ref": "#/components/schemas/ProviderEngine"
           },
           "env_vars": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/EnvVarConfig"
-            },
-            "nullable": true
+            }
           },
           "fast_model": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "headers": {
-            "type": "object",
+            "type": [
+              "object",
+              "null"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "nullable": true
+            "propertyNames": {
+              "type": "string"
+            }
           },
           "model_doc_link": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "models": {
             "type": "array",
@@ -4658,13 +4714,17 @@
             "type": "boolean"
           },
           "supports_streaming": {
-            "type": "boolean",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "timeout_seconds": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int64",
-            "nullable": true,
             "minimum": 0
           }
         }
@@ -4720,9 +4780,11 @@
         ],
         "properties": {
           "config_key": {
-            "type": "string",
-            "description": "Config key name if uses_provider_config is false",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Config key name if uses_provider_config is false"
           },
           "configured": {
             "type": "boolean",
@@ -4733,14 +4795,18 @@
             "description": "Description of what this provider does"
           },
           "host": {
-            "type": "string",
-            "description": "Custom host URL if configured (only for providers that support it)",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Custom host URL if configured (only for providers that support it)"
           },
           "settings_path": {
-            "type": "string",
-            "description": "Path to settings if uses_provider_config is true",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Path to settings if uses_provider_config is true"
           },
           "uses_provider_config": {
             "type": "boolean",
@@ -4777,15 +4843,19 @@
             "minimum": 0
           },
           "error": {
-            "type": "string",
-            "description": "Error message if failed",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Error message if failed"
           },
           "eta_seconds": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int64",
             "description": "Estimated time remaining in seconds",
-            "nullable": true,
             "minimum": 0
           },
           "model_id": {
@@ -4798,14 +4868,17 @@
             "description": "Download progress percentage (0-100)"
           },
           "speed_bps": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int64",
             "description": "Download speed in bytes per second",
-            "nullable": true,
             "minimum": 0
           },
           "status": {
-            "$ref": "#/components/schemas/DownloadStatus"
+            "$ref": "#/components/schemas/DownloadStatus",
+            "description": "Download status"
           },
           "total_bytes": {
             "type": "integer",
@@ -4878,20 +4951,26 @@
         ],
         "properties": {
           "default": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "description": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "name": {
             "type": "string"
           },
           "primary": {
-            "type": "boolean",
-            "description": "When true, the field is shown prominently in the UI (not collapsed).\nDefaults to the value of `required` if not specified.",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "When true, the field is shown prominently in the UI (not collapsed).\nDefaults to the value of `required` if not specified."
           },
           "required": {
             "type": "boolean"
@@ -4911,10 +4990,10 @@
       "ErrorResponse": {
         "type": "object",
         "required": [
-          "message"
+          "error"
         ],
         "properties": {
-          "message": {
+          "error": {
             "type": "string"
           }
         }
@@ -4943,8 +5022,10 @@
                 ]
               },
               "uri": {
-                "type": "string",
-                "nullable": true
+                "type": [
+                  "string",
+                  "null"
+                ]
               }
             }
           },
@@ -4972,8 +5053,10 @@
                 }
               },
               "bundled": {
-                "type": "boolean",
-                "nullable": true
+                "type": [
+                  "boolean",
+                  "null"
+                ]
               },
               "cmd": {
                 "type": "string"
@@ -4995,9 +5078,11 @@
                 "description": "The name used to identify this extension"
               },
               "timeout": {
-                "type": "integer",
+                "type": [
+                  "integer",
+                  "null"
+                ],
                 "format": "int64",
-                "nullable": true,
                 "minimum": 0
               },
               "type": {
@@ -5024,24 +5109,30 @@
                 }
               },
               "bundled": {
-                "type": "boolean",
-                "nullable": true
+                "type": [
+                  "boolean",
+                  "null"
+                ]
               },
               "description": {
                 "type": "string"
               },
               "display_name": {
-                "type": "string",
-                "nullable": true
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "name": {
                 "type": "string",
                 "description": "The name used to identify this extension"
               },
               "timeout": {
-                "type": "integer",
+                "type": [
+                  "integer",
+                  "null"
+                ],
                 "format": "int64",
-                "nullable": true,
                 "minimum": 0
               },
               "type": {
@@ -5068,15 +5159,19 @@
                 }
               },
               "bundled": {
-                "type": "boolean",
-                "nullable": true
+                "type": [
+                  "boolean",
+                  "null"
+                ]
               },
               "description": {
                 "type": "string"
               },
               "display_name": {
-                "type": "string",
-                "nullable": true
+                "type": [
+                  "string",
+                  "null"
+                ]
               },
               "name": {
                 "type": "string",
@@ -5107,8 +5202,10 @@
                 }
               },
               "bundled": {
-                "type": "boolean",
-                "nullable": true
+                "type": [
+                  "boolean",
+                  "null"
+                ]
               },
               "description": {
                 "type": "string"
@@ -5126,6 +5223,9 @@
                 "type": "object",
                 "additionalProperties": {
                   "type": "string"
+                },
+                "propertyNames": {
+                  "type": "string"
                 }
               },
               "name": {
@@ -5133,14 +5233,18 @@
                 "description": "The name used to identify this extension"
               },
               "socket": {
-                "type": "string",
-                "description": "Optional Unix domain socket path for HTTP-over-UDS transport.\nWhen set, the HTTP connection is routed through this socket while\n`uri` is used for the Host header and path.\nUse `@name` for Linux abstract sockets.",
-                "nullable": true
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Optional Unix domain socket path for HTTP-over-UDS transport.\nWhen set, the HTTP connection is routed through this socket while\n`uri` is used for the Host header and path.\nUse `@name` for Linux abstract sockets."
               },
               "timeout": {
-                "type": "integer",
+                "type": [
+                  "integer",
+                  "null"
+                ],
                 "format": "int64",
-                "nullable": true,
                 "minimum": 0
               },
               "type": {
@@ -5171,16 +5275,20 @@
                 }
               },
               "bundled": {
-                "type": "boolean",
-                "nullable": true
+                "type": [
+                  "boolean",
+                  "null"
+                ]
               },
               "description": {
                 "type": "string"
               },
               "instructions": {
-                "type": "string",
-                "description": "Instructions for how to use these tools",
-                "nullable": true
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Instructions for how to use these tools"
               },
               "name": {
                 "type": "string",
@@ -5189,7 +5297,7 @@
               "tools": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/Tool"
+                  "type": "object"
                 },
                 "description": "The tools provided by the frontend"
               },
@@ -5222,12 +5330,14 @@
                 "description": "The Python code to execute"
               },
               "dependencies": {
-                "type": "array",
+                "type": [
+                  "array",
+                  "null"
+                ],
                 "items": {
                   "type": "string"
                 },
-                "description": "Python package dependencies required by this extension",
-                "nullable": true
+                "description": "Python package dependencies required by this extension"
               },
               "description": {
                 "type": "string"
@@ -5237,10 +5347,12 @@
                 "description": "The name used to identify this extension"
               },
               "timeout": {
-                "type": "integer",
+                "type": [
+                  "integer",
+                  "null"
+                ],
                 "format": "int64",
                 "description": "Timeout in seconds",
-                "nullable": true,
                 "minimum": 0
               },
               "type": {
@@ -5252,10 +5364,7 @@
             }
           }
         ],
-        "description": "Represents the different types of MCP extensions that can be added to the manager",
-        "discriminator": {
-          "propertyName": "type"
-        }
+        "description": "Represents the different types of MCP extensions that can be added to the manager"
       },
       "ExtensionData": {
         "type": "object",
@@ -5288,8 +5397,10 @@
         ],
         "properties": {
           "error": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "name": {
             "type": "string"
@@ -5349,6 +5460,9 @@
             "description": "Map of feature name to enabled status",
             "additionalProperties": {
               "type": "boolean"
+            },
+            "propertyNames": {
+              "type": "string"
             }
           }
         }
@@ -5364,9 +5478,11 @@
             "type": "boolean"
           },
           "timestamp": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
           },
           "truncate": {
             "type": "boolean"
@@ -5406,8 +5522,10 @@
         ],
         "properties": {
           "extension_name": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "session_id": {
             "type": "string"
@@ -5420,12 +5538,14 @@
             "$ref": "#/components/schemas/McpAppResource"
           },
           {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/WindowProps"
               }
-            ],
-            "nullable": true
+            ]
           },
           {
             "type": "object",
@@ -5437,8 +5557,10 @@
                 }
               },
               "prd": {
-                "type": "string",
-                "nullable": true
+                "type": [
+                  "string",
+                  "null"
+                ]
               }
             }
           }
@@ -5625,6 +5747,9 @@
           }
         }
       },
+      "ImageContentRef": {
+        "$ref": "#/components/schemas/ImageContent"
+      },
       "ImportAppRequest": {
         "type": "object",
         "required": [
@@ -5676,8 +5801,10 @@
             "type": "string"
           },
           "resolvedModel": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -5685,17 +5812,23 @@
         "type": "object",
         "properties": {
           "processStartTime": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "runningDurationSeconds": {
-            "type": "integer",
-            "format": "int64",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
           },
           "sessionId": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -5718,8 +5851,10 @@
         "type": "object",
         "properties": {
           "session_id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -5801,12 +5936,14 @@
             "type": "string"
           },
           "mmproj_status": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/ModelDownloadStatus"
               }
-            ],
-            "nullable": true
+            ]
           },
           "quantization": {
             "type": "string"
@@ -5843,22 +5980,29 @@
         ],
         "properties": {
           "_meta": {
-            "allOf": [
+            "oneOf": [
               {
-                "$ref": "#/components/schemas/ResourceMetadata"
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/ResourceMetadata",
+                "description": "Resource metadata including UI configuration"
               }
-            ],
-            "nullable": true
+            ]
           },
           "blob": {
-            "type": "string",
-            "description": "Base64-encoded binary content (alternative to text)",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Base64-encoded binary content (alternative to text)"
           },
           "description": {
-            "type": "string",
-            "description": "Optional description of what this resource does",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional description of what this resource does"
           },
           "mimeType": {
             "type": "string",
@@ -5869,9 +6013,11 @@
             "description": "Human-readable name of the resource"
           },
           "text": {
-            "type": "string",
-            "description": "Text content of the resource (HTML for MCP Apps)",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Text content of the resource (HTML for MCP Apps)"
           },
           "uri": {
             "type": "string",
@@ -5900,14 +6046,16 @@
             "format": "int64"
           },
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "metadata": {
             "$ref": "#/components/schemas/MessageMetadata"
           },
           "role": {
-            "$ref": "#/components/schemas/Role"
+            "$ref": "#/components/schemas/RoleRef"
           }
         }
       },
@@ -5916,7 +6064,7 @@
           {
             "allOf": [
               {
-                "$ref": "#/components/schemas/TextContent"
+                "$ref": "#/components/schemas/TextContentRef"
               },
               {
                 "type": "object",
@@ -5937,7 +6085,7 @@
           {
             "allOf": [
               {
-                "$ref": "#/components/schemas/ImageContent"
+                "$ref": "#/components/schemas/ImageContentRef"
               },
               {
                 "type": "object",
@@ -6124,10 +6272,7 @@
             ]
           }
         ],
-        "description": "Content passed inside a message, which can be both simple content and tool content",
-        "discriminator": {
-          "propertyName": "type"
-        }
+        "description": "Content passed inside a message, which can be both simple content and tool content"
       },
       "MessageEvent": {
         "oneOf": [
@@ -6269,10 +6414,7 @@
               }
             }
           }
-        ],
-        "discriminator": {
-          "propertyName": "type"
-        }
+        ]
       },
       "MessageMetadata": {
         "type": "object",
@@ -6287,12 +6429,14 @@
             "description": "Whether the message should be included in the agent's context window"
           },
           "inference": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/InferenceMetadata"
               }
-            ],
-            "nullable": true
+            ]
           },
           "steer": {
             "type": "boolean",
@@ -6335,39 +6479,54 @@
         ],
         "properties": {
           "context_limit": {
-            "type": "integer",
-            "nullable": true,
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 0
           },
           "max_tokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "model_name": {
             "type": "string"
           },
           "reasoning": {
-            "type": "boolean",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "request_params": {
-            "type": "object",
+            "type": [
+              "object",
+              "null"
+            ],
             "description": "Provider-specific request parameters (e.g., anthropic_beta headers)",
             "additionalProperties": {},
-            "nullable": true
+            "propertyNames": {
+              "type": "string"
+            }
           },
           "temperature": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "float"
           },
           "toolshim": {
             "type": "boolean"
           },
           "toolshim_model": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -6406,9 +6565,11 @@
                 "format": "float"
               },
               "speed_bps": {
-                "type": "integer",
+                "type": [
+                  "integer",
+                  "null"
+                ],
                 "format": "int64",
-                "nullable": true,
                 "minimum": 0
               },
               "state": {
@@ -6438,10 +6599,7 @@
               }
             }
           }
-        ],
-        "discriminator": {
-          "propertyName": "state"
-        }
+        ]
       },
       "ModelInfo": {
         "type": "object",
@@ -6457,39 +6615,49 @@
             "minimum": 0
           },
           "currency": {
-            "type": "string",
-            "description": "Currency for the costs (default: \"$\")",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Currency for the costs (default: \"$\")"
           },
           "input_token_cost": {
-            "type": "number",
+            "type": [
+              "number",
+              "null"
+            ],
             "format": "double",
-            "description": "Cost per token for input in USD (optional)",
-            "nullable": true
+            "description": "Cost per token for input in USD (optional)"
           },
           "name": {
             "type": "string",
             "description": "The name of the model"
           },
           "output_token_cost": {
-            "type": "number",
+            "type": [
+              "number",
+              "null"
+            ],
             "format": "double",
-            "description": "Cost per token for output in USD (optional)",
-            "nullable": true
+            "description": "Cost per token for output in USD (optional)"
           },
           "reasoning": {
             "type": "boolean",
             "description": "Whether this model supports reasoning/thinking controls"
           },
           "resolved_model": {
-            "type": "string",
-            "description": "The underlying model resolved from provider metadata, when the configured model is an alias or endpoint.",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The underlying model resolved from provider metadata, when the configured model is an alias or endpoint."
           },
           "supports_cache_control": {
-            "type": "boolean",
-            "description": "Whether this model supports cache control",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Whether this model supports cache control"
           }
         }
       },
@@ -6504,14 +6672,18 @@
         ],
         "properties": {
           "cache_read_token_cost": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
           },
           "cache_write_token_cost": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
           },
           "context_limit": {
             "type": "integer",
@@ -6521,22 +6693,28 @@
             "type": "string"
           },
           "input_token_cost": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
           },
           "max_output_tokens": {
-            "type": "integer",
-            "nullable": true,
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 0
           },
           "model": {
             "type": "string"
           },
           "output_token_cost": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
           },
           "provider": {
             "type": "string"
@@ -6568,12 +6746,14 @@
         ],
         "properties": {
           "model_info": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/ModelInfoData"
               }
-            ],
-            "nullable": true
+            ]
           },
           "source": {
             "type": "string"
@@ -6587,17 +6767,21 @@
             "$ref": "#/components/schemas/ChatTemplate"
           },
           "context_size": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int32",
-            "nullable": true,
             "minimum": 0
           },
           "enable_thinking": {
             "type": "boolean"
           },
           "flash_attention": {
-            "type": "boolean",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "frequency_penalty": {
             "type": "number",
@@ -6609,8 +6793,10 @@
             "minimum": 0
           },
           "max_output_tokens": {
-            "type": "integer",
-            "nullable": true,
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 0
           },
           "mmproj_size_bytes": {
@@ -6620,21 +6806,27 @@
             "minimum": 0
           },
           "n_batch": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int32",
-            "nullable": true,
             "minimum": 0
           },
           "n_gpu_layers": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int32",
-            "nullable": true,
             "minimum": 0
           },
           "n_threads": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "presence_penalty": {
             "type": "number",
@@ -6856,8 +7048,10 @@
             "$ref": "#/components/schemas/ProviderType"
           },
           "saved_model": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -6913,9 +7107,11 @@
             "description": "Link to the docs where models can be found"
           },
           "model_selection_hint": {
-            "type": "string",
-            "description": "Hint shown in the model picker when this provider manages its own model selection.",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Hint shown in the model picker when this provider manages its own model selection."
           },
           "name": {
             "type": "string",
@@ -6963,16 +7159,20 @@
             "type": "boolean"
           },
           "configure_provider": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "configured": {
             "type": "boolean"
           },
           "expires_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           },
           "has_secret": {
             "type": "boolean"
@@ -7220,13 +7420,20 @@
         ],
         "properties": {
           "_meta": {
-            "type": "object",
+            "type": [
+              "object",
+              "null"
+            ],
             "additionalProperties": {},
-            "nullable": true
+            "propertyNames": {
+              "type": "string"
+            }
           },
           "mimeType": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "text": {
             "type": "string"
@@ -7244,75 +7451,95 @@
         ],
         "properties": {
           "activities": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
-            },
-            "nullable": true
+            }
           },
           "author": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/Author"
               }
-            ],
-            "nullable": true
+            ]
           },
           "description": {
             "type": "string"
           },
           "extensions": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/ExtensionConfig"
-            },
-            "nullable": true
+            }
           },
           "instructions": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "parameters": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/RecipeParameter"
-            },
-            "nullable": true
+            }
           },
           "prompt": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "response": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/Response"
               }
-            ],
-            "nullable": true
+            ]
           },
           "retry": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/RetryConfig"
               }
-            ],
-            "nullable": true
+            ]
           },
           "settings": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/Settings"
               }
-            ],
-            "nullable": true
+            ]
           },
           "sub_recipes": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/SubRecipe"
-            },
-            "nullable": true
+            }
           },
           "title": {
             "type": "string"
@@ -7344,12 +7571,16 @@
             "$ref": "#/components/schemas/Recipe"
           },
           "schedule_cron": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "slash_command": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -7363,8 +7594,10 @@
         ],
         "properties": {
           "default": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "description": {
             "type": "string"
@@ -7376,11 +7609,13 @@
             "type": "string"
           },
           "options": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "type": "string"
-            },
-            "nullable": true
+            }
           },
           "requirement": {
             "$ref": "#/components/schemas/RecipeParameterRequirement"
@@ -7474,8 +7709,10 @@
             }
           },
           "recommended_index": {
-            "type": "integer",
-            "nullable": true,
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 0
           },
           "variants": {
@@ -7539,21 +7776,22 @@
         "description": "Resource metadata containing UI configuration",
         "properties": {
           "ui": {
-            "allOf": [
+            "oneOf": [
               {
-                "$ref": "#/components/schemas/UiMetadata"
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/UiMetadata",
+                "description": "UI-specific configuration"
               }
-            ],
-            "nullable": true
+            ]
           }
         }
       },
       "Response": {
         "type": "object",
         "properties": {
-          "json_schema": {
-            "nullable": true
-          }
+          "json_schema": {}
         }
       },
       "RestartAgentRequest": {
@@ -7603,11 +7841,13 @@
         ],
         "properties": {
           "extension_results": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/ExtensionLoadResult"
-            },
-            "nullable": true
+            }
           },
           "session": {
             "$ref": "#/components/schemas/Session"
@@ -7636,22 +7876,28 @@
             "minimum": 0
           },
           "on_failure": {
-            "type": "string",
-            "description": "Optional shell command to run on failure for cleanup",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Optional shell command to run on failure for cleanup"
           },
           "on_failure_timeout_seconds": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int64",
             "description": "Timeout in seconds for on_failure commands (default: 600 seconds)",
-            "nullable": true,
             "minimum": 0
           },
           "timeout_seconds": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int64",
             "description": "Timeout in seconds for individual shell commands (default: 300 seconds)",
-            "nullable": true,
             "minimum": 0
           }
         }
@@ -7671,6 +7917,9 @@
             ]
           }
         ]
+      },
+      "RoleRef": {
+        "$ref": "#/components/schemas/Role"
       },
       "RunNowResponse": {
         "type": "object",
@@ -7714,9 +7963,11 @@
                 "format": "float"
               },
               "seed": {
-                "type": "integer",
+                "type": [
+                  "integer",
+                  "null"
+                ],
                 "format": "int32",
-                "nullable": true,
                 "minimum": 0
               },
               "temperature": {
@@ -7752,9 +8003,11 @@
                 "format": "float"
               },
               "seed": {
-                "type": "integer",
+                "type": [
+                  "integer",
+                  "null"
+                ],
                 "format": "int32",
-                "nullable": true,
                 "minimum": 0
               },
               "tau": {
@@ -7769,10 +8022,7 @@
               }
             }
           }
-        ],
-        "discriminator": {
-          "propertyName": "type"
-        }
+        ]
       },
       "SavePromptRequest": {
         "type": "object",
@@ -7792,8 +8042,10 @@
         ],
         "properties": {
           "id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "recipe": {
             "$ref": "#/components/schemas/Recipe"
@@ -7848,8 +8100,10 @@
         ],
         "properties": {
           "cron_schedule": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "id": {
             "type": "string"
@@ -7868,8 +8122,10 @@
             "type": "string"
           },
           "current_session_id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "currently_running": {
             "type": "boolean"
@@ -7878,38 +8134,43 @@
             "type": "string"
           },
           "last_run": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           },
           "parameters": {
             "type": "array",
             "items": {
               "type": "array",
-              "items": {
-                "allOf": [
-                  {
-                    "type": "string"
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
-              }
+              "items": false,
+              "prefixItems": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ]
             }
           },
           "paused": {
             "type": "boolean"
           },
           "process_start_time": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           },
           "recipe_base_dir": {
-            "type": "string",
-            "description": "Original directory of the recipe file before it was copied to scheduled_recipes/.\nPreserved so that relative paths (sub-recipes, template includes) resolve correctly\nagainst the source tree rather than the scheduler's internal storage directory.",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Original directory of the recipe file before it was copied to scheduled_recipes/.\nPreserved so that relative paths (sub-recipes, template includes) resolve correctly\nagainst the source tree rather than the scheduler's internal storage directory."
           },
           "source": {
             "type": "string"
@@ -7929,37 +8190,49 @@
         ],
         "properties": {
           "accumulated_cost": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
           },
           "accumulated_input_tokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "accumulated_output_tokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "accumulated_total_tokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "archived_at": {
-            "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           },
           "conversation": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/Conversation"
               }
-            ],
-            "nullable": true
+            ]
           },
           "created_at": {
             "type": "string",
@@ -7975,68 +8248,89 @@
             "type": "string"
           },
           "input_tokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "message_count": {
             "type": "integer",
             "minimum": 0
           },
           "model_config": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/ModelConfig"
               }
-            ],
-            "nullable": true
+            ]
           },
           "name": {
             "type": "string"
           },
           "output_tokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "project_id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "provider_name": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "recipe": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/Recipe"
               }
-            ],
-            "nullable": true
+            ]
           },
           "schedule_id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "session_type": {
             "$ref": "#/components/schemas/SessionType"
           },
           "total_tokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "updated_at": {
             "type": "string",
             "format": "date-time"
           },
           "user_recipe_values": {
-            "type": "object",
+            "type": [
+              "object",
+              "null"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "nullable": true
+            "propertyNames": {
+              "type": "string"
+            }
           },
           "user_set_name": {
             "type": "boolean"
@@ -8057,19 +8351,25 @@
         ],
         "properties": {
           "accumulatedInputTokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "accumulatedOutputTokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "accumulatedTotalTokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "createdAt": {
             "type": "string"
@@ -8078,9 +8378,11 @@
             "type": "string"
           },
           "inputTokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "messageCount": {
             "type": "integer",
@@ -8090,18 +8392,24 @@
             "type": "string"
           },
           "outputTokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "scheduleId": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "totalTokens": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32"
           },
           "workingDir": {
             "type": "string"
@@ -8130,11 +8438,13 @@
         ],
         "properties": {
           "override_conversation": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/Message"
-            },
-            "nullable": true
+            }
           },
           "request_id": {
             "type": "string",
@@ -8205,8 +8515,10 @@
             "type": "string"
           },
           "slash_command": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -8214,22 +8526,30 @@
         "type": "object",
         "properties": {
           "goose_model": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "goose_provider": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "max_turns": {
-            "type": "integer",
-            "nullable": true,
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 0
           },
           "temperature": {
-            "type": "number",
-            "format": "float",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "float"
           }
         }
       },
@@ -8325,27 +8645,35 @@
         ],
         "properties": {
           "extension_overrides": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "items": {
               "$ref": "#/components/schemas/ExtensionConfig"
-            },
-            "nullable": true
+            }
           },
           "recipe": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/Recipe"
               }
-            ],
-            "nullable": true
+            ]
           },
           "recipe_deeplink": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "recipe_id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "working_dir": {
             "type": "string"
@@ -8371,8 +8699,10 @@
         ],
         "properties": {
           "description": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "name": {
             "type": "string"
@@ -8384,11 +8714,16 @@
             "type": "boolean"
           },
           "values": {
-            "type": "object",
+            "type": [
+              "object",
+              "null"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "nullable": true
+            "propertyNames": {
+              "type": "string"
+            }
           }
         }
       },
@@ -8415,10 +8750,7 @@
             }
           }
         ],
-        "description": "A single success check to validate recipe completion",
-        "discriminator": {
-          "propertyName": "type"
-        }
+        "description": "A single success check to validate recipe completion"
       },
       "SystemInfo": {
         "type": "object",
@@ -8443,8 +8775,10 @@
             }
           },
           "model": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "os": {
             "type": "string"
@@ -8453,8 +8787,10 @@
             "type": "string"
           },
           "provider": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -8465,9 +8801,7 @@
           "msg"
         ],
         "properties": {
-          "data": {
-            "nullable": true
-          },
+          "data": {},
           "msg": {
             "type": "string"
           },
@@ -8517,7 +8851,10 @@
           },
           "properties": {
             "type": "object",
-            "additionalProperties": {}
+            "additionalProperties": {},
+            "propertyNames": {
+              "type": "string"
+            }
           }
         }
       },
@@ -8544,8 +8881,10 @@
             "type": "string"
           },
           "user_content": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           }
         }
       },
@@ -8573,6 +8912,9 @@
             "type": "string"
           }
         }
+      },
+      "TextContentRef": {
+        "$ref": "#/components/schemas/TextContent"
       },
       "ThinkingContent": {
         "type": "object",
@@ -8611,9 +8953,11 @@
         ],
         "properties": {
           "accumulatedCost": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
+            "type": [
+              "number",
+              "null"
+            ],
+            "format": "double"
           },
           "accumulatedInputTokens": {
             "type": "integer",
@@ -8734,14 +9078,16 @@
         ],
         "properties": {
           "arguments": {
-            "$ref": "#/components/schemas/JsonObject"
+            "type": "object"
           },
           "id": {
             "type": "string"
           },
           "prompt": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "toolName": {
             "type": "string"
@@ -8788,12 +9134,14 @@
             }
           },
           "permission": {
-            "allOf": [
+            "oneOf": [
+              {
+                "type": "null"
+              },
               {
                 "$ref": "#/components/schemas/PermissionLevel"
               }
-            ],
-            "nullable": true
+            ]
           }
         }
       },
@@ -8868,7 +9216,8 @@
             "description": "MIME type of the audio (e.g., \"audio/webm\", \"audio/wav\")"
           },
           "provider": {
-            "$ref": "#/components/schemas/DictationProvider"
+            "$ref": "#/components/schemas/DictationProvider",
+            "description": "Transcription provider to use"
           }
         }
       },
@@ -8922,25 +9271,33 @@
         "description": "UI-specific metadata for MCP resources",
         "properties": {
           "csp": {
-            "allOf": [
+            "oneOf": [
               {
-                "$ref": "#/components/schemas/CspMetadata"
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/CspMetadata",
+                "description": "Content Security Policy configuration"
               }
-            ],
-            "nullable": true
+            ]
           },
           "domain": {
-            "type": "string",
-            "description": "Preferred domain for the app (used for CORS)",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Preferred domain for the app (used for CORS)"
           },
           "permissions": {
-            "$ref": "#/components/schemas/PermissionsMetadata"
+            "$ref": "#/components/schemas/PermissionsMetadata",
+            "description": "Sandbox permissions requested by the UI"
           },
           "prefersBorder": {
-            "type": "boolean",
-            "description": "Whether the app prefers to have a border around it",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Whether the app prefers to have a border around it"
           }
         }
       },
@@ -8961,12 +9318,16 @@
             "type": "string"
           },
           "base_path": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "catalog_provider_id": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "display_name": {
             "type": "string"
@@ -8975,11 +9336,16 @@
             "type": "string"
           },
           "headers": {
-            "type": "object",
+            "type": [
+              "object",
+              "null"
+            ],
             "additionalProperties": {
               "type": "string"
             },
-            "nullable": true
+            "propertyNames": {
+              "type": "string"
+            }
           },
           "models": {
             "type": "array",
@@ -8988,15 +9354,19 @@
             }
           },
           "preserves_thinking": {
-            "type": "boolean",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ]
           },
           "requires_auth": {
             "type": "boolean"
           },
           "supports_streaming": {
-            "type": "boolean",
-            "nullable": true
+            "type": [
+              "boolean",
+              "null"
+            ]
           }
         }
       },
@@ -9019,21 +9389,30 @@
         ],
         "properties": {
           "context_limit": {
-            "type": "integer",
-            "nullable": true,
+            "type": [
+              "integer",
+              "null"
+            ],
             "minimum": 0
           },
           "model": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "provider": {
             "type": "string"
           },
           "request_params": {
-            "type": "object",
+            "type": [
+              "object",
+              "null"
+            ],
             "additionalProperties": {},
-            "nullable": true
+            "propertyNames": {
+              "type": "string"
+            }
           },
           "session_id": {
             "type": "string"
@@ -9070,8 +9449,10 @@
         ],
         "properties": {
           "goose_mode": {
-            "type": "string",
-            "nullable": true
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "session_id": {
             "type": "string"
@@ -9088,6 +9469,9 @@
             "type": "object",
             "description": "Recipe parameter values entered by the user",
             "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
               "type": "string"
             }
           }

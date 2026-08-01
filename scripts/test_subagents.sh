@@ -11,7 +11,7 @@
 # Knobs:
 #   GOOSE_PROVIDER (default: anthropic)
 #   GOOSE_MODEL    (default: claude-haiku-4-5)
-#   SKIP_BUILD     skip cargo build (assumes target/debug/goose already exists)
+#   SKIP_BUILD     skip cargo build (assumes target/debug/codev already exists)
 #   KEEP_TESTDIR   don't rm the temp workdir on exit (for debugging)
 #
 # Agent names are deliberately weird ("janpier", "peterjoris") so that they
@@ -37,7 +37,7 @@ else
 fi
 
 SCRIPT_DIR=$(pwd)
-GOOSE_BIN="$SCRIPT_DIR/target/debug/goose"
+GOOSE_BIN="$SCRIPT_DIR/target/debug/codev"
 export PATH="$SCRIPT_DIR/target/debug:$PATH"
 
 export GOOSE_PROVIDER="${GOOSE_PROVIDER:-anthropic}"

@@ -8,6 +8,24 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    # Deferred majors — each of these broke `Test and Lint Electron` on its own
+    # merits (the other nine bumps in the same batch passed the same job), and
+    # each is a migration rather than a bump. Closed 2026-08-01; revisit
+    # deliberately, not via an auto-PR that gets rebased forever.
+    #
+    # NOTE: majors are NOT ignored globally — electron 41 -> 43 (#35) passed and
+    # is being merged. These five are named individually on purpose.
+    ignore:
+      - dependency-name: "typescript"        # 5.9 -> 7.0, breaks the openapi-ts codegen toolchain
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"            # 9 -> 10, flat-config migration
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-plugin-react-hooks"   # 5 -> 7, rules realignment
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "zod"               # 3 -> 4, schema API rewrite
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vitejs/plugin-react"        # 5 -> 6
+        update-types: ["version-update:semver-major"]
     groups:
       ui-minor-and-patch:
         update-types:

@@ -1036,8 +1036,9 @@ fn resample_audio(data: &[f32], from_rate: u32, to_rate: u32) -> Result<Vec<f32>
         "resampling audio"
     );
 
+    const SINC_LEN: usize = 256;
     let params = SincInterpolationParameters {
-        sinc_len: 256,
+        sinc_len: SINC_LEN,
         f_cutoff: 0.95,
         interpolation: SincInterpolationType::Linear,
         oversampling_factor: 256,
@@ -1054,9 +1055,27 @@ fn resample_audio(data: &[f32], from_rate: u32, to_rate: u32) -> Result<Vec<f32>
 
     let waves_in = vec![data.to_vec()];
     let waves_out = resampler.process(&waves_in, None)?;
+    let out = waves_out[0].clone();
 
-    tracing::debug!(output_samples = waves_out[0].len(), "resampling complete");
-    Ok(waves_out[0].clone())
+    // A 256-tap windowed sinc cannot emit an output frame from fewer input samples
+    // than the filter is long, and the chunk size above is the whole input. In that
+    // case process() SUCCEEDS and hands back an empty vec, so this returned
+    // Ok(vec![]) — a success carrying no audio. The only caller feeds Whisper, so a
+    // short or truncated recording transcribed as silence with no error anywhere,
+    // indistinguishable from the user having said nothing. Fail loudly instead.
+    if out.is_empty() && !data.is_empty() {
+        anyhow::bail!(
+            "resampling {}Hz -> {}Hz produced no samples from {} input samples: \
+             audio is shorter than the resampler's {}-tap filter",
+            from_rate,
+            to_rate,
+            data.len(),
+            SINC_LEN,
+        );
+    }
+
+    tracing::debug!(output_samples = out.len(), "resampling complete");
+    Ok(out)
 }
 
 #[cfg(test)]
@@ -1272,5 +1291,46 @@ mod tests {
             decode_audio_simple(&junk).is_err(),
             "non-audio input must return Err, not silently decode"
         );
+    }
+
+    // ---- resample_audio: short input used to succeed with no audio ----
+
+    #[test]
+    fn test_resample_audio_rejects_input_shorter_than_the_filter() {
+        // rubato's SincFixedIn is configured with sinc_len = 256 and a chunk size
+        // equal to the whole input, so fewer samples than the filter is long yields
+        // zero output frames. That used to return Ok(vec![]) — a success carrying no
+        // audio, which reached Whisper as silence with no error anywhere.
+        let tiny = vec![0.25f32; 64];
+        let err = resample_audio(&tiny, 8000, 16000)
+            .expect_err("input shorter than the 256-tap filter must be an error, not empty audio");
+        let msg = err.to_string();
+        assert!(
+            msg.contains("produced no samples"),
+            "error should name the real cause, got: {msg}"
+        );
+    }
+
+    #[test]
+    fn test_resample_audio_accepts_input_longer_than_the_filter() {
+        // 0.1s at 8kHz = 800 samples, comfortably over sinc_len.
+        let ok = resample_audio(&vec![0.25f32; 800], 8000, 16000)
+            .expect("800 samples is well over the filter length and must resample");
+        assert!(!ok.is_empty(), "expected samples out");
+        // ~2x for 8k -> 16k; bound rather than pin, resampler edge handling varies.
+        assert!(
+            ok.len() >= 1200 && ok.len() <= 2000,
+            "expected roughly 1600 samples, got {}",
+            ok.len()
+        );
+    }
+
+    #[test]
+    fn test_resample_audio_equal_rates_passes_through_untouched() {
+        // The equal-rate early return never builds a resampler, so the short-input
+        // guard must not fire here.
+        let tiny = vec![0.5f32; 8];
+        let out = resample_audio(&tiny, 16000, 16000).expect("equal rates must pass through");
+        assert_eq!(out, tiny, "equal rates should return the input unchanged");
     }
 }

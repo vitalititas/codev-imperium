@@ -266,11 +266,13 @@ pub struct SystemNotificationContent {
 /// Content passed inside a message, which can be both simple content and tool content
 #[serde(tag = "type", rename_all = "camelCase")]
 pub enum MessageContent {
-    // rmcp's TextContent/ImageContent are Annotated<Raw*Content>. rmcp derives schemars,
-    // not utoipa, so under utoipa 5 they have no ToSchema and must be declared here.
-    #[schema(value_type = Object)]
+    // rmcp derives schemars, not utoipa, so these have no ToSchema under utoipa 5.
+    // Reference-only shims (see conversation::schema_refs) emit a $ref to the schema
+    // codev-server's derive_utoipa! bridge registers, instead of flattening to
+    // {"type":"object"} — which is what cost the generated TS client its `.text`.
+    #[schema(value_type = crate::conversation::schema_refs::TextContentRef)]
     Text(TextContent),
-    #[schema(value_type = Object)]
+    #[schema(value_type = crate::conversation::schema_refs::ImageContentRef)]
     Image(ImageContent),
     ToolRequest(ToolRequest),
     ToolResponse(ToolResponse),
@@ -769,9 +771,9 @@ impl MessageMetadata {
 #[serde(rename_all = "camelCase")]
 pub struct Message {
     pub id: Option<String>,
-    // rmcp's Role is a unit enum with #[serde(rename_all = "camelCase")], so it is
-    // "user" / "assistant" on the wire. String is the accurate schema type.
-    #[schema(value_type = String)]
+    // $ref the Role schema (oneOf: user | assistant) that codev-server registers,
+    // rather than widening to a bare string. See conversation::schema_refs.
+    #[schema(value_type = crate::conversation::schema_refs::RoleRef)]
     pub role: Role,
     pub created: i64,
     #[serde(deserialize_with = "deserialize_sanitized_content")]

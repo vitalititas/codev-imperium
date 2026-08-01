@@ -102,7 +102,9 @@ export const DiagnosticsModal: React.FC<DiagnosticsModalProps> = ({
         throwOnError: true,
       });
 
-      const blob = new Blob([response.data], { type: 'application/zip' });
+      // The diagnostics endpoint returns raw bytes; utoipa 5 types that as
+      // number[] rather than Blob | File, so wrap it before handing it to Blob.
+      const blob = new Blob([new Uint8Array(response.data)], { type: 'application/zip' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

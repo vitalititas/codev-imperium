@@ -5747,6 +5747,9 @@
           }
         }
       },
+      "ImageContentRef": {
+        "$ref": "#/components/schemas/ImageContent"
+      },
       "ImportAppRequest": {
         "type": "object",
         "required": [
@@ -6052,7 +6055,7 @@
             "$ref": "#/components/schemas/MessageMetadata"
           },
           "role": {
-            "type": "string"
+            "$ref": "#/components/schemas/RoleRef"
           }
         }
       },
@@ -6061,7 +6064,7 @@
           {
             "allOf": [
               {
-                "type": "object"
+                "$ref": "#/components/schemas/TextContentRef"
               },
               {
                 "type": "object",
@@ -6082,7 +6085,7 @@
           {
             "allOf": [
               {
-                "type": "object"
+                "$ref": "#/components/schemas/ImageContentRef"
               },
               {
                 "type": "object",
@@ -7915,6 +7918,9 @@
           }
         ]
       },
+      "RoleRef": {
+        "$ref": "#/components/schemas/Role"
+      },
       "RunNowResponse": {
         "type": "object",
         "required": [
@@ -8906,6 +8912,9 @@
             "type": "string"
           }
         }
+      },
+      "TextContentRef": {
+        "$ref": "#/components/schemas/TextContent"
       },
       "ThinkingContent": {
         "type": "object",

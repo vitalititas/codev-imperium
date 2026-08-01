@@ -227,7 +227,7 @@ export function buildGoose(): string {
     console.error('Skipping build (SKIP_BUILD is set)...');
     console.error('');
   }
-  return path.resolve(process.cwd(), '..', '..', 'target/debug/goose');
+  return path.resolve(process.cwd(), '..', '..', 'target/debug/codev');
 }
 
 // ---------------------------------------------------------------------------

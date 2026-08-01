@@ -11,7 +11,7 @@ else
 fi
 
 SCRIPT_DIR=$(pwd)
-GOOSE_BIN="$SCRIPT_DIR/target/debug/goose"
+GOOSE_BIN="$SCRIPT_DIR/target/debug/codev"
 
 TEST_PROVIDER=${GOOSE_PROVIDER:-anthropic}
 TEST_MODEL=${GOOSE_MODEL:-claude-haiku-4-5-20251001}

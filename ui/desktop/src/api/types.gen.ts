@@ -602,6 +602,8 @@ export type ImageContent = {
     mimeType: string;
 };
 
+export type ImageContentRef = ImageContent;
+
 export type ImportAppRequest = {
     html: string;
 };
@@ -709,19 +711,15 @@ export type Message = {
     created: number;
     id?: string | null;
     metadata: MessageMetadata;
-    role: string;
+    role: Role;
 };
 
 /**
  * Content passed inside a message, which can be both simple content and tool content
  */
-export type MessageContent = ({
-    [key: string]: unknown;
-} & {
+export type MessageContent = (TextContent & {
     type: 'text';
-}) | ({
-    [key: string]: unknown;
-} & {
+}) | (ImageContent & {
     type: 'image';
 }) | (ToolRequest & {
     type: 'toolRequest';
@@ -1273,6 +1271,8 @@ export type RetryConfig = {
 
 export type Role = 'user' | 'assistant';
 
+export type RoleRef = Role;
+
 export type RunNowResponse = {
     session_id: string;
 };
@@ -1533,6 +1533,8 @@ export type TextContent = {
     };
     text: string;
 };
+
+export type TextContentRef = TextContent;
 
 export type ThinkingContent = {
     signature: string;

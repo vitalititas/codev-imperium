@@ -153,10 +153,11 @@ export function RecipeFormFields({
   const [_forceRender, setForceRender] = useState(0);
 
   React.useEffect(() => {
-    return form.store.subscribe(() => {
+    const sub = form.store.subscribe(() => {
       // Force re-render when any form field changes to update parameter usage indicators
       setForceRender((prev) => prev + 1);
     });
+    return () => sub.unsubscribe();
   }, [form.store]);
 
   const parseParametersFromInstructions = React.useCallback(

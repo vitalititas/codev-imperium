@@ -38,6 +38,49 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    # Deferred: agent-client-protocol 0.11 -> 2.0 is a feature migration, not a bump.
+    # 2.0 DELETED SessionModelState and ModelInfo (present in schema 0.12 agent.rs,
+    # absent from 1.5.0 entirely — not in v1, not in v2). crates/codev/src/acp/
+    # provider.rs:1873-1899 uses them to advertise per-session models, and the
+    # replacement is a differently-shaped generic system (SessionConfigOption +
+    # SessionConfigSelectOptions + SetSessionConfigOptionRequest). Porting means
+    # deciding how model identity maps onto SessionConfigId and how "current model"
+    # becomes a selected value — a design call, not an import rewrite.
+    #
+    # The schema crate is pinned with it: acp 2.0 requires "=1.5.0" exactly, so
+    # bumping the schema alone can never resolve (that was #13).
+    #
+    # Settled while investigating, worth keeping: the target is schema::v1, NOT v2.
+    # ProtocolVersion::LATEST == V1; v2 is an explicitly unstable draft gated behind
+    # `unstable_protocol_v2` which this repo does not enable, and the crate removes
+    # LATEST entirely when that feature is on so nobody drifts onto a draft by
+    # accident. This app initializes with ProtocolVersion::LATEST.
+    #
+    # llama-cpp-2 / llama-cpp-sys-2: ignored ENTIRELY, not just majors. These two are a
+    # lockstep pair that llama-cpp-2 does not pin itself, so Dependabot bumps the sys crate
+    # alone and the pair desynchronizes — llama-cpp-2 0.1.146 then calls symbols the newer
+    # regenerated bindings no longer export. That split is what made #20 and #67 unmergeable.
+    #
+    # Ignoring only semver-major would not help: this crate ships breaking changes in PATCH
+    # releases (hence the "=" pins in Cargo.toml), and 0.1.147 is exactly that. It deleted
+    # the OpenAI-compat chat-template surface with no in-crate replacement — the `openai`
+    # module, ChatTemplateResult, apply_chat_template_oaicompat, streaming_state_oaicompat,
+    # parse_response_oaicompat. Verified against the vendored crates and docs.rs: still gone
+    # in 0.1.153 (latest, 2026-07-21), and the new `common` feature does NOT restore it
+    # (wrapper_oai.{h,cpp} are deleted from sys-2; wrapper_common.h has zero chat symbols).
+    #
+    # crates/codev/src/providers/local_inference/llamacpp/ is built on that surface for
+    # native tool calling: constrained lazy-grammar decoding, preserved tokens, and the
+    # incremental streaming parser. Only render-only apply_chat_template -> String survives,
+    # so any bump is a behavioural redesign, not a port. Deliberately deferred; revisit only
+    # as a scoped project (see the tracking issue), never as a dependency bump.
+    ignore:
+      - dependency-name: "agent-client-protocol"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "agent-client-protocol-schema"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "llama-cpp-2"
+      - dependency-name: "llama-cpp-sys-2"
     groups:
       cargo-minor-and-patch:
         update-types:

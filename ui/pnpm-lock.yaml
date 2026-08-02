@@ -28,8 +28,8 @@ importers:
         specifier: 6.1.0
         version: 6.1.0(@preact/signals-core@1.14.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@modelcontextprotocol/ext-apps':
-        specifier: ^1.1.1
-        version: 1.2.2(@modelcontextprotocol/sdk@1.30.0(zod@3.25.76))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(zod@3.25.76)
+        specifier: ^1.7.5
+        version: 1.7.5(@modelcontextprotocol/sdk@1.30.0(zod@3.25.76))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(zod@3.25.76)
       '@radix-ui/react-accordion':
         specifier: ^1.2.20
         version: 1.2.20(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -1559,11 +1559,11 @@ packages:
       react-dom:
         optional: true
 
-  '@modelcontextprotocol/ext-apps@1.2.2':
-    resolution: {integrity: sha512-qMnhIKb8tyPesl+kZU76Xz9Bi9putCO+LcgvBJ00fDdIniiLZsnQbAeTKoq+sTiYH1rba2Fvj8NPAFxij+gyxw==}
+  '@modelcontextprotocol/ext-apps@1.7.5':
+    resolution: {integrity: sha512-TjPH2S2y5UEGKhmI6+XGFuqfqOV4ppe1x6DA3txnUaEWkgtA4G5vo14jGKFZmegdkZ1H4QMLyujLvoU1BEdnAg==}
     engines: {node: '>=20'}
     peerDependencies:
-      '@modelcontextprotocol/sdk': ^1.24.0
+      '@modelcontextprotocol/sdk': ^1.29.0
       react: ^19.2.4
       react-dom: ^19.2.4
       zod: ^3.25.0 || ^4.0.0
@@ -9260,9 +9260,10 @@ snapshots:
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@modelcontextprotocol/ext-apps@1.2.2(@modelcontextprotocol/sdk@1.30.0(zod@3.25.76))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(zod@3.25.76)':
+  '@modelcontextprotocol/ext-apps@1.7.5(@modelcontextprotocol/sdk@1.30.0(zod@3.25.76))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(zod@3.25.76)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.30.0(zod@3.25.76)
+      '@standard-schema/spec': 1.1.0
       zod: 3.25.76
     optionalDependencies:
       react: 19.2.8

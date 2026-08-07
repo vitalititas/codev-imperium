@@ -422,11 +422,11 @@ importers:
         specifier: ^0.1.0
         version: 0.1.0(ink@6.8.0(@types/react@19.2.17)(react@19.2.8))(react@19.2.8)
       marked:
-        specifier: ^15.0.12
-        version: 15.0.12
+        specifier: ^18.0.7
+        version: 18.0.7
       marked-terminal:
         specifier: ^7.3.0
-        version: 7.3.0(marked@15.0.12)
+        version: 7.3.0(marked@18.0.7)
       meow:
         specifier: ^13.2.0
         version: 13.2.0
@@ -814,7 +814,7 @@ packages:
     engines: {node: '>=14'}
 
   '@electron/node-gyp@https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2':
-    resolution: {tarball: https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/electron/node-gyp/tar.gz/06b29aafb7708acef8b3669835c8a7857ebc92d2}
     version: 10.2.0-electron.1
     engines: {node: '>=12.13.0'}
     hasBin: true
@@ -5226,10 +5226,6 @@ packages:
   intl-messageformat@11.2.12:
     resolution: {integrity: sha512-KW70Xxfcvy7vV3qODfvShWkFDPMqKDAa4N+hSyVBWGNtVhTUFYaqlD/l88DaYPKiVcPP4rPQ3qnH7i5K82Mg7g==}
 
-  ip-address@10.2.0:
-    resolution: {integrity: sha512-/+S6j4E9AHvW9SWMSEY9Xfy66O5PWvVEJ08O0y5JGyEKQpojb0K0GKpz/v5HJ/G0vi3D2sjGK78119oXZeE0qA==}
-    engines: {node: '>= 12'}
-
   ip-address@10.4.0:
     resolution: {integrity: sha512-oSK96Grm3aP6OrS263xVxbNDGVL7rzBtYdpGqlDG8iQdoenDoTs/nkki+DflYbAEE8Xl6o5YxhxlrKvI3nqKXQ==}
     engines: {node: '>= 12'}
@@ -5761,9 +5757,9 @@ packages:
     engines: {node: '>= 18'}
     hasBin: true
 
-  marked@15.0.12:
-    resolution: {integrity: sha512-8dD6FusOQSrpv9Z1rdNMdlSgQOIP880DHqnohobOmYLElGEqAL/JvxvuxZO16r4HtjTlfPRDC1hbvxC9dPN2nA==}
-    engines: {node: '>= 18'}
+  marked@18.0.7:
+    resolution: {integrity: sha512-iDVQ5ldaiKXn6b2JroX5kgRfmwgqolW7NpaEzTl1k/2Zh1njIEN9yniyLV/mOvWwtsE8OGgkjsCYvijuPk1dtA==}
+    engines: {node: '>= 20'}
     hasBin: true
 
   matcher@3.0.0:
@@ -8506,7 +8502,7 @@ snapshots:
       make-fetch-happen: 10.2.1
       nopt: 6.0.0
       proc-log: 2.0.1
-      semver: 7.7.4
+      semver: 7.8.5
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -9312,7 +9308,7 @@ snapshots:
   '@npmcli/fs@2.1.2':
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.7.4
+      semver: 7.8.5
 
   '@npmcli/move-file@2.0.1':
     dependencies:
@@ -13188,8 +13184,6 @@ snapshots:
       '@formatjs/fast-memoize': 3.1.7
       '@formatjs/icu-messageformat-parser': 3.5.15
 
-  ip-address@10.2.0: {}
-
   ip-address@10.4.0: {}
 
   ipaddr.js@1.9.1: {}
@@ -13704,20 +13698,20 @@ snapshots:
 
   markdown-table@3.0.4: {}
 
-  marked-terminal@7.3.0(marked@15.0.12):
+  marked-terminal@7.3.0(marked@18.0.7):
     dependencies:
       ansi-escapes: 7.3.0
       ansi-regex: 6.2.2
       chalk: 5.6.2
       cli-highlight: 2.1.11
       cli-table3: 0.6.5
-      marked: 15.0.12
+      marked: 18.0.7
       node-emoji: 2.2.0
       supports-hyperlinks: 3.2.0
 
   marked@11.2.0: {}
 
-  marked@15.0.12: {}
+  marked@18.0.7: {}
 
   matcher@3.0.0:
     dependencies:
@@ -15329,7 +15323,7 @@ snapshots:
 
   socks@2.8.9:
     dependencies:
-      ip-address: 10.2.0
+      ip-address: 10.4.0
       smart-buffer: 4.2.0
 
   source-map-js@1.2.1: {}

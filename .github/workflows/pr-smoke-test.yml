@@ -156,7 +156,7 @@ jobs:
         working-directory: ui/desktop
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
@@ -255,7 +255,7 @@ jobs:
         run: chmod +x target/debug/codev
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
